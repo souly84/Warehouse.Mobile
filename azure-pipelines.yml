@@ -78,7 +78,7 @@ steps:
   displayName: 'Run tests'
   inputs:
     command: 'test'
-    projects: '**/*[Tt]est*/*.csproj'
+    projects: '**/*Unit[Tt]est*/*.csproj'
     publishTestResults: true
     arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true "/p:CoverletOutputFormat=\"opencover,Cobertura\""'
 
