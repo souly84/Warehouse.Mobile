@@ -1,0 +1,48 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <Platforms>AnyCPU;x86;x64</Platforms>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2012" PrivateAssets="all" />
+    <PackageReference Include="Xamarin.Forms.DebugRainbows" Version="365.0.0" PrivateAssets="all" />
+    <PackageReference Include="Xamarin.Forms.Visual.Material" Version="5.0.0.2012" PrivateAssets="all" />
+    <PackageReference Include="Com.Airbnb.Xamarin.Forms.Lottie" Version="4.0.10" PrivateAssets="all" />
+    <PackageReference Include="Xamarin.Forms.PancakeView" Version="2.3.0.759" PrivateAssets="all" />
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="1.2.0" PrivateAssets="all" />
+    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" PrivateAssets="all" />
+    <PackageReference Include="Prism.Core" Version="8.1.97" PrivateAssets="all"/>
+    <PackageReference Include="Prism.Forms" Version="8.1.97" PrivateAssets="all" />
+    <PackageReference Include="Prism.Unity.Forms" Version="8.1.97" PrivateAssets="all"/>
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Update="Translation\Translations.Designer.cs">
+      <DependentUpon>Translations.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  
+  <ItemGroup>
+    <EmbeddedResource Update="Translation\Translations.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Translations.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+</Project>
