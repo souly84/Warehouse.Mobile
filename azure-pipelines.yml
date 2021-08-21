@@ -1,0 +1,192 @@
+# .NET Desktop
+# Build and run tests for .NET Desktop or Windows classic desktop solutions.
+# Add steps that publish symbols, save build artifacts, and more:
+# https://docs.microsoft.com/azure/devops/pipelines/apps/windows/dot-net
+
+trigger:
+- main
+
+pool:
+  vmImage: 'macOS-latest'
+
+variables:
+- group: Keystore_WarehouseMobile
+- group: Warehouse_Mobile
+- name: solution
+  value: '**/*.sln'
+- name: buildPlatform
+  value: 'Any CPU'
+- name: buildConfiguration
+  value: 'Release'
+- name: releaseBuildNumber
+  value: '1.0.0'
+- name: outputDirectory
+  value: '$(build.binariesDirectory)/$(buildConfiguration)'
+- name: isDevelop
+  value: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+
+name: $(releaseBuildNumber).$(Build.BuildId)
+
+steps:
+
+- task: NuGetToolInstaller@1
+- task: NuGetCommand@2
+  inputs:
+    restoreSolution: '$(solution)'
+    feedsToUse: config
+    nugetConfigPath: NuGet.config
+- task: richardfennellBM.BM-VSTS-Versioning-Task.Version-AndroidManifest-Task.VersionAndroidManifest@2
+  displayName: 'Version Android Manifest'
+  inputs:
+    VersionNameFormat: '{1}.{2}.{3}-$(Build.SourceBranchName)'
+    VersionCodeFormat: '{4}'
+    VersionRegex: '\d+\.\d+\.\d+\.\d+'
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'SonarCloud'
+    organization: 'souly84'
+    scannerMode: 'MSBuild'
+    projectKey: 'souly84_Warehouse.Mobile'
+    projectName: 'Warehouse.Mobile'
+    extraProperties: |
+        sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)\tests\coverage.opencover.xml
+        sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)\*.trx
+- task: VSBuild@1
+  inputs:
+    solution: '$(solution)'
+    platform: '$(buildPlatform)'
+    configuration: '$(buildConfiguration)'
+
+- task: DotNetCoreCLI@2
+  displayName: 'Run tests'
+  inputs:
+    command: 'test'
+    projects: '**/*[Tt]est*/*.csproj'
+    publishTestResults: true
+    arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true "/p:CoverletOutputFormat=\"opencover,Cobertura\""'
+
+- task: XamarinAndroid@1
+  displayName: 'Build Xamarin.Android projects'
+  inputs:
+    projectFile: '**/*@(Android|IntegrationTests).csproj'
+    target: Build
+    outputDirectory: '$(outputDirectory)'
+    configuration: '$(buildConfiguration)'
+    msbuildArguments: '/p:AndroidPackageFormat=apk'
+    
+- task: AndroidSigning@3
+  displayName: 'Signing and aligning APK file(s)'
+  inputs:
+    apkFiles: '$(outputDirectory)/*.apk'
+    apksignerKeystoreFile: '$(keystore_file)'
+    apksignerKeystorePassword: '$(keystore_password)'
+    apksignerKeystoreAlias: '$(keystore_key_alias)'
+    apksignerKeyPassword: '$(keystore_key_password)'
+
+- task: CopyFiles@2
+  displayName: 'Copy Files to:  $(Build.ArtifactStagingDirectory)'
+  inputs:
+    SourceFolder: '$(outputDirectory)'
+    Contents: |
+     **/*.apk
+     **/*.aab
+    TargetFolder: ' $(Build.ArtifactStagingDirectory)'
+    
+- task: PublishBuildArtifacts@1
+  displayName: 'Publish Artifact: android'
+  inputs:
+    PathtoPublish: ' $(Build.ArtifactStagingDirectory)'
+    ArtifactName: android
+    
+- bash: |
+    cd $(outputDirectory)
+    dotnet Warehouse.Server.FakeWebApi.dll --configuration $(buildConfiguration) --urls http://localhost:5850 &
+  displayName: 'Start FakeWebApi'
+  failOnStderr: true
+
+- task: Bash@3
+  displayName: 'Start Android emulator'
+  inputs:
+    targetType: filePath
+    filePath: ./Scripts/RunAndroidEmulator.sh
+    failOnStderr: true
+    
+- task: Bash@3
+  displayName: 'Install Integration Tests'
+  inputs:
+    targetType: filePath
+    filePath: ./Scripts/InstallApkToEmulator.sh
+    arguments: '$(outputDirectory)/Warehouse.Mobile.IntegrationTests.apk Warehouse.Mobile.IntegrationTests'
+    failOnStderr: true
+
+- bash: |
+    nc -vz localhost 5850
+  displayName: 'Check connect to FakeWebApi'
+    
+- task: Bash@3
+  displayName: 'Run Integration Tests'
+  inputs:
+    targetType: filePath
+    filePath: ./Scripts/RunIntegrationTest.sh
+    arguments: '$(Build.SourcesDirectory) Warehouse.Mobile.IntegrationTests warehouse.mobile.testinstrumentation'
+    failOnStderr: true
+
+- task: PublishTestResults@2
+  displayName: 'Publish Test Results **/TestResults.trx'
+  inputs:
+    testResultsFormat: VSTest
+    testResultsFiles: '**/TestResults.trx'
+    failTaskOnFailedTests: true
+    testRunTitle: 'Integration tests'
+
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish code coverage result'
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '**/*.cobertura.xml'
+
+- task: SonarCloudAnalyze@1
+- task: SonarCloudPublish@1
+  inputs:
+    pollingTimeoutSec: '300'
+
+- task: Bash@3
+  displayName: 'Update AppCenter Key in Android Manifest'
+  condition: and(succeeded(), eq(variables.isPullRequest, false))
+  inputs:
+    targetType: filePath
+    filePath: ./Scripts/UpdateMetaDataValue.sh
+    arguments: AppCenterKey $(appCenterKey)
+    failOnStderr: true
+    
+- task: XamarinAndroid@1
+  displayName: 'Build Xamarin.Android projects for AppCenter'
+  condition: and(succeeded(), eq(variables.isPullRequest, false))
+  inputs:
+    projectFile: '**/*@(Android).csproj'
+    target: Build
+    outputDirectory: '$(outputDirectory)'
+    configuration: '$(buildConfiguration)'
+    msbuildArguments: '/p:AndroidPackageFormat=apk'    
+
+- task: AndroidSigning@3
+  condition: and(succeeded(), eq(variables.isPullRequest, false))
+  displayName: 'Signing and aligning APK file(s)'
+  inputs:
+    apkFiles: '$(outputDirectory)/*.apk'
+    apksignerKeystoreFile: '$(keystore_file)'
+    apksignerKeystorePassword: '$(keystore_password)'
+    apksignerKeystoreAlias: '$(keystore_key_alias)'
+    apksignerKeyPassword: '$(keystore_key_password)'
+
+- task: AppCenterDistribute@3
+  condition: and(succeeded(), eq(variables.isPullRequest, false))
+  inputs:
+    serverEndpoint: '$(appCenter_serverEndpoint)'
+    appSlug: '$(appCenter_appSlug)'
+    appFile: '$(outputDirectory)/warehouse.mobile.android.apk'
+    symbolsOption: 'Android'
+    releaseNotesOption: 'input'
+    releaseNotesInput: '$(appCenter_releaseNotes)'
+    destinationType: 'groups'
+    isSilent: true
