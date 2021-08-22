@@ -7,7 +7,7 @@ trigger:
 - main
 
 pool:
-  vmImage: 'macOS-latest'
+  vmImage: 'macOS-10.14'
 
 variables:
 - group: Keystore_WarehouseMobile
