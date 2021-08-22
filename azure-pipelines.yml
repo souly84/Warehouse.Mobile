@@ -7,7 +7,7 @@ trigger:
 - main
 
 pool:
-  vmImage: 'macOS-10.14'
+  vmImage: 'windows-latest'
 
 variables:
 - group: Keystore_WarehouseMobile
@@ -30,9 +30,6 @@ name: $(releaseBuildNumber).$(Build.BuildId)
 steps:
 
 - task: NuGetToolInstaller@1
-  displayName: 'Use NuGet'
-  inputs:
-    versionSpec: 5.8
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
