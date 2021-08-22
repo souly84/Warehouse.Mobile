@@ -30,6 +30,9 @@ name: $(releaseBuildNumber).$(Build.BuildId)
 steps:
 
 - task: NuGetToolInstaller@1
+  displayName: 'Use NuGet'
+  inputs:
+    versionSpec: 5.8
 - task: NuGetCommand@2
   inputs:
     restoreSolution: '$(solution)'
