@@ -7,7 +7,7 @@ trigger:
 - main
 
 pool:
-  vmImage: 'windows-latest'
+  vmImage: 'macOS-10.14'
 
 variables:
 - group: Keystore_WarehouseMobile
@@ -65,7 +65,6 @@ steps:
     extraProperties: |
         sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)\tests\coverage.opencover.xml
         sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)\*.trx
-
 
 - task: MSBuild@1
   displayName: 'Build solution'
