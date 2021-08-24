@@ -33,8 +33,11 @@ steps:
     echo /Users/runner/Library/Android/sdk/ndk/
   displayName: 'Test'
 - bash: |
-      $ANDROID_HOME/tools/bin/sdkmanager --list
-    displayName: 'list already installed Android packages'
+    $ANDROID_HOME/tools/bin/sdkmanager --list
+  displayName: 'list already installed Android packages'
+- bash: |
+    export ANDROID_NDK_HOME=/Users/runner/Development/adt/sdk/ndk/21.4.7075529
+  displayName: 'Bla'
 
 - task: NuGetToolInstaller@1
 - task: NuGetCommand@2
