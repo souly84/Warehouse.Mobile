@@ -29,6 +29,13 @@ name: $(releaseBuildNumber).$(Build.BuildId)
 
 steps:
 
+- bash: |
+    echo /Users/runner/Library/Android/sdk/ndk/
+  displayName: 'Test'
+- bash: |
+      $ANDROID_HOME/tools/bin/sdkmanager --list
+    displayName: 'list already installed Android packages'
+
 - task: NuGetToolInstaller@1
 - task: NuGetCommand@2
   inputs:
