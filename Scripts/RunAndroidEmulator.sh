@@ -10,8 +10,9 @@ if [[ $DEVICES == *"emulator-"* ]]; then
 }
 else
 {
-    echo y | sudo -EH "${ANDROID_HOME}/tools/bin/sdkmanager" "ndk;21.3.6528147" >/dev/null
- 
+    echo java --version
+    echo $ANDROID_HOME
+    
     # Install AVD files
     echo "y" | $ANDROID_HOME/tools/bin/sdkmanager --install 'system-images;android-28;google_apis;x86'
 
