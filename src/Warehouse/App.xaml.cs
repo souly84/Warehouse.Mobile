@@ -37,7 +37,7 @@ namespace Warehouse.Mobile
 
         private async Task NavigateToMainPageAsync()
         {
-            var result = await NavigationService.NavigateAsync(nameof(LoginPage));
+            var result = await NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(LoginPage)}" );
             if (result.Exception != null)
             {
                 throw result.Exception;
