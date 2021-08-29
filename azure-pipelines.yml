@@ -24,6 +24,8 @@ variables:
   value: '$(build.binariesDirectory)/$(buildConfiguration)'
 - name: isDevelop
   value: $[eq(variables['Build.SourceBranch'], 'refs/heads/main')]
+- name: isPullRequest
+  value: $[eq(variables['Build.Reason'], 'PullRequest')]
 
 name: $(releaseBuildNumber).$(Build.BuildId)
 
