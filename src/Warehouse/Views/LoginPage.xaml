@@ -5,11 +5,13 @@
     xmlns:viewModels="clr-namespace:Warehouse.Mobile.Views"
     x:Class="Warehouse.Mobile.Views.LoginPage"
     x:DataType="viewModels:LoginViewModel"
+    Title="Login"
     Visual="Material">
-    <ContentView>
+    <ContentView VerticalOptions="Center">
         <Label
-            Text="Hello World"
+            Text="It's just a starting page which is still under construction. The login page should appear soon."
             TextColor="Black"
-            HorizontalTextAlignment="Center" />
+            FontSize="Medium"
+            HorizontalTextAlignment="Start" />
     </ContentView>
 </ContentPage>

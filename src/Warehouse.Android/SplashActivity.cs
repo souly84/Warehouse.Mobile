@@ -3,6 +3,8 @@ using Android.App;
 using Android.Content;
 using Android.Content.PM;
 using Android.OS;
+using Com.Airbnb.Lottie;
+using Warehouse.Droid;
 
 namespace Warehouse.Mobile.Droid
 {
@@ -17,7 +19,7 @@ namespace Warehouse.Mobile.Droid
 
         public void OnAnimationEnd(Animator animation)
         {
-            
+            StartActivity(new Intent(this, typeof(MainActivity)));
         }
 
         public void OnAnimationRepeat(Animator animation)
@@ -32,10 +34,10 @@ namespace Warehouse.Mobile.Droid
         {
             base.OnCreate(savedInstanceState);
 
-          //  SetContentView(Resource.Layout.splash_layout);
-            //var animationView = FindViewById<LottieAnimationView>(Resource.Id.animation_view);
-            //animationView.AddAnimatorListener(this);
-            StartActivity(new Intent(this, typeof(MainActivity)));
+            SetContentView(Resource.Layout.splash_layout);
+            var animationView = FindViewById<LottieAnimationView>(Resource.Id.animation_view);
+            animationView.AddAnimatorListener(this);
+           
         }
     }
 }
