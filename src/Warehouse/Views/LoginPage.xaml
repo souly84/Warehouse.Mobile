@@ -7,10 +7,11 @@
     x:DataType="viewModels:LoginViewModel"
     Title="Login"
     Visual="Material">
-    <ContentView>
+    <ContentView VerticalOptions="Center">
         <Label
-            Text="It's just a starting page which is still under construction. The login page sjould appear soon."
+            Text="It's just a starting page which is still under construction. The login page should appear soon."
             TextColor="Black"
+            FontSize="Large"
             HorizontalTextAlignment="Center" />
     </ContentView>
 </ContentPage>
