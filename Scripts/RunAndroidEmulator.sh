@@ -19,7 +19,7 @@ else
     # Create emulator
     echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd -n xamarin_android_emulator -k 'system-images;android-28;google_apis;x86' --force
     
-    echo "Emulator created successfully $(ANDROID_HOME/emulator/emulator -list-avds), launching it"
+    echo "Emulator created successfully $($ANDROID_HOME/emulator/emulator -list-avds), launching it"
     #echo "no" | $ANDROID_HOME/tools/bin/avdmanager create avd -n xamarin_android_emulator -k 'system-images;android-28;google_apis;x86' --force
     
     nohup $ANDROID_HOME/emulator/emulator -avd xamarin_android_emulator -no-snapshot -no-boot-anim -gpu auto -qemu > /dev/null 2>&1 &
