@@ -9,10 +9,8 @@
     <DebugSymbols>false</DebugSymbols>
     <DebugType></DebugType>
     <Optimize>false</Optimize>
-    <OutputPath>bin\Mock\netcoreapp3.1\netcoreapp3.1\netcoreapp3.1\netcoreapp3.1</OutputPath>
     <DefineConstants></DefineConstants>
     <WarningLevel>4</WarningLevel>
-    <IntermediateOutputPath>obj\Mock\netcoreapp3.1\netcoreapp3.1\netcoreapp3.1\netcoreapp3.1</IntermediateOutputPath>
     <NoWarn></NoWarn>
     <NoStdLib>false</NoStdLib>
   </PropertyGroup>
@@ -23,7 +21,7 @@
     <Folder Include="Resources\" />
   </ItemGroup>
   <ItemGroup>
-    <PackageReference Include="SoapCore" Version="1.1.0.10" />
+    <PackageReference Include="SoapCore" Version="1.1.0.21" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Microsoft.AspNetCore.Server.Kestrel.Https" Version="2.2.0" />
   </ItemGroup>

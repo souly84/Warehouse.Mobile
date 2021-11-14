@@ -67,13 +67,13 @@
       <Version>5.11.10</Version>
     </PackageReference> 
     <PackageReference Include="Xamarin.Forms.Visual.Material">
-      <Version>5.0.0.2083</Version>
+      <Version>5.0.0.2196</Version>
     </PackageReference>
     <PackageReference Include="Com.Airbnb.Xamarin.Forms.Lottie">
-      <Version>4.0.10</Version>
+      <Version>4.0.11</Version>
     </PackageReference>
     <PackageReference Include="Xamarin.CommunityToolkit">
-      <Version>1.2.0</Version>
+      <Version>1.3.0</Version>
     </PackageReference>
     <PackageReference Include="Prism.Forms">
       <Version>8.1.97</Version>
@@ -92,6 +92,9 @@
     </PackageReference>
     <PackageReference Include="Microsoft.AppCenter.Analytics">
       <Version>4.4.0</Version>
+    </PackageReference>
+    <PackageReference Include="EbSoft.Warehouse.SDK">
+      <Version>1.0.0.126</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
