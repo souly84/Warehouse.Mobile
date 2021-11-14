@@ -3,8 +3,10 @@ using Android.Content.PM;
 using Android.OS;
 using Xamarin.Forms.Platform.Android;
 using Prism.Navigation;
-using Warehouse.Mobile;
 using Resource = Xamarin.Forms.Platform.Android.Resource;
+using Microsoft.AppCenter;
+using Microsoft.AppCenter.Analytics;
+using Microsoft.AppCenter.Crashes;
 
 namespace Warehouse.Mobile.Droid
 {
@@ -24,6 +26,9 @@ namespace Warehouse.Mobile.Droid
             var application = new App(new AndroidInitializer(this));
 
             LoadApplication(application);
+
+            AppCenter.Start("dbafbbc1-b7fc-4dec-b29e-36015da6bc4e",
+                   typeof(Analytics), typeof(Crashes));
         }
     }
 }
