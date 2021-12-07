@@ -3,6 +3,8 @@ using Prism.Ioc;
 using Prism.Navigation;
 using Prism.Unity;
 using System.Threading.Tasks;
+using Warehouse.Core.Plugins;
+using Warehouse.Mobile.ViewModels;
 using Warehouse.Mobile.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -20,19 +22,24 @@ namespace Warehouse.Mobile
 
         public INavigationService Navigation => NavigationService;
 
-        protected override async void OnInitialized()
+        public IScanner Scanner => Container.Resolve<IScanner>();
+
+        protected override void OnInitialized()
         {
-            await NavigateToMainPageAsync();
+            // Nothing to do
+        }
+
+        protected override void OnStart()
+        {
+            base.OnStart();
+            _ = NavigateToMainPageAsync();
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             //Navigations
             containerRegistry.RegisterForNavigation<NavigationPage>();
-            containerRegistry.RegisterForNavigation<LoginPage>();
-
-            //Services
-            //containerRegistry.RegisterSingleton<ICentralServiceClient, CentralServiceClient>();
+            containerRegistry.RegisterForNavigation<LoginPage, LoginViewModel>();
         }
 
         private async Task NavigateToMainPageAsync()
