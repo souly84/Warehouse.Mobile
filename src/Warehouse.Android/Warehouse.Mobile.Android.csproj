@@ -96,6 +96,9 @@
     <PackageReference Include="EbSoft.Warehouse.SDK">
       <Version>1.0.0.126</Version>
     </PackageReference>
+    <PackageReference Include="Xamarin.Forms.NeoControls">
+      <Version>1.1.1-pre</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MainActivity.cs" />

@@ -3,10 +3,9 @@ using Xamarin.Forms.Xaml;
 
 namespace Warehouse.Mobile.Views
 {
-    [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class LoginPage : ContentPage
+    public partial class LoginView : ContentPage
     {
-        public LoginPage()
+        public LoginView()
         {
             InitializeComponent();
         }

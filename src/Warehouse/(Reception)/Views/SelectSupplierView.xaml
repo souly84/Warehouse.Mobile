@@ -1,0 +1,94 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewModels="clr-namespace:Warehouse.Mobile.ViewModels"
+    x:Class="Warehouse.Mobile.Views.SelectSupplierView"
+    Title="Select supplier"
+    xmlns:controls="clr-namespace:Warehouse.Mobile.Controls;assembly=Warehouse.Mobile"
+    xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
+    x:Name="ThisPage"
+    x:DataType="viewModels:SelectSupplierViewModel"
+    >
+    <ContentView VerticalOptions="Center" Padding="5">
+        <StackLayout VerticalOptions="FillAndExpand">
+
+            <StackLayout
+                Spacing="0"
+                Orientation="Horizontal"
+                HeightRequest="80">
+
+               <!--<CollectionView
+                   BackgroundColor="White"
+                   ItemsSource="{Binding AllowedDates}">
+                   <CollectionView.ItemTemplate>
+                      <DataTemplate x:DataType="viewModels:ReceptionDateViewModel">
+                          <controls:DateItem />
+                      </DataTemplate>
+                   </CollectionView.ItemTemplate>
+               </CollectionView>-->
+
+                          <!--<controls:DateItem Date="{Binding CurrentDate}"/>
+                          <controls:DateItem Date="{Binding CurrentDate}"/>
+                          <controls:DateItem Date="{Binding CurrentDate}"/>
+                          <controls:DateItem Date="{Binding CurrentDate}"/>
+                          <controls:DateItem Date="{Binding CurrentDate}"/>
+                          <controls:DateItem Date="{Binding CurrentDate}"/>
+                          <controls:DateItem Date="{Binding CurrentDate}"/>-->
+
+
+                <DatePicker MinimumDate="{Binding CurrentDate}" HorizontalOptions="CenterAndExpand"/>
+
+
+
+            </StackLayout>
+            <CollectionView
+                VerticalOptions="FillAndExpand"
+                ItemsSource="{Binding Suppliers}">
+                <CollectionView.ItemTemplate>
+                    <DataTemplate x:DataType="viewModels:SupplierViewModel">
+                        <Frame
+                            BackgroundColor="Transparent"
+                            Padding="2"
+                            CornerRadius="10">
+                            <Grid VerticalOptions="FillAndExpand" >
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <Label Text="{Binding Name}"
+                                       Grid.ColumnSpan="2"
+                                       Style="{DynamicResource SupplierNameLabel}"/>
+
+                                <NeoButton
+                                    Grid.Column="2"
+                                    Command="{Binding BindingContext.GoToReceptionDetailsCommand, Source={x:Reference ThisPage}}"
+                                    Style="{DynamicResource SupplierSelectionButton}">
+                                    <Label
+                                        Style="{DynamicResource ButtonActionIcon}"
+                                        FontFamily="icomoon"
+                                        Text="{x:Static fonts:IcoMoon.IconNext}">
+                                    </Label>
+                                </NeoButton>
+                                    
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </StackLayout>
+
+
+         <ContentView.Background>
+            <LinearGradientBrush StartPoint="0,1"
+                                 EndPoint="0,0">
+                <GradientStop Color="{StaticResource BackgroundColorViewStart}"
+                              Offset="0.1"/>
+                <GradientStop Color="{StaticResource BackgroundColorViewEnd}"
+                              Offset="1.0"/>
+            </LinearGradientBrush>
+        </ContentView.Background>
+    </ContentView>
+</ContentPage>

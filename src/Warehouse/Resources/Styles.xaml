@@ -1,0 +1,82 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<ResourceDictionary xmlns="http://xamarin.com/schemas/2014/forms" 
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d">
+    <Color x:Key="DefaultBackground">#F5F5F5</Color>
+    <Color x:Key="Primary">#343F44</Color>
+    <Color x:Key="PrimaryLight">#EF6666</Color>
+    <Color x:Key="PrimaryDark">#343F44</Color>
+    <Color x:Key="Secondary">#ffc617</Color>
+    <Color x:Key="SecondaryLight">#FFD34A</Color>
+    <Color x:Key="FakeBlack">#1c1c1c</Color>
+    <Color x:Key="MainFrameColor">#C9D6FF</Color>
+    <Color x:Key="BackgroundColorViewStart">#E3E8F1</Color>
+    <Color x:Key="BackgroundColorViewEnd">#ECF0F7</Color>
+    <Color x:Key="TextsColor">#544F5F</Color>
+    <Color x:Key="MainColor">#E2E5ED</Color>
+
+    <Style x:Key="SupplierNameLabel" TargetType="Label" ApplyToDerivedTypes="True">
+        <Setter Property="TextColor" Value="{DynamicResource TextsColor}" />
+        <Setter Property="FontSize" Value="25" />
+        <Setter Property="HorizontalTextAlignment" Value="Start" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="Margin" Value="30,0" />
+    </Style>
+
+     <Style x:Key="SupplierSelectionButton" TargetType="NeoButton" ApplyToDerivedTypes="True">
+        <Setter Property="CornerRadius" Value="35" />
+        <Setter Property="HeightRequest" Value="70" />
+        <Setter Property="WidthRequest" Value="70" />
+        <Setter Property="LightShadowColor" Value="Transparent" />
+        <Setter Property="VerticalOptions" Value="FillAndExpand" />
+        <Setter Property="HorizontalOptions" Value="EndAndExpand" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource BackgroundColorViewEnd}"  />
+    </Style>
+
+
+    <Style x:Key="ReceptionGoodDescription" TargetType="Label" ApplyToDerivedTypes="True">
+        <Setter Property="TextColor" Value="{DynamicResource TextsColor}" />
+        <Setter Property="FontSize" Value="14" />
+        <Setter Property="HorizontalTextAlignment" Value="Start" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="Margin" Value="40,0" />
+    </Style>
+
+    <Style x:Key="ReceptionGoodQuantty" TargetType="Label" ApplyToDerivedTypes="True">
+        <Setter Property="TextColor" Value="{DynamicResource TextsColor}" />
+        <Setter Property="FontSize" Value="18" />
+        <Setter Property="HorizontalTextAlignment" Value="Start" />
+        <Setter Property="VerticalOptions" Value="Center" />
+    </Style>
+
+    <Style x:Key="ReceptionGoodCategoryIcon" TargetType="Label" ApplyToDerivedTypes="True">
+        <Setter Property="TextColor" Value="#4f94d4" />
+        <Setter Property="FontSize" Value="35" />
+        <Setter Property="HorizontalOptions" Value="StartAndExpand" />
+        <Setter Property="HorizontalTextAlignment" Value="Start" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="VerticalTextAlignment" Value="Center" />
+    </Style>
+
+
+    <Style x:Key="ButtonActionIcon" TargetType="Label" ApplyToDerivedTypes="True">
+        <Setter Property="TextColor" Value="#544F5F" />
+        <Setter Property="FontSize" Value="30" />
+        <Setter Property="HorizontalOptions" Value="Center" />
+        <Setter Property="HorizontalTextAlignment" Value="Center" />
+        <Setter Property="VerticalOptions" Value="Center" />
+        <Setter Property="VerticalTextAlignment" Value="Center" />
+    </Style>
+
+     <Style x:Key="ActionButton" TargetType="NeoButton" ApplyToDerivedTypes="True">
+        <Setter Property="CornerRadius" Value="35" />
+        <Setter Property="HeightRequest" Value="70" />
+        <Setter Property="WidthRequest" Value="70" />
+        <Setter Property="LightShadowColor" Value="Transparent" />
+        <Setter Property="VerticalOptions" Value="FillAndExpand" />
+        <Setter Property="HorizontalOptions" Value="EndAndExpand" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource BackgroundColorViewEnd}"  />
+    </Style>
+</ResourceDictionary>

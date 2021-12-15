@@ -1,0 +1,207 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Warehouse.Mobile.Views.MenuSelectionView"
+    xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
+    Title="Main menu"
+    NavigationPage.HasBackButton="True"
+    >
+    <ContentView VerticalOptions="Fill" BackgroundColor="#2980B9">
+        <StackLayout
+            VerticalOptions="FillAndExpand"
+            Spacing="0">
+            <StackLayout
+                Spacing="0"
+                Padding="20">
+
+
+                <Label
+                    Text="Welcome to Eggo warehouse managment app"
+                    TextColor="White"
+                    FontAttributes="Bold"
+                    FontSize="Subtitle"/>
+            </StackLayout>
+            <Grid
+                VerticalOptions="FillAndExpand"
+                RowSpacing="15"
+                ColumnSpacing="15"
+                Padding="50">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <StackLayout>
+                    <NeoButton BackgroundColor="#e3edf7" VerticalOptions="FillAndExpand" Command="{Binding GoToAvailableSuppliersCommand}">
+                       <Grid VerticalOptions="FillAndExpand" Padding="15">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label
+                            FontFamily="warehouseIcons"
+                            FontSize="30"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"
+                            HorizontalTextAlignment="Start"
+                            HorizontalOptions="Start"
+                            Text="{x:Static fonts:IcoMoon.Reception}"
+                            TextColor="#4f94d4">
+                        </Label>
+
+                        <Label
+                            VerticalTextAlignment="Center"
+                            TextColor="#4f94d4"
+                            Grid.Row="1"
+                            Text="Reception" />
+
+                        <Label
+                            TextColor="Black"
+                            VerticalOptions="End"
+                            HorizontalOptions="End"
+                            FontSize="Micro"
+                            Grid.Row="2"
+                            Text="Good receipt PO" />
+                        
+                    </Grid>
+                    </NeoButton>
+                </StackLayout>
+
+                <StackLayout
+                    Grid.Column="1">
+
+                    <NeoButton BackgroundColor="#e3edf7" VerticalOptions="FillAndExpand" Command="{Binding GoToPutAwayCommand}">
+                       <Grid VerticalOptions="FillAndExpand" Padding="15">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label
+                            FontFamily="materialicons"
+                            FontSize="30"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"
+                            HorizontalTextAlignment="Start"
+                            HorizontalOptions="Start"
+                            Text="{x:Static fonts:MaterialIcons.PackageVariant}"
+                            TextColor="#4f94d4">
+                        </Label>
+
+                        <Label
+                            VerticalTextAlignment="Center"
+                            TextColor="#4f94d4"
+                            Grid.Row="1"
+                            Text="Put Away" />
+
+                        <Label
+                            TextColor="Black"
+                            VerticalOptions="End"
+                            HorizontalOptions="End"
+                            FontSize="Micro"
+                            Grid.Row="2"
+                            Text="Place received goods" />
+                        
+                    </Grid>
+                    </NeoButton>
+
+                </StackLayout>
+
+                <StackLayout
+                    Grid.Row="1"
+                    Grid.Column="0">
+
+                     <NeoButton BackgroundColor="#e3edf7" VerticalOptions="FillAndExpand">
+                       <Grid VerticalOptions="FillAndExpand" Padding="15">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                        <Label
+                            FontFamily="materialicons"
+                            FontSize="30"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"
+                            HorizontalTextAlignment="Start"
+                            HorizontalOptions="Start"
+                            Text="{x:Static fonts:MaterialIcons.Dolly}"
+                            TextColor="#4f94d4">
+                        </Label>
+
+                        <Label
+                            VerticalTextAlignment="Center"
+                            TextColor="#4f94d4"
+                            Grid.Row="1"
+                            Text="Stock Move" />
+
+                        <Label
+                            TextColor="Black"
+                            VerticalOptions="End"
+                            HorizontalOptions="End"
+                            FontSize="Micro"
+                            Grid.Row="2"
+                            Text="Move items location" />
+                        
+                        </Grid>
+                    </NeoButton>
+                </StackLayout>
+
+               
+            </Grid>
+
+            <StackLayout Orientation="Horizontal"
+                         Padding="2,2"
+                BackgroundColor="#2C3E50"
+                VerticalOptions="End"
+                HeightRequest="30"
+                Spacing="0">
+
+                 <Label
+                    FontFamily="materialicons"
+                    FontSize="20"
+                    Text="{x:Static fonts:MaterialIcons.AccountCircle}"
+                     VerticalOptions="Center"
+                    TextColor="White">
+                </Label>
+
+                   <Label
+                        FontSize="Small"
+                        Text="Souleymen Mlalih"
+                        TextColor="White"
+                        VerticalTextAlignment="Center"
+                       Margin="5,5"/>
+
+                  <Label
+                        FontSize="Small"
+                        HorizontalOptions="EndAndExpand"
+                        HorizontalTextAlignment="End"
+                        Text="v1.0"
+                        TextColor="White"
+                      VerticalOptions="Center"
+                        VerticalTextAlignment="Center" />
+
+            </StackLayout>
+                
+        </StackLayout>
+
+        <ContentView.Background>
+            <LinearGradientBrush StartPoint="0,1"
+                                 EndPoint="0,0">
+                <GradientStop Color="#1A5681"
+                              Offset="0.1"/>
+                <GradientStop Color="#29A2AD"
+                              Offset="1.0"/>
+            </LinearGradientBrush>
+        </ContentView.Background>
+        
+    </ContentView>
+</ContentPage>

@@ -33,6 +33,8 @@
     <PackageReference Include="Prism.Forms" Version="8.1.97" PrivateAssets="all" />
     <PackageReference Include="Prism.Unity.Forms" Version="8.1.97" PrivateAssets="all" />
     <PackageReference Include="EbSoft.Warehouse.SDK" Version="1.0.0.126" />
+    <PackageReference Include="Warehouse.Core" Version="1.0.0.214" />
+    <PackageReference Include="Xamarin.Forms.NeoControls" Version="1.1.1-pre" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Translation\Translations.Designer.cs">
@@ -41,6 +43,10 @@
   </ItemGroup>
   
   <ItemGroup>
+    <EmbeddedResource Include="Resources\materialdesignicons-webfont.ttf" />
+    <EmbeddedResource Include="Resources\icomoon.ttf" />
+  </ItemGroup>
+  <ItemGroup>
     <EmbeddedResource Update="Translation\Translations.resx">
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Translations.Designer.cs</LastGenOutput>
@@ -48,5 +54,32 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="EbSoft.Warehouse.SDK" />
+    <None Remove="Warehouse.Core" />
+    <None Remove="ViewModels\%28Suppliers%29\" />
+    <None Remove="Xamarin.Forms.NeoControls" />
+    <None Remove="Resources\" />
+    <None Remove="Resources\materialdesignicons-webfont.ttf" />
+    <None Remove="Resources\icomoon.ttf" />
+    <None Remove="Controls\" />
+    <None Remove="ViewModels\%28DatePicker%29\" />
+    <None Remove="%28Reception%29\" />
+    <None Remove="%28Reception%29\Views\" />
+    <None Remove="%28Reception%29\ViewModels\" />
+    <None Remove="%28StockMove%29\" />
+    <None Remove="%28StockMove%29\Views\" />
+    <None Remove="%28StockMove%29\ViewModels\" />
+    <None Remove="Model\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\" />
+    <Folder Include="Controls\" />
+    <Folder Include="ViewModels\%28DatePicker%29\" />
+    <Folder Include="%28Reception%29\" />
+    <Folder Include="%28Reception%29\Views\" />
+    <Folder Include="%28Reception%29\ViewModels\" />
+    <Folder Include="%28StockMove%29\" />
+    <Folder Include="%28StockMove%29\Views\" />
+    <Folder Include="%28StockMove%29\ViewModels\" />
+    <Folder Include="Model\" />
   </ItemGroup>
 </Project>

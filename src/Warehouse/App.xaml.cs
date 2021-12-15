@@ -3,11 +3,13 @@ using Prism.Ioc;
 using Prism.Navigation;
 using Prism.Unity;
 using System.Threading.Tasks;
+using Warehouse.Core;
+using Warehouse.Mobile.ViewModels;
 using Warehouse.Mobile.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
-[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
+
 namespace Warehouse.Mobile
 {
     public partial class App : PrismApplication
@@ -29,15 +31,20 @@ namespace Warehouse.Mobile
         {
             //Navigations
             containerRegistry.RegisterForNavigation<NavigationPage>();
-            containerRegistry.RegisterForNavigation<LoginPage>();
+            containerRegistry.RegisterForNavigation<LoginView>();
+            containerRegistry.RegisterForNavigation<SelectSupplierView, SelectSupplierViewModel>();
+            containerRegistry.RegisterForNavigation<MenuSelectionView>();
+            containerRegistry.RegisterForNavigation<ReceptionDetailsView>();
+            containerRegistry.RegisterForNavigation<PutAwayView>();
 
             //Services
             //containerRegistry.RegisterSingleton<ICentralServiceClient, CentralServiceClient>();
+            containerRegistry.RegisterSingleton<ICompany, MockWarehouseCompany>();
         }
 
         private async Task NavigateToMainPageAsync()
         {
-            var result = await NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(LoginPage)}" );
+            var result = await NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(MenuSelectionView)}" );
             if (result.Exception != null)
             {
                 throw result.Exception;

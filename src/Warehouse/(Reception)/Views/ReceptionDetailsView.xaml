@@ -1,0 +1,109 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:viewModels="clr-namespace:Warehouse.Mobile.ViewModels"
+    xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
+    Title="Receptions"
+    NavigationPage.HasBackButton="True"
+    x:Class="Warehouse.Mobile.Views.ReceptionDetailsView">
+     <ContentView VerticalOptions="Center" Padding="5">
+        <StackLayout VerticalOptions="FillAndExpand">
+
+           
+                <CollectionView
+                    VerticalOptions="FillAndExpand"
+                    ItemsSource="{Binding ReceptionGoods}">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate x:DataType="viewModels:ReceptionGoodViewModel">
+                            <Frame
+                                BackgroundColor="Transparent"
+                                Padding="2"
+                                CornerRadius="10">
+                                <Grid VerticalOptions="FillAndExpand" >
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                        <ColumnDefinition/>
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition/>
+                                    </Grid.RowDefinitions>
+
+                                    <Label
+                                        Grid.Column="0"
+                                        Grid.RowSpan="2"
+                                        Style="{DynamicResource ReceptionGoodCategoryIcon}"
+                                        FontFamily="materialicons"
+                                        Text="{x:Static fonts:MaterialIcons.WashingMachine}"/> 
+
+                                    <Label Text="{Binding Name}"
+                                           Grid.ColumnSpan="2"
+                                           Grid.Row="1"
+                                           Style="{DynamicResource ReceptionGoodDescription}"/>
+
+                                    <Label Text="{Binding Oa}"
+                                           Grid.ColumnSpan="2"
+                                           FontSize="18"
+                                           VerticalOptions="EndAndExpand"
+                                           Style="{DynamicResource ReceptionGoodDescription}"/>
+                                   
+                                        <Label
+                                            Grid.Column="2"
+                                            Grid.RowSpan="2"
+                                            Style="{DynamicResource ReceptionGoodQuantty}"
+                                            Text="{Binding Quantity}"/>
+
+                                     <Label
+                                        Grid.Column="2"
+                                        Grid.RowSpan="2"
+                                        HorizontalOptions="End"
+                                        TextColor="Green"
+                                        Style="{DynamicResource ReceptionGoodCategoryIcon}"
+                                        FontFamily="warehouseIcons"
+                                        Text="{x:Static fonts:IcoMoon.Barcode}"/> 
+
+                                    <BoxView
+                                        Grid.Row="1"
+                                        Grid.ColumnSpan="3"
+                                        HeightRequest="1"
+                                        HorizontalOptions="Fill"
+                                        VerticalOptions="End"
+                                        BackgroundColor="Gray"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+            </CollectionView>
+
+            <StackLayout Orientation="Horizontal"  VerticalOptions="EndAndExpand" Spacing="0" HeightRequest="90" HorizontalOptions="CenterAndExpand">
+                <NeoButton
+                    Style="{DynamicResource ActionButton}">
+                    <Label
+                        Style="{DynamicResource ButtonActionIcon}"
+                        FontFamily="icomoon"
+                        Text="{x:Static fonts:IcoMoon.History}">
+                    </Label>
+                </NeoButton>
+                <NeoButton
+                    Style="{DynamicResource ActionButton}">
+                    <Label
+                        Style="{DynamicResource ButtonActionIcon}"
+                        FontFamily="icomoon"
+                        Text="{x:Static fonts:IcoMoon.Validate}">
+                    </Label>
+                </NeoButton>
+            </StackLayout>
+        </StackLayout>
+
+         <ContentView.Background>
+            <LinearGradientBrush StartPoint="0,1"
+                                 EndPoint="0,0">
+                <GradientStop Color="{StaticResource BackgroundColorViewStart}"
+                              Offset="0.1"/>
+                <GradientStop Color="{StaticResource BackgroundColorViewEnd}"
+                              Offset="1.0"/>
+            </LinearGradientBrush>
+        </ContentView.Background>
+    </ContentView>
+</ContentPage>

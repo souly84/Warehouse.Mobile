@@ -1,0 +1,26 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Warehouse.Mobile.Views.LoginView"
+    Title="Login"
+    Visual="Material">
+    <ContentView VerticalOptions="Center">
+        <StackLayout>
+            <Label
+                            FontFamily="{StaticResource MaterialFontFamily}"
+                            FontSize="30"
+                            VerticalOptions="Center"
+                            VerticalTextAlignment="Center"
+                            HorizontalTextAlignment="Start"
+                            HorizontalOptions="Start"
+                            Text="{Binding Icons.TruckCheck}"
+                            TextColor="#4f94d4">
+                        </Label>
+
+            
+        </StackLayout>
+        
+
+    </ContentView>
+</ContentPage>
