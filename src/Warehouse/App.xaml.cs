@@ -1,9 +1,11 @@
-﻿using Prism;
+﻿using EbSoft.Warehouse.SDK;
+using Prism;
 using Prism.Ioc;
 using Prism.Navigation;
 using Prism.Unity;
 using System.Threading.Tasks;
 using Warehouse.Core;
+using Warehouse.Core.Plugins;
 using Warehouse.Mobile.ViewModels;
 using Warehouse.Mobile.Views;
 using Xamarin.Forms;
@@ -21,6 +23,7 @@ namespace Warehouse.Mobile
         }
 
         public INavigationService Navigation => NavigationService;
+        public IScanner Scanner => Container.Resolve<IScanner>();
 
         protected override async void OnInitialized()
         {
@@ -39,7 +42,9 @@ namespace Warehouse.Mobile
 
             //Services
             //containerRegistry.RegisterSingleton<ICentralServiceClient, CentralServiceClient>();
-            containerRegistry.RegisterSingleton<ICompany, MockWarehouseCompany>();
+            containerRegistry.RegisterInstance<ICompany>(new EbSoftCompany("http://wdc-logcnt.eurocenter.be/webservice/apiscanning.php"));
+            //containerRegistry.RegisterSingleton<ICompany, MockWarehouseCompany>();
+
         }
 
         private async Task NavigateToMainPageAsync()

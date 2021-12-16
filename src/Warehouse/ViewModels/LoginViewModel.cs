@@ -19,7 +19,7 @@ namespace Warehouse.Mobile.Views
 
         public async Task InitializeAsync(INavigationParameters parameters)
         {
-            Suppliers = await _company.Suppliers.ToViewModelListAsync();
+            //Suppliers = await _company.Suppliers.ToViewModelListAsync();
         }
     }
 }

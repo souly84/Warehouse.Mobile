@@ -64,7 +64,7 @@
 
                                 <NeoButton
                                     Grid.Column="2"
-                                    Command="{Binding BindingContext.GoToReceptionDetailsCommand, Source={x:Reference ThisPage}}"
+                                    Command="{Binding GoToReceptionDetailsCommand}"
                                     Style="{DynamicResource SupplierSelectionButton}">
                                     <Label
                                         Style="{DynamicResource ButtonActionIcon}"

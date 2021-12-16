@@ -7,6 +7,7 @@ using Resource = Xamarin.Forms.Platform.Android.Resource;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using Warehouse.Core.Plugins;
 
 namespace Warehouse.Mobile.Droid
 {
@@ -14,6 +15,7 @@ namespace Warehouse.Mobile.Droid
     public class MainActivity : FormsAppCompatActivity
     {
         public INavigationService Navigation => ((App)App.Current).Navigation;
+        private App application;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -23,12 +25,30 @@ namespace Warehouse.Mobile.Droid
             base.OnCreate(savedInstanceState);
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             global::Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
-            var application = new App(new AndroidInitializer(this));
+            application = new App(new AndroidInitializer(this));
 
             LoadApplication(application);
 
             AppCenter.Start("dbafbbc1-b7fc-4dec-b29e-36015da6bc4e",
                    typeof(Analytics), typeof(Crashes));
+        }
+
+        protected override void OnResume()
+        {
+            base.OnResume();
+            _ = application.Scanner.OpenAsync();
+        }
+
+        protected override void OnPause()
+        {
+            base.OnPause();
+            _ = application.Scanner.CloseAsync();
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            _ = application.Scanner.CloseAsync();
         }
     }
 }
