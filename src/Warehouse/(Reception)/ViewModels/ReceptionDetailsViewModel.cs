@@ -8,7 +8,6 @@ using Prism.Navigation;
 using Prism.Services;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
-using Warehouse.Mobile.Reception;
 using Xamarin.Forms;
 
 namespace Warehouse.Mobile.ViewModels

@@ -8,6 +8,7 @@ using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Warehouse.Core.Plugins;
+using Prism.Plugin.Popups;
 
 namespace Warehouse.Mobile.Droid
 {
@@ -23,8 +24,11 @@ namespace Warehouse.Mobile.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
+            global::Rg.Plugins.Popup.Popup.Init(this);
+
             global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
             global::Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
+
             application = new App(new AndroidInitializer(this));
 
             LoadApplication(application);
@@ -49,6 +53,11 @@ namespace Warehouse.Mobile.Droid
         {
             base.OnDestroy();
             _ = application.Scanner.CloseAsync();
+        }
+
+        public override void OnBackPressed()
+        {
+            PopupPlugin.OnBackPressed();
         }
     }
 }

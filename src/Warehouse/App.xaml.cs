@@ -2,6 +2,7 @@
 using Prism;
 using Prism.Ioc;
 using Prism.Navigation;
+using Prism.Plugin.Popups;
 using Prism.Unity;
 using System.Threading.Tasks;
 using Warehouse.Core;
@@ -33,9 +34,13 @@ namespace Warehouse.Mobile
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             //Navigations
+            containerRegistry.RegisterPopupNavigationService();
             containerRegistry.RegisterForNavigation<NavigationPage>();
+
+            //Pages
             containerRegistry.RegisterForNavigation<LoginView>();
             containerRegistry.RegisterForNavigation<SelectSupplierView, SelectSupplierViewModel>();
+            containerRegistry.RegisterForNavigation<QuantityToMovePopupView, QuantityToMovePopupViewModel>();
             containerRegistry.RegisterForNavigation<MenuSelectionView>();
             containerRegistry.RegisterForNavigation<ReceptionDetailsView>();
             containerRegistry.RegisterForNavigation<PutAwayView>();
@@ -50,7 +55,7 @@ namespace Warehouse.Mobile
 
         private async Task NavigateToMainPageAsync()
         {
-            var result = await NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(MenuSelectionView)}" );
+            var result = await NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(PutAwayView)}" );
             if (result.Exception != null)
             {
                 throw result.Exception;

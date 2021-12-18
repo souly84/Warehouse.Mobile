@@ -1,0 +1,69 @@
+﻿using System;
+using System.Threading.Tasks;
+using Prism.Commands;
+using Prism.Mvvm;
+using Prism.Navigation;
+using Prism.Services;
+using Warehouse.Core;
+using Warehouse.Core.Plugins;
+using Warehouse.Mobile.Extensions;
+using Xamarin.Forms;
+
+namespace Warehouse.Mobile
+{
+    public class QuantityToMovePopupViewModel : BindableBase, IInitialize
+    {
+        private readonly INavigationService _navigationService;
+        private IWarehouseGood _goodToMove;
+
+
+        public QuantityToMovePopupViewModel(INavigationService navigationService)
+        {
+            _navigationService = navigationService;
+        }
+
+        private IStorage _originLocation;
+        public IStorage OriginLocation
+        {
+            get => _originLocation;
+            set => SetProperty(ref _originLocation, value);
+        }
+
+        private string _destinationLocation;
+        public string DestinationLocation
+        {
+            get => _destinationLocation;
+            set => SetProperty(ref _destinationLocation, value);
+        }
+
+        
+
+
+        public void Initialize(INavigationParameters parameters)
+        {
+            OriginLocation = parameters.Value<IStorage>("Origin");
+            DestinationLocation = parameters.Value<string>("Destination");
+            _goodToMove = parameters.Value<IWarehouseGood>("Good");
+        }
+
+        private DelegateCommand validateCommand;
+
+        public DelegateCommand ValidateCommand => validateCommand ?? (validateCommand = new DelegateCommand(async () =>
+        {
+            await _goodToMove
+                .Movement
+                .From(OriginLocation)
+                .MoveToAsync(
+                    await _goodToMove.Storages.ByBarcodeAsync(DestinationLocation),
+                    5
+            );
+            await _navigationService.GoBackAsync();
+        }));
+
+        private DelegateCommand cancelCommand;
+        public DelegateCommand CancelCommand => cancelCommand ?? (cancelCommand = new DelegateCommand(async () =>
+        {
+            await _navigationService.GoBackAsync();
+        }));
+    }
+}

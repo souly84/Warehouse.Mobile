@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using EbSoft.Warehouse.SDK;
 using MediaPrint;
 using Newtonsoft.Json.Linq;
+using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
@@ -19,12 +20,18 @@ namespace Warehouse.Mobile
         private readonly IScanner _scanner;
         private readonly IPageDialogService _dialog;
         private readonly ICompany _company;
+        private readonly INavigationService _navigationService;
 
-        public PutAwayViewModel(IScanner scanner, IPageDialogService dialog, ICompany company)
+        public PutAwayViewModel(
+            IScanner scanner,
+            IPageDialogService dialog,
+            ICompany company,
+            INavigationService navigationService)
         {
             _scanner = scanner;
             _dialog = dialog;
             _company = company;
+            _navigationService = navigationService;
         }
 
         private ObservableCollection<LocationViewModel> _reserveLocations;
@@ -152,16 +159,37 @@ namespace Warehouse.Mobile
             {
                 try
                 {
-                    ScannedBarcode = barcode.BarcodeData;
-                    IsRecognizedProduct = true;
-                    WarehouseGood = await _company
-                        .Warehouse
-                        .Goods.For(barcode.BarcodeData)
-                        .FirstAsync();
-                    CheckInStorage = await WarehouseGood?.Storages?
-                        .FirstAsync(x => x.ToDictionary().ValueOrDefault<string>("location")
-                        .Contains("CHECK IN"));
-                    CheckInQuantity = CheckInStorage?.ToDictionary().ValueOrDefault<int>("Quantity");
+                    switch (barcode.Symbology.ToLower())
+                    {
+                        case "code128":
+                            {
+                                await _navigationService.NavigateAsync(
+                                    AppConstants.QuantityToMovePopupViewId,
+                                    new NavigationParameters
+                                    {
+                                        { "Origin", CheckInStorage },
+                                        { "Destination", barcode.BarcodeData },
+                                        { "Good", WarehouseGood }
+                                    }
+                                );
+                                break;
+                            }
+                        default:
+                            {
+                                ScannedBarcode = barcode.BarcodeData;
+                                IsRecognizedProduct = true;
+                                WarehouseGood = await _company
+                                    .Warehouse
+                                    .Goods.For(barcode.BarcodeData)
+                                    .FirstAsync();
+                                CheckInStorage = await WarehouseGood?.Storages?
+                                    .FirstAsync(x => x.ToDictionary().ValueOrDefault<string>("location")
+                                    .Contains("CHECK IN"));
+                                CheckInQuantity = CheckInStorage?.ToDictionary().ValueOrDefault<int>("Quantity");
+                                break;
+                            }
+                    }
+                    
 
                 }
                 catch (Exception ex)
@@ -170,5 +198,13 @@ namespace Warehouse.Mobile
                 }
             });
         }
+
+        private DelegateCommand goToPopupCommand;
+
+        public DelegateCommand GoToPopupCommand => goToPopupCommand ?? (goToPopupCommand = new DelegateCommand(async () =>
+        {
+            await _navigationService.NavigateAsync(
+                       AppConstants.QuantityToMovePopupViewId);
+        }));
     }
 }

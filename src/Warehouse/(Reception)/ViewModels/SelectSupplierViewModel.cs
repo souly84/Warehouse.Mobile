@@ -38,19 +38,8 @@ namespace Warehouse.Mobile.ViewModels
 
         public async Task InitializeAsync(INavigationParameters parameters)
         {
-            try
-            {
-                CurrentDate = new DateTime(2021, 12, 16);
-                Suppliers = await _company.Suppliers.For(CurrentDate).ToViewModelListAsync(_navigationService);
-            }
-            catch (Exception ex)
-            {
-
-            }
-            
+            CurrentDate = new DateTime(2021, 12, 16);
+            Suppliers = await _company.Suppliers.For(CurrentDate).ToViewModelListAsync(_navigationService);
         }
-
-
-        
     }
 }

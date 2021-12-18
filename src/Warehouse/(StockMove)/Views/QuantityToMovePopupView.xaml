@@ -1,0 +1,116 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<pages:PopupPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns:d="http://xamarin.com/schemas/2014/forms/design"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
+    xmlns:controls="clr-namespace:Warehouse.Mobile.Controls"
+    CloseWhenBackgroundIsClicked="False"
+    mc:Ignorable="d"    
+    x:Class="Warehouse.Mobile.QuantityToMovePopupView"
+    BackgroundColor="#A000"
+    HasSystemPadding="True"
+    Padding="20">
+
+    <StackLayout Padding="10" VerticalOptions="CenterAndExpand">
+        <Frame
+            CornerRadius="10"
+            BackgroundColor="{DynamicResource MainColor}">
+
+            <StackLayout>
+                <Grid ColumnSpacing="0"
+                      Padding="10,0,10,0">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="70"/>
+                    </Grid.ColumnDefinitions>
+                     <Label
+                         FontFamily="materialicons"
+                         FontSize="25"
+                         Text="{x:Static fonts:MaterialIcons.MapMarker}"
+                         VerticalTextAlignment="End"/>
+
+                     <Label
+                         Grid.Column="1"
+                         Text="Put away"
+                         VerticalOptions="End"
+                         HorizontalOptions="Start"
+                         TextColor="{DynamicResource TextsColor}"/>
+
+                     <Label
+                         Grid.Column="2"
+                         FontFamily="materialicons"
+                         FontSize="25"
+                         Text="{x:Static fonts:MaterialIcons.Dolly}"
+                         VerticalOptions="End"
+                         VerticalTextAlignment="End"
+                         HorizontalOptions="Center"/>
+
+                     <Label
+                         Grid.Column="3"
+                         FontFamily="materialicons"
+                         FontSize="25"
+                         Text="{x:Static fonts:MaterialIcons.MapMarker}"
+                         VerticalTextAlignment="End"/>
+
+                    <Label
+                        Grid.Column="4"
+                         Text="{Binding DestinationLocation}"
+                         VerticalOptions="End"
+                         HorizontalOptions="End"
+                         TextColor="{DynamicResource TextsColor}"/>
+
+                </Grid>
+
+                <StackLayout Padding="20,20,20,0" Spacing="0">
+                    <Label Text="How many items would you like to place here?" />
+                </StackLayout>
+
+                <StackLayout HorizontalOptions="Center" Spacing="0">
+                    <controls:CustomEntry WidthRequest="70" DigitsTypesToAllow="Numbers"/>
+                </StackLayout>
+
+                <StackLayout
+                    Orientation="Horizontal"
+                    VerticalOptions="EndAndExpand"
+                    Spacing="0"
+                    HeightRequest="70"
+                    HorizontalOptions="CenterAndExpand">
+                <NeoButton
+                    Style="{DynamicResource ActionButton}"
+                    Command="{Binding CancelCommand}"
+                    HeightRequest="70"
+                    WidthRequest="70">
+                    <Label
+                        Style="{DynamicResource ButtonActionIcon}"
+                        FontSize="30"
+                        FontFamily="icomoon"
+                        Text="{x:Static fonts:IcoMoon.History}">
+                    </Label>
+                </NeoButton>
+                <NeoButton
+                    Style="{DynamicResource ActionButton}"
+                    Command="{Binding ValidateCommand}">
+                    <Label
+                        Style="{DynamicResource ButtonActionIcon}"
+                        FontFamily="icomoon"
+                        FontSize="30"
+                        Text="{x:Static fonts:IcoMoon.Validate}">
+                    </Label>
+                </NeoButton>
+            </StackLayout>
+            </StackLayout>
+
+            
+            
+
+    </Frame>
+    </StackLayout>
+    
+    
+</pages:PopupPage>

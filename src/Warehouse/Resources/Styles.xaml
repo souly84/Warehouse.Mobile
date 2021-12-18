@@ -17,6 +17,11 @@
     <Color x:Key="TextsColor">#544F5F</Color>
     <Color x:Key="MainColor">#E2E5ED</Color>
 
+    <Style TargetType="NavigationPage" ApplyToDerivedTypes="True">
+        <Setter Property="BarBackgroundColor" Value="{DynamicResource MainColor}" />
+        <Setter Property="BarTextColor" Value="{DynamicResource TextsColor}" />
+    </Style>
+
     <Style x:Key="SupplierNameLabel" TargetType="Label" ApplyToDerivedTypes="True">
         <Setter Property="TextColor" Value="{DynamicResource TextsColor}" />
         <Setter Property="FontSize" Value="25" />

@@ -7,21 +7,6 @@
     xmlns:viewModels="clr-namespace:Warehouse.Mobile.ViewModels"
     Title="Put Away"
     x:Class="Warehouse.Mobile.PutAwayView">
-    <!--<NavigationPage.TitleView>
-        <StackLayout>
-            <Label Text="Put Away"></Label>
-              <controls1:MaterialSearchBar
-            HorizontalOptions="FillAndExpand"
-            Margin="0,0,20,0"
-            BackgroundColor="White"
-            CornerRadius="5"
-            TextColor="White"
-            CancelButtonColor="White"
-            Placeholder="EAN/Hope"/>
-        </StackLayout>
-        
-      
-    </NavigationPage.TitleView>-->
 
     <ContentView VerticalOptions="FillAndExpand" Padding="5" BackgroundColor="{DynamicResource MainColor}">
         <StackLayout VerticalOptions="FillAndExpand" BackgroundColor="{DynamicResource MainColor}">
@@ -38,7 +23,7 @@
                          BackgroundColor="White"
                          CornerRadius="5"
                          Text="{Binding ScannedBarcode}"
-                         TextColor="White"
+                         TextColor="{DynamicResource TextsColor}"
                          CancelButtonColor="Red"
                          Placeholder="Scan product"/>
 
@@ -48,7 +33,8 @@
                         TextColor="{DynamicResource TextsColor}"
                         Style="{DynamicResource ReceptionGoodCategoryIcon}"
                         FontFamily="warehouseIcons"
-                        Text="{x:Static fonts:IcoMoon.Barcode}"/> 
+                        Text="{x:Static fonts:IcoMoon.Barcode}">
+                    </Label> 
                 </Grid>
             </StackLayout>
 
