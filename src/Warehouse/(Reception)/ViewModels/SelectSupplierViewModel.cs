@@ -40,7 +40,7 @@ namespace Warehouse.Mobile.ViewModels
         {
             try
             {
-                CurrentDate = new DateTime(2021, 10, 28);
+                CurrentDate = new DateTime(2021, 12, 16);
                 Suppliers = await _company.Suppliers.For(CurrentDate).ToViewModelListAsync(_navigationService);
             }
             catch (Exception ex)

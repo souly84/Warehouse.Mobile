@@ -42,7 +42,8 @@ namespace Warehouse.Mobile
 
             //Services
             //containerRegistry.RegisterSingleton<ICentralServiceClient, CentralServiceClient>();
-            containerRegistry.RegisterInstance<ICompany>(new EbSoftCompany("http://wdc-logcnt.eurocenter.be/webservice/apiscanning.php"));
+            //containerRegistry.RegisterInstance<ICompany>(new EbSoftCompany("http://wdc-logcnt.eurocenter.be/webservice/apiscanning.php"));
+            containerRegistry.RegisterInstance<ICompany>(new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php"));
             //containerRegistry.RegisterSingleton<ICompany, MockWarehouseCompany>();
 
         }
