@@ -4,12 +4,11 @@ using Prism.Ioc;
 using Prism.Navigation;
 using Prism.Unity;
 using System.Threading.Tasks;
+using Warehouse.Core;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.ViewModels;
 using Warehouse.Mobile.Views;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-
 
 namespace Warehouse.Mobile
 {
@@ -22,7 +21,6 @@ namespace Warehouse.Mobile
         }
 
         public INavigationService Navigation => NavigationService;
-        public IScanner Scanner => Container.Resolve<IScanner>();
 
         public IScanner Scanner => Container.Resolve<IScanner>();
 
@@ -35,12 +33,14 @@ namespace Warehouse.Mobile
         {
             //Navigations
             containerRegistry.RegisterForNavigation<NavigationPage>();
-            containerRegistry.RegisterForNavigation<LoginPage, LoginViewModel>();
+            containerRegistry.RegisterForNavigation<LoginView, LoginViewModel>();
             containerRegistry.RegisterForNavigation<SelectSupplierView, SelectSupplierViewModel>();
             containerRegistry.RegisterForNavigation<MenuSelectionView>();
             containerRegistry.RegisterForNavigation<ReceptionDetailsView>();
             containerRegistry.RegisterForNavigation<PutAwayView>();
-            containerRegistry.RegisterInstance<ICompany>(new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php"));
+            containerRegistry.RegisterInstance<ICompany>(
+                new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php")
+            );
         }
 
         private async Task NavigateToMainPageAsync()

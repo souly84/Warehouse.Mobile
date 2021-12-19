@@ -8,8 +8,8 @@ namespace Warehouse.Mobile
     {
         private readonly string _supplierName;
 
-        public MockSupplier() : this(
-            "MockSupplier")
+        public MockSupplier()
+            : this("MockSupplier")
         {
         }
 

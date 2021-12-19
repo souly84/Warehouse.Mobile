@@ -1,41 +1,30 @@
 ﻿using System;
-using System.Threading.Tasks;
+using System.Windows.Input;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
 
 namespace Warehouse.Mobile.ViewModels
 {
-    public class MenuSelectionViewModel : BindableBase, IInitializeAsync
+    public class MenuSelectionViewModel : BindableBase
     {
         private readonly INavigationService _navigationService;
+        private ICommand goToAvailableSuppliersCommand;
+        private ICommand goToPutAwayCommand;
 
         public MenuSelectionViewModel(INavigationService navigationService)
         {
-            _navigationService = navigationService;
+            _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
         }
 
-
-     
-
-        public async Task InitializeAsync(INavigationParameters parameters)
-        {
-        }
-
-        private DelegateCommand goToAvailableSuppliersCommand;
-
-        public DelegateCommand GoToAvailableSuppliersCommand => goToAvailableSuppliersCommand ?? (goToAvailableSuppliersCommand = new DelegateCommand(async () =>
+        public ICommand GoToAvailableSuppliersCommand => goToAvailableSuppliersCommand ?? (goToAvailableSuppliersCommand = new DelegateCommand(async () =>
         {
             await _navigationService.NavigateAsync(AppConstants.SupplierViewId);
         }));
 
-        private DelegateCommand goToPutAwayCommand;
-
-        public DelegateCommand GoToPutAwayCommand => goToPutAwayCommand ?? (goToPutAwayCommand = new DelegateCommand(async () =>
+        public ICommand GoToPutAwayCommand => goToPutAwayCommand ?? (goToPutAwayCommand = new DelegateCommand(async () =>
         {
             await _navigationService.NavigateAsync(AppConstants.PutAwayViewId);
         }));
-
-
     }
 }

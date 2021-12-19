@@ -7,10 +7,6 @@ namespace Warehouse.Mobile
 {
     public class MockWarehouseCompany : ICompany
     {
-        public MockWarehouseCompany()
-        {
-        }
-
         public IEntities<ICustomer> Customers => throw new NotImplementedException();
 
         public IEntities<IUser> Users => throw new NotImplementedException();
@@ -32,7 +28,6 @@ namespace Warehouse.Mobile
 
         public void PrintTo(IMedia media)
         {
-            
         }
     }
 }

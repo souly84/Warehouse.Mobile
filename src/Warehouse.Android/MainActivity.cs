@@ -7,7 +7,6 @@ using Resource = Xamarin.Forms.Platform.Android.Resource;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
-using Warehouse.Core.Plugins;
 using Warehouse.Droid.Permissions;
 
 namespace Warehouse.Mobile.Droid
@@ -21,8 +20,7 @@ namespace Warehouse.Mobile.Droid
     {
         private App _app;
 
-        public INavigationService Navigation => ((App)App.Current).Navigation;
-        private App application;
+        public INavigationService Navigation => _app.Navigation;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -57,24 +55,6 @@ namespace Warehouse.Mobile.Droid
         {
             base.OnDestroy();
             _app.Scanner.CloseAsync().ConfigureAwait(false);
-        }
-
-        protected override void OnResume()
-        {
-            base.OnResume();
-            _ = application.Scanner.OpenAsync();
-        }
-
-        protected override void OnPause()
-        {
-            base.OnPause();
-            _ = application.Scanner.CloseAsync();
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            _ = application.Scanner.CloseAsync();
         }
     }
 }

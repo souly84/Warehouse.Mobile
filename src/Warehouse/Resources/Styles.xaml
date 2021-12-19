@@ -35,7 +35,6 @@
         <Setter Property="BackgroundColor" Value="{DynamicResource BackgroundColorViewEnd}"  />
     </Style>
 
-
     <Style x:Key="ReceptionGoodDescription" TargetType="Label" ApplyToDerivedTypes="True">
         <Setter Property="TextColor" Value="{DynamicResource TextsColor}" />
         <Setter Property="FontSize" Value="14" />
@@ -59,7 +58,6 @@
         <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="VerticalTextAlignment" Value="Center" />
     </Style>
-
 
     <Style x:Key="ButtonActionIcon" TargetType="Label" ApplyToDerivedTypes="True">
         <Setter Property="TextColor" Value="#544F5F" />

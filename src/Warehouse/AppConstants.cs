@@ -9,6 +9,5 @@ namespace Warehouse.Mobile
         public const string SupplierViewId = nameof(SelectSupplierView);
         public const string ReceptionDetailsViewId = nameof(ReceptionDetailsView);
         public const string PutAwayViewId = nameof(PutAwayView);
-
     }
 }
