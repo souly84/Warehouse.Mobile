@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Prism.Mvvm;
 using Prism.Navigation;
-using Prism.Services.Dialogs;
+using Prism.Services;
 using Warehouse.Core.Plugins;
 
 namespace Warehouse.Mobile.ViewModels
@@ -9,9 +10,9 @@ namespace Warehouse.Mobile.ViewModels
     public class ScannerViewModel : BindableBase, INavigatedAware
     {
         private readonly IScanner _scanner;
-        private readonly IDialogService _dialog;
+        private readonly IPageDialogService _dialog;
 
-        public ScannerViewModel(IScanner scanner, IDialogService dialog)
+        public ScannerViewModel(IScanner scanner, IPageDialogService dialog)
         {
             _scanner = scanner;
             _dialog = dialog;
@@ -32,10 +33,11 @@ namespace Warehouse.Mobile.ViewModels
             catch(Exception ex)
             {
                 _scanner.OnScan -= OnScan;
-                _dialog.ShowDialog(
+                _dialog.DisplayAlertAsync(
                     "Scanner initialization error",
-                    new DialogParameters($"message={ex.Message}")
-                );
+                    ex.Message,
+                    "Ok"
+                ).FireAndForget();
             }
         }
 
@@ -48,10 +50,11 @@ namespace Warehouse.Mobile.ViewModels
             }
             catch (Exception ex)
             {
-                _dialog.ShowDialog(
+                _dialog.DisplayAlertAsync(
                     "Scanner initialization error",
-                    new DialogParameters($"message={ex.Message}")
-                );
+                    ex.Message,
+                    "Ok"
+                ).FireAndForget();
             }
         }
 
