@@ -71,8 +71,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AndroidInstrumentations\TestInstrumentation.cs" />
     <Compile Include="%28Extensions%29\AssertExtensions.cs" />
-    <Compile Include="IntegrationTests.cs" />
     <Compile Include="%28Extensions%29\ExceptionExtensions.cs" />
+    <Compile Include="MainActivityTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -121,7 +121,7 @@
     <PackageReference Include="xunit.runner.testSuiteInstrumentation">
       <Version>1.0.2</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.CommunityToolkit" Version="1.3.0" />
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="1.3.1" />
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.1</Version>
     </PackageReference>

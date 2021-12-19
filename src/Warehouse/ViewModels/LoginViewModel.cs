@@ -1,25 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-using Prism.Navigation;
-using Warehouse.Core;
-using Warehouse.Mobile.ViewModels;
+﻿using Prism.Mvvm;
 
-namespace Warehouse.Mobile.Views
+namespace Warehouse.Mobile.ViewModels
 {
-    public class LoginViewModel : IInitializeAsync
+    public class LoginViewModel : BindableBase
     {
-        private readonly ICompany _company;
-
-        public LoginViewModel(ICompany company)
-        {
-            _company = company;
-        }
-
-        public IList<SupplierViewModel> Suppliers { get; set; }
-
-        public async Task InitializeAsync(INavigationParameters parameters)
-        {
-            //Suppliers = await _company.Suppliers.ToViewModelListAsync();
-        }
     }
 }

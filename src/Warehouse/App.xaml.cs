@@ -4,7 +4,6 @@ using Prism.Ioc;
 using Prism.Navigation;
 using Prism.Unity;
 using System.Threading.Tasks;
-using Warehouse.Core;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.ViewModels;
 using Warehouse.Mobile.Views;
@@ -25,27 +24,23 @@ namespace Warehouse.Mobile
         public INavigationService Navigation => NavigationService;
         public IScanner Scanner => Container.Resolve<IScanner>();
 
-        protected override async void OnInitialized()
+        public IScanner Scanner => Container.Resolve<IScanner>();
+
+        protected override void OnInitialized()
         {
-            await NavigateToMainPageAsync();
+            _ = NavigateToMainPageAsync();
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             //Navigations
             containerRegistry.RegisterForNavigation<NavigationPage>();
-            containerRegistry.RegisterForNavigation<LoginView>();
+            containerRegistry.RegisterForNavigation<LoginPage, LoginViewModel>();
             containerRegistry.RegisterForNavigation<SelectSupplierView, SelectSupplierViewModel>();
             containerRegistry.RegisterForNavigation<MenuSelectionView>();
             containerRegistry.RegisterForNavigation<ReceptionDetailsView>();
             containerRegistry.RegisterForNavigation<PutAwayView>();
-
-            //Services
-            //containerRegistry.RegisterSingleton<ICentralServiceClient, CentralServiceClient>();
-            //containerRegistry.RegisterInstance<ICompany>(new EbSoftCompany("http://wdc-logcnt.eurocenter.be/webservice/apiscanning.php"));
             containerRegistry.RegisterInstance<ICompany>(new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php"));
-            //containerRegistry.RegisterSingleton<ICompany, MockWarehouseCompany>();
-
         }
 
         private async Task NavigateToMainPageAsync()

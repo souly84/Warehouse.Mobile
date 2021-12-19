@@ -37,6 +37,24 @@ steps:
     restoreSolution: '$(solution)'
     feedsToUse: config
     nugetConfigPath: NuGet.config
+- task: SonarCloudPrepare@1
+  inputs:
+    SonarCloud: 'SonarCloud'
+    organization: 'souly84'
+    scannerMode: 'MSBuild'
+    projectKey: 'souly84_Warehouse.Mobile'
+    projectName: 'Warehouse.Mobile'
+    extraProperties: |
+        sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)\**\coverage.opencover.xml
+        sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)\*.trx
+        
+- task: richardfennellBM.BM-VSTS-Versioning-Task.Version-AndroidManifest-Task.VersionAndroidManifest@2
+  displayName: 'Version Android Manifest'
+  inputs:
+    VersionNameFormat: '{1}.{2}.{3}-$(Build.SourceBranchName)'
+    VersionCodeFormat: '{4}'
+    VersionRegex: '\d+\.\d+\.\d+\.\d+'
+    
 - task: UseDotNet@2
   displayName: 'Use .Net Core sdk'
   inputs:
@@ -50,23 +68,6 @@ steps:
     version: 3.x
     vsVersion: 16.x
   continueOnError: true
-  
-- task: richardfennellBM.BM-VSTS-Versioning-Task.Version-AndroidManifest-Task.VersionAndroidManifest@2
-  displayName: 'Version Android Manifest'
-  inputs:
-    VersionNameFormat: '{1}.{2}.{3}-$(Build.SourceBranchName)'
-    VersionCodeFormat: '{4}'
-    VersionRegex: '\d+\.\d+\.\d+\.\d+'
-- task: SonarCloudPrepare@1
-  inputs:
-    SonarCloud: 'SonarCloud'
-    organization: 'souly84'
-    scannerMode: 'MSBuild'
-    projectKey: 'souly84_Warehouse.Mobile'
-    projectName: 'Warehouse.Mobile'
-    extraProperties: |
-        sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)\tests\coverage.opencover.xml
-        sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)\*.trx
 
 - task: MSBuild@1
   displayName: 'Build solution'
@@ -82,7 +83,12 @@ steps:
     projects: '**/*Unit[Tt]est*/*.csproj'
     publishTestResults: true
     arguments: '--configuration $(BuildConfiguration) /p:CollectCoverage=true "/p:CoverletOutputFormat=\"opencover,Cobertura\""'
-
+- task: PublishCodeCoverageResults@1
+  displayName: 'Publish code coverage result'
+  inputs:
+    codeCoverageTool: Cobertura
+    summaryFileLocation: '**/*.cobertura.xml'
+    
 - task: XamarinAndroid@1
   displayName: 'Build Xamarin.Android projects'
   inputs:
