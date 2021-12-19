@@ -45,8 +45,9 @@ steps:
     projectKey: 'souly84_Warehouse.Mobile'
     projectName: 'Warehouse.Mobile'
     extraProperties: |
-        sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)\tests\coverage.opencover.xml
+        sonar.cs.opencover.reportsPaths=$(Build.SourcesDirectory)\**\coverage.opencover.xml
         sonar.cs.vstest.reportsPaths=$(Agent.TempDirectory)\*.trx
+        
 - task: richardfennellBM.BM-VSTS-Versioning-Task.Version-AndroidManifest-Task.VersionAndroidManifest@2
   displayName: 'Version Android Manifest'
   inputs:
