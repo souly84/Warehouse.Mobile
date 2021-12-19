@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Prism.AppModel;
 using Prism.Services;
@@ -129,6 +130,20 @@ namespace Warehouse.Mobile.Tests
             public string AcceptButton { get; set; }
 
             public string CancelButton { get; set; }
+
+            public override bool Equals(object obj)
+            {
+                return obj is DialogPage page &&
+                       Title == page.Title &&
+                       Message == page.Message &&
+                       AcceptButton == page.AcceptButton &&
+                       CancelButton == page.CancelButton;
+            }
+
+            public override int GetHashCode()
+            {
+                return HashCode.Combine(Title, Message, AcceptButton, CancelButton);
+            }
         }
     }
 }
