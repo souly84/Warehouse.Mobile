@@ -11,7 +11,11 @@ using Warehouse.Droid.Permissions;
 
 namespace Warehouse.Mobile.Droid
 {
-    [Activity(Label = "Warehouse", Icon = "@mipmap/icon", Theme = "@style/MainTheme", ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "Warehouse",
+        Icon = "@mipmap/icon",
+        Theme = "@style/MainTheme",
+        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
+        Name = "warehouse.mobile.android.mainactivity")]
     public class MainActivity : FormsAppCompatActivity
     {
         private App _app;

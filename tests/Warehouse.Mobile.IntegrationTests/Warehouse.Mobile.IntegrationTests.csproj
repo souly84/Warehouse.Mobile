@@ -71,8 +71,8 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="AndroidInstrumentations\TestInstrumentation.cs" />
     <Compile Include="%28Extensions%29\AssertExtensions.cs" />
-    <Compile Include="IntegrationTests.cs" />
     <Compile Include="%28Extensions%29\ExceptionExtensions.cs" />
+    <Compile Include="MainActivityTests.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
