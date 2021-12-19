@@ -26,12 +26,6 @@ namespace Warehouse.Mobile
 
         protected override void OnInitialized()
         {
-            // Nothing to do
-        }
-
-        protected override void OnStart()
-        {
-            base.OnStart();
             _ = NavigateToMainPageAsync();
         }
 

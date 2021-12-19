@@ -1,6 +1,6 @@
 ﻿using Xunit;
 
-namespace Warehouse.Mobile.Tests
+namespace Warehouse.Mobile.UnitTests
 {
     public class AppTests
     {
