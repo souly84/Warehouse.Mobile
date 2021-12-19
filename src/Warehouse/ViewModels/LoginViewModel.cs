@@ -1,10 +1,8 @@
-﻿using System;
-namespace Warehouse.Mobile.Views
+﻿using Prism.Mvvm;
+
+namespace Warehouse.Mobile.ViewModels
 {
-    public class LoginViewModel
+    public class LoginViewModel : BindableBase
     {
-        public LoginViewModel()
-        {
-        }
     }
 }

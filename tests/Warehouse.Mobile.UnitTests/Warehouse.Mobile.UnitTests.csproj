@@ -16,9 +16,18 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
+    <PackageReference Include="Prism.Forms" Version="8.1.97" />
+    <PackageReference Include="Prism.Unity.Forms" Version="8.1.97" />
+    <PackageReference Include="Xamarin.Forms.Mocks" Version="4.7.0.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Warehouse\Warehouse.Mobile.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="Prism.Core" />
+    <None Remove="Prism.Forms" />
+    <None Remove="Prism.Unity.Forms" />
+    <None Remove="Xamarin.Forms.Mocks" />
   </ItemGroup>
 </Project>
