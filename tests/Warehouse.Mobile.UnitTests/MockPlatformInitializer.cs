@@ -1,7 +1,7 @@
 ﻿using Prism;
 using Prism.Ioc;
 
-namespace Warehouse.Mobile.Tests
+namespace Warehouse.Mobile.UnitTests
 {
     internal class MockPlatformInitializer : IPlatformInitializer
     {

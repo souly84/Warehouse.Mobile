@@ -8,6 +8,7 @@ namespace Warehouse.Mobile.UnitTests
         {
             Xamarin.Forms.Mocks.MockForms.Init();
         }
+
         [Fact]
         public void Startup()
         {
