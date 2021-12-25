@@ -4,9 +4,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     x:Class="Warehouse.Mobile.Views.MenuSelectionView"
     xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
+    xmlns:viewmodels="clr-namespace:Warehouse.Mobile.ViewModels"
     Title="Main menu"
-    NavigationPage.HasBackButton="True"
-    >
+    x:DataType="viewmodels:MenuSelectionViewModel"
+    NavigationPage.HasBackButton="True">
     <ContentView VerticalOptions="Fill" BackgroundColor="#2980B9">
         <StackLayout
             VerticalOptions="FillAndExpand"
@@ -14,8 +15,6 @@
             <StackLayout
                 Spacing="0"
                 Padding="20">
-
-
                 <Label
                     Text="Welcome to Eggo warehouse managment app"
                     TextColor="White"
@@ -43,7 +42,6 @@
                             <RowDefinition/>
                             <RowDefinition/>
                         </Grid.RowDefinitions>
-
                         <Label
                             FontFamily="warehouseIcons"
                             FontSize="30"
@@ -69,7 +67,7 @@
                             Grid.Row="2"
                             Text="Good receipt PO" />
                         
-                    </Grid>
+                        </Grid>
                     </NeoButton>
                 </StackLayout>
 
@@ -202,6 +200,5 @@
                               Offset="1.0"/>
             </LinearGradientBrush>
         </ContentView.Background>
-        
     </ContentView>
 </ContentPage>
