@@ -118,7 +118,7 @@
                     Grid.Row="1"
                     Grid.Column="0">
 
-                     <NeoButton BackgroundColor="#e3edf7" VerticalOptions="FillAndExpand">
+                     <NeoButton BackgroundColor="#e3edf7" VerticalOptions="FillAndExpand" Command="{Binding GoToStockMoveCommand}">
                        <Grid VerticalOptions="FillAndExpand" Padding="15">
                         <Grid.RowDefinitions>
                             <RowDefinition/>

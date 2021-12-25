@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using EbSoft.Warehouse.SDK;
 using MediaPrint;
@@ -48,11 +50,11 @@ namespace Warehouse.Mobile
             set => SetProperty(ref _raceLocations, value);
         }
 
-        private IStorage _checkInStorage;
-        public IStorage CheckInStorage
+        private LocationViewModel _putAwayStorage;
+        public LocationViewModel PutAwayStorage
         {
-            get => _checkInStorage;
-            set => SetProperty(ref _checkInStorage, value);
+            get => _putAwayStorage;
+            set => SetProperty(ref _putAwayStorage, value);
         }
 
         private string _scannedBarcode;
@@ -88,29 +90,29 @@ namespace Warehouse.Mobile
 
         public async Task InitializeAsync(INavigationParameters parameters)
         {
-            ReserveLocations = new ObservableCollection<LocationViewModel>
-            {
-                new LocationViewModel
-                {
-                    Location = "41-1-3", LocationaType = LocationType.Reserve
-                },
-                new LocationViewModel
-                {
-                    Location = "42-1-2", LocationaType = LocationType.Reserve
-                }
-            };
+            //ReserveLocations = new ObservableCollection<LocationViewModel>
+            //{
+            //    new LocationViewModel
+            //    {
+            //        Location = "41-1-3", LocationaType = LocationType.Reserve
+            //    },
+            //    new LocationViewModel
+            //    {
+            //        Location = "42-1-2", LocationaType = LocationType.Reserve
+            //    }
+            //};
 
-            RaceLocations = new ObservableCollection<LocationViewModel>
-            {
-                new LocationViewModel
-                {
-                    Location = "41-1-1", LocationaType = LocationType.Race
-                },
-                new LocationViewModel
-                {
-                    Location = "42-1-1", LocationaType = LocationType.Race
-                }
-            };
+            //RaceLocations = new ObservableCollection<LocationViewModel>
+            //{
+            //    new LocationViewModel
+            //    {
+            //        Location = "41-1-1", LocationaType = LocationType.Race
+            //    },
+            //    new LocationViewModel
+            //    {
+            //        Location = "42-1-1", LocationaType = LocationType.Race
+            //    }
+            //};
         }
 
         async void INavigatedAware.OnNavigatedTo(INavigationParameters parameters)
@@ -153,7 +155,7 @@ namespace Warehouse.Mobile
             }
         }
 
-        protected virtual void OnScan(object sender, IScanningResult barcode)
+        protected virtual async void OnScan(object sender, IScanningResult barcode)
         {
             Device.BeginInvokeOnMainThread(async () =>
             {
@@ -167,7 +169,7 @@ namespace Warehouse.Mobile
                                     AppConstants.QuantityToMovePopupViewId,
                                     new NavigationParameters
                                     {
-                                        { "Origin", CheckInStorage },
+                                        { "Origin", PutAwayStorage },
                                         { "Destination", barcode.BarcodeData },
                                         { "Good", WarehouseGood }
                                     }
@@ -182,10 +184,11 @@ namespace Warehouse.Mobile
                                     .Warehouse
                                     .Goods.For(barcode.BarcodeData)
                                     .FirstAsync();
-                                CheckInStorage = await WarehouseGood?.Storages?
-                                    .FirstAsync(x => x.ToDictionary().ValueOrDefault<string>("location")
-                                    .Contains("CHECK IN"));
-                                CheckInQuantity = CheckInStorage?.ToDictionary().ValueOrDefault<int>("Quantity");
+
+                                var check = await WarehouseGood.Storages.PutAway.ToListAsync();
+                                //PutAwayStorage = await check.FirstAsync();
+                                RaceLocations = (ObservableCollection<LocationViewModel>)await WarehouseGood.Storages.Race.ToViewModelListAsync();
+                                ReserveLocations = (ObservableCollection<LocationViewModel>)await WarehouseGood.Storages.Reserve.ToViewModelListAsync();
                                 break;
                             }
                     }
@@ -205,6 +208,13 @@ namespace Warehouse.Mobile
         {
             await _navigationService.NavigateAsync(
                        AppConstants.QuantityToMovePopupViewId);
+        }));
+
+        private DelegateCommand searchItemCommand;
+
+        public DelegateCommand SearchItemCommand => searchItemCommand ?? (searchItemCommand = new DelegateCommand(async () =>
+        {
+            SearchItem(ScannedBarcode);
         }));
     }
 }

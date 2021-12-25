@@ -113,7 +113,6 @@ namespace Warehouse.Mobile.ViewModels
         }
 
         private DelegateCommand validateReceptionCommand;
-
         public DelegateCommand ValidateReceptionCommand => validateReceptionCommand ?? (validateReceptionCommand = new DelegateCommand(async () =>
         {
             try
@@ -124,6 +123,25 @@ namespace Warehouse.Mobile.ViewModels
             catch (Exception ex)
             {
                 await _dialog.DisplayAlertAsync("Syncro error", ex.Message, "Ok");
+            }
+        }));
+
+        private DelegateCommand markAsPreparedCommand;
+        public DelegateCommand MarkAsPreparedCommand => markAsPreparedCommand ?? (markAsPreparedCommand = new DelegateCommand(async () =>
+        {
+            var good = await _reception.ByBarcodeAsync("4242005051137");
+            var goodVm = ReceptionGoods.FirstOrDefault(x => x.Equals(good));
+            if (goodVm != null)
+            {
+                goodVm.IncreaseQuantityCommand.Execute();
+                if (await good.ConfirmedAsync())
+                {
+                    ReceptionGoods.Remove(goodVm);
+                }
+            }
+            else
+            {
+                ReceptionGoods.Insert(0, new ReceptionGoodViewModel(good));
             }
         }));
     }

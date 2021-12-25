@@ -69,6 +69,8 @@ namespace Warehouse.Mobile.ViewModels
                 && _receptionGood.Equals(receptionGood);
         }
 
+        
+
 
 
     }

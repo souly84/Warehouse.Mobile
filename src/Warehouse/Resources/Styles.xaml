@@ -4,7 +4,7 @@
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              mc:Ignorable="d">
-    <Color x:Key="DefaultBackground">#F5F5F5</Color>
+    <Color x:Key="DefaultBackground">#E2E5ED</Color>
     <Color x:Key="Primary">#343F44</Color>
     <Color x:Key="PrimaryLight">#EF6666</Color>
     <Color x:Key="PrimaryDark">#343F44</Color>

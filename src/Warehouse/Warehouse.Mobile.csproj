@@ -32,11 +32,11 @@
     <PackageReference Include="Prism.Core" Version="8.1.97" PrivateAssets="all" />
     <PackageReference Include="Prism.Forms" Version="8.1.97" PrivateAssets="all" />
     <PackageReference Include="Prism.Unity.Forms" Version="8.1.97" PrivateAssets="all" />
-    <PackageReference Include="Warehouse.Core" Version="1.0.0.230" />
+    <PackageReference Include="Warehouse.Core" Version="1.0.0.259" />
     <PackageReference Include="Xamarin.Forms.NeoControls" Version="1.1.1-pre" />
     <PackageReference Include="WebRequest.Elegant" Version="1.1.0.2" />
     <PackageReference Include="Prism.Plugin.Popups" Version="8.0.76" />
-    <PackageReference Include="EbSoft.Warehouse.SDK" Version="1.0.0.233" />
+    <PackageReference Include="EbSoft.Warehouse.SDK" Version="1.0.0.261" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Translation\Translations.Designer.cs">
@@ -73,6 +73,7 @@
     <None Remove="Model\" />
     <None Remove="WebRequest.Elegant" />
     <None Remove="Prism.Plugin.Popups" />
+    <None Remove="Behavior\" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -85,5 +86,6 @@
     <Folder Include="%28StockMove%29\Views\" />
     <Folder Include="%28StockMove%29\ViewModels\" />
     <Folder Include="Model\" />
+    <Folder Include="Behavior\" />
   </ItemGroup>
 </Project>

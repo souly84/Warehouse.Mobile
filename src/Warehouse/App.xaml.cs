@@ -44,6 +44,7 @@ namespace Warehouse.Mobile
             containerRegistry.RegisterForNavigation<MenuSelectionView>();
             containerRegistry.RegisterForNavigation<ReceptionDetailsView>();
             containerRegistry.RegisterForNavigation<PutAwayView>();
+            containerRegistry.RegisterForNavigation<StockMoveView>();
 
             //Services
             //containerRegistry.RegisterSingleton<ICentralServiceClient, CentralServiceClient>();
@@ -55,7 +56,7 @@ namespace Warehouse.Mobile
 
         private async Task NavigateToMainPageAsync()
         {
-            var result = await NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(PutAwayView)}" );
+            var result = await NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(MenuSelectionView)}" );
             if (result.Exception != null)
             {
                 throw result.Exception;

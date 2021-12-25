@@ -5,7 +5,7 @@
     xmlns:viewModels="clr-namespace:Warehouse.Mobile.ViewModels"
     x:Class="Warehouse.Mobile.Views.SelectSupplierView"
     Title="Select supplier"
-    xmlns:controls="clr-namespace:Warehouse.Mobile.Controls;assembly=Warehouse.Mobile"
+    xmlns:behaviors="clr-namespace:Warehouse.Mobile.Behavior"
     xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
     x:Name="ThisPage"
     x:DataType="viewModels:SelectSupplierViewModel"
@@ -37,7 +37,13 @@
                           <controls:DateItem Date="{Binding CurrentDate}"/>-->
 
 
-                <DatePicker MinimumDate="{Binding CurrentDate}" HorizontalOptions="CenterAndExpand"/>
+                <DatePicker
+                    Date="{Binding SelectedDate, Mode=TwoWay}"
+                    HorizontalOptions="CenterAndExpand">
+                    <DatePicker.Behaviors>
+                        <behaviors:EventToCommandBehavior Command="{Binding ChangeSelectedDateCommand}" EventName="DateSelected" />
+                    </DatePicker.Behaviors>
+                </DatePicker>
 
 
 

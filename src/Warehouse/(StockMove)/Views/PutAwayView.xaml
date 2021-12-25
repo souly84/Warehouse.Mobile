@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:controls1="clr-namespace:Warehouse.Mobile.Controls;assembly=Warehouse.Mobile"
     xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
-    xmlns:viewModels="clr-namespace:Warehouse.Mobile.ViewModels"
+    xmlns:viewModels="clr-namespace:Warehouse.Mobile"
     Title="Put Away"
     x:Class="Warehouse.Mobile.PutAwayView">
 
@@ -12,19 +12,17 @@
         <StackLayout VerticalOptions="FillAndExpand" BackgroundColor="{DynamicResource MainColor}">
 
             <StackLayout Orientation="Horizontal" BackgroundColor="{DynamicResource MainColor}">
-                <Grid>
+                <Grid HorizontalOptions="FillAndExpand" Padding="20">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                     <controls1:MaterialSearchBar
+                     <controls1:CustomEntry
                          HorizontalOptions="FillAndExpand"
-                         BackgroundColor="White"
-                         CornerRadius="5"
                          Text="{Binding ScannedBarcode}"
                          TextColor="{DynamicResource TextsColor}"
-                         CancelButtonColor="Red"
+                         EnterCommand="{Binding SearchItemCommand}"
                          Placeholder="Scan product"/>
 
                     <Label
@@ -67,7 +65,7 @@
             </StackLayout>
 
             <StackLayout HorizontalOptions="CenterAndExpand">
-                <Label Text="{Binding Quantity}" FontSize="25" />
+                <Label Text="{Binding PutAwayLocation.Quantity}" FontSize="25" />
             </StackLayout>
 
 
@@ -128,6 +126,7 @@
                         
                 </Frame>
             </StackLayout>
+
             </StackLayout>
              
         </StackLayout>

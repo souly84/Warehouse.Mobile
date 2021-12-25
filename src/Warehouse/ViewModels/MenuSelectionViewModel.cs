@@ -36,6 +36,12 @@ namespace Warehouse.Mobile.ViewModels
             await _navigationService.NavigateAsync(AppConstants.PutAwayViewId);
         }));
 
+        private DelegateCommand goToStockMoveCommand;
+
+        public DelegateCommand GoToStockMoveCommand => goToStockMoveCommand ?? (goToStockMoveCommand = new DelegateCommand(async () =>
+        {
+            await _navigationService.NavigateAsync(AppConstants.StockMoveViewId);
+        }));
 
     }
 }
