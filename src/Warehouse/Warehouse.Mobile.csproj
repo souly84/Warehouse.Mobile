@@ -36,7 +36,7 @@
     <PackageReference Include="Xamarin.Forms.NeoControls" Version="1.1.1-pre" />
     <PackageReference Include="WebRequest.Elegant" Version="1.1.0.2" />
     <PackageReference Include="Prism.Plugin.Popups" Version="8.0.76" />
-    <PackageReference Include="EbSoft.Warehouse.SDK" Version="1.0.0.261" />
+    <PackageReference Include="EbSoft.Warehouse.SDK" Version="1.0.0.265" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Translation\Translations.Designer.cs">

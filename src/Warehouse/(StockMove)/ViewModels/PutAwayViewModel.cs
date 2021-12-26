@@ -185,8 +185,8 @@ namespace Warehouse.Mobile
                                     .Goods.For(barcode.BarcodeData)
                                     .FirstAsync();
 
-                                var check = await WarehouseGood.Storages.PutAway.ToListAsync();
-                                //PutAwayStorage = await check.FirstAsync();
+                                var check = await WarehouseGood.Storages.PutAway.ToViewModelListAsync();
+                                PutAwayStorage = check.First();
                                 RaceLocations = (ObservableCollection<LocationViewModel>)await WarehouseGood.Storages.Race.ToViewModelListAsync();
                                 ReserveLocations = (ObservableCollection<LocationViewModel>)await WarehouseGood.Storages.Reserve.ToViewModelListAsync();
                                 break;
@@ -214,7 +214,7 @@ namespace Warehouse.Mobile
 
         public DelegateCommand SearchItemCommand => searchItemCommand ?? (searchItemCommand = new DelegateCommand(async () =>
         {
-            SearchItem(ScannedBarcode);
+            //SearchItem(ScannedBarcode);
         }));
     }
 }

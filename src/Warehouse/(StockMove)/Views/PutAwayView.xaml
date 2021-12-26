@@ -39,7 +39,7 @@
 
             <!--Product Is Recognized-->
             <StackLayout IsVisible="{Binding IsRecognizedProduct}">
-                <StackLayout Orientation="Horizontal" Padding="35" >
+                <StackLayout Orientation="Horizontal" Padding="35,0,35,0" >
                  <Grid>
                      <Grid.ColumnDefinitions>
                          <ColumnDefinition/>
@@ -65,11 +65,18 @@
             </StackLayout>
 
             <StackLayout HorizontalOptions="CenterAndExpand">
-                <Label Text="{Binding PutAwayLocation.Quantity}" FontSize="25" />
+                <Label FontSize="25" >
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="Items to store: " />
+                            <Span Text="{Binding PutAwayStorage.Quantity}" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
             </StackLayout>
 
 
-            <StackLayout HeightRequest="150">
+            <StackLayout HeightRequest="130">
                 <Label Text="Existing Race Locations" />
                 <Frame
                     BackgroundColor="White"
@@ -98,7 +105,7 @@
                 </Frame>
             </StackLayout>
 
-            <StackLayout HeightRequest="150">
+            <StackLayout HeightRequest="130">
                 <Label Text="Existing Reserve Locations" />
                 <Frame
                     BackgroundColor="White"

@@ -14,9 +14,14 @@ namespace Warehouse.Mobile
             _storage = storage;
         }
 
-        //public int Quantity { get => _storage.ToDictionary().ValueOrDefault<int>("Quantity"); }
+        public int Quantity { get => _storage.ToDictionary().ValueOrDefault<int>("Quantity"); }
 
         //public string Location { get => _storage.ToDictionary().ValueOrDefault<string>("Location"); }
+
+        public IStorage ToStorage()
+        {
+            return _storage;
+        }
 
     }
 }

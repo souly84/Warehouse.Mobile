@@ -14,16 +14,18 @@ namespace Warehouse.Mobile
     public class QuantityToMovePopupViewModel : BindableBase, IInitialize
     {
         private readonly INavigationService _navigationService;
+        private readonly ICompany _company;
         private IWarehouseGood _goodToMove;
 
 
-        public QuantityToMovePopupViewModel(INavigationService navigationService)
+        public QuantityToMovePopupViewModel(INavigationService navigationService, ICompany company)
         {
             _navigationService = navigationService;
+            _company = company;
         }
 
-        private IStorage _originLocation;
-        public IStorage OriginLocation
+        private LocationViewModel _originLocation;
+        public LocationViewModel OriginLocation
         {
             get => _originLocation;
             set => SetProperty(ref _originLocation, value);
@@ -41,7 +43,7 @@ namespace Warehouse.Mobile
 
         public void Initialize(INavigationParameters parameters)
         {
-            OriginLocation = parameters.Value<IStorage>("Origin");
+            OriginLocation = parameters.Value<LocationViewModel>("Origin");
             DestinationLocation = parameters.Value<string>("Destination");
             _goodToMove = parameters.Value<IWarehouseGood>("Good");
         }
@@ -52,10 +54,10 @@ namespace Warehouse.Mobile
         {
             await _goodToMove
                 .Movement
-                .From(OriginLocation)
+                .From(OriginLocation.ToStorage())
                 .MoveToAsync(
-                    await _goodToMove.Storages.ByBarcodeAsync(DestinationLocation),
-                    5
+                    await _goodToMove.Storages.ByBarcodeAsync(_company.Warehouse, DestinationLocation),
+                    1
             );
             await _navigationService.GoBackAsync();
         }));
