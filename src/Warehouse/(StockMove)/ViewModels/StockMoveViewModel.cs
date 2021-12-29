@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using EbSoft.Warehouse.SDK;
 using Prism.Mvvm;
@@ -6,6 +7,7 @@ using Prism.Navigation;
 using Prism.Services;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
+using Warehouse.Mobile.ViewModels;
 
 namespace Warehouse.Mobile
 {
@@ -48,6 +50,13 @@ namespace Warehouse.Mobile
             set => SetProperty(ref _scannedBarcodeDestinationLocation, value);
         }
 
+        private LocationViewModel _originLocationVm;
+        public LocationViewModel OriginLocationVm
+        {
+            get => _originLocationVm;
+            set => SetProperty(ref _originLocationVm, value);
+        }
+
         private bool _isRecognizedProduct;
         public bool IsRecognizedProduct
         {
@@ -67,6 +76,20 @@ namespace Warehouse.Mobile
         {
             get => _warehouseGood;
             set => SetProperty(ref _warehouseGood, value);
+        }
+
+        private ObservableCollection<LocationViewModel> _reserveLocations;
+        public ObservableCollection<LocationViewModel> ReserveLocations
+        {
+            get => _reserveLocations;
+            set => SetProperty(ref _reserveLocations, value);
+        }
+
+        private ObservableCollection<LocationViewModel> _raceLocations;
+        public ObservableCollection<LocationViewModel> RaceLocations
+        {
+            get => _raceLocations;
+            set => SetProperty(ref _raceLocations, value);
         }
 
         public async Task InitializeAsync(INavigationParameters parameters)
@@ -122,7 +145,16 @@ namespace Warehouse.Mobile
                     {
                         if (IsRecognizedProduct)
                         {
-                            //Move item
+                            await _navigationService.NavigateAsync(
+                                     AppConstants.QuantityToMovePopupViewId,
+                                     new NavigationParameters
+                                     {
+                                        { "Origin", OriginLocationVm },
+                                        { "Destination", barcode.BarcodeData },
+                                        { "Good", WarehouseGood }
+                                     }
+                                 );
+                            break;
                         }
                         else
                         {
@@ -139,7 +171,10 @@ namespace Warehouse.Mobile
                             .Warehouse
                             .Goods.For(barcode.BarcodeData)
                             .FirstAsync();
-
+                        var storage = await WarehouseGood.Storages.ByBarcodeAsync(ScannedBarcodeOriginLocation);
+                        OriginLocationVm = new LocationViewModel(storage);
+                        RaceLocations = (ObservableCollection<LocationViewModel>)await WarehouseGood.Storages.Race.ToViewModelListAsync();
+                        ReserveLocations = (ObservableCollection<LocationViewModel>)await WarehouseGood.Storages.Reserve.ToViewModelListAsync();
                         break;
                     }
             }

@@ -56,6 +56,7 @@
                           Grid.Column="1"
                           HorizontalOptions="FillAndExpand"
                           Keyboard="Numeric"
+                         TextColor="{DynamicResource TextsColor}"
                           Text="{Binding ScannedProductToMove}"
                           DigitsTypesToAllow="Numbers"
                           Placeholder="Scan product"/>
@@ -82,7 +83,7 @@
                             ItemsSource="{Binding RaceLocations}"
                             ItemsLayout="HorizontalList" >
                             <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="viewModels:LocationViewModel">
+                                <DataTemplate>
                                     <Frame CornerRadius="10" >
                                         <StackLayout Orientation="Horizontal">
                                             <Label
@@ -90,7 +91,7 @@
                                                 FontSize="25"
                                                 Text="{x:Static fonts:MaterialIcons.MapMarker}"
                                                 VerticalTextAlignment="Center"/>
-                                            <Label Text="{Binding Location}"  VerticalTextAlignment="Center" FontSize="18"/>
+                                            <Label Text="{Binding Quantity}"  VerticalTextAlignment="Center" FontSize="18"/>
                                         </StackLayout>
                                     </Frame>
                                 </DataTemplate>
@@ -101,21 +102,39 @@
                 <StackLayout HeightRequest="150">
                     <Label Text="Existing Reserve Locations" />
                     <Frame
-                        BackgroundColor="White"
+                        Padding="0"
                         CornerRadius="10">
                         <CollectionView
+                            VerticalOptions="FillAndExpand"
+                            HorizontalOptions="FillAndExpand"
                             ItemsSource="{Binding ReserveLocations}"
                             ItemsLayout="HorizontalList" >
                             <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="viewModels:LocationViewModel">
-                                    <Frame CornerRadius="10" >
-                                        <StackLayout Orientation="Horizontal">
+                                <DataTemplate >
+                                    <Frame CornerRadius="10" VerticalOptions="FillAndExpand">
+                                        <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand">
                                             <Label
                                                 FontFamily="materialicons"
                                                 FontSize="25"
                                                 Text="{x:Static fonts:MaterialIcons.MapMarker}"
-                                                VerticalTextAlignment="Center"/>
-                                            <Label Text="{Binding Location}"  VerticalTextAlignment="Center" FontSize="18"/>
+                                                HorizontalOptions="Center"
+                                                VerticalTextAlignment="Center" />
+
+                                            <Label Text="{Binding Location}"
+                                                   VerticalTextAlignment="Center"
+                                                   FontSize="14" />
+                                            <Label 
+                                                   FontAttributes="Bold"
+                                                   VerticalTextAlignment="Center"
+                                                   HorizontalOptions="Center"
+                                                   FontSize="12" >
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="#" />
+                                                        <Span Text="{Binding Quantity}" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
                                         </StackLayout>
                                     </Frame>
                                 </DataTemplate>

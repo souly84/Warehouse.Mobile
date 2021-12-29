@@ -90,29 +90,7 @@ namespace Warehouse.Mobile
 
         public async Task InitializeAsync(INavigationParameters parameters)
         {
-            //ReserveLocations = new ObservableCollection<LocationViewModel>
-            //{
-            //    new LocationViewModel
-            //    {
-            //        Location = "41-1-3", LocationaType = LocationType.Reserve
-            //    },
-            //    new LocationViewModel
-            //    {
-            //        Location = "42-1-2", LocationaType = LocationType.Reserve
-            //    }
-            //};
 
-            //RaceLocations = new ObservableCollection<LocationViewModel>
-            //{
-            //    new LocationViewModel
-            //    {
-            //        Location = "41-1-1", LocationaType = LocationType.Race
-            //    },
-            //    new LocationViewModel
-            //    {
-            //        Location = "42-1-1", LocationaType = LocationType.Race
-            //    }
-            //};
         }
 
         async void INavigatedAware.OnNavigatedTo(INavigationParameters parameters)
@@ -179,14 +157,19 @@ namespace Warehouse.Mobile
                         default:
                             {
                                 ScannedBarcode = barcode.BarcodeData;
-                                IsRecognizedProduct = true;
                                 WarehouseGood = await _company
                                     .Warehouse
                                     .Goods.For(barcode.BarcodeData)
                                     .FirstAsync();
 
-                                var check = await WarehouseGood.Storages.PutAway.ToViewModelListAsync();
-                                PutAwayStorage = check.First();
+                                var checkIn = await WarehouseGood.Storages.PutAway.ToViewModelListAsync();
+                                if (checkIn.Count == 0)
+                                {
+                                    await _dialog.DisplayAlertAsync("Error", "This item is not present in the check in area", "ok");
+                                    return;
+                                }
+                                IsRecognizedProduct = true;
+                                PutAwayStorage = checkIn.First();
                                 RaceLocations = (ObservableCollection<LocationViewModel>)await WarehouseGood.Storages.Race.ToViewModelListAsync();
                                 ReserveLocations = (ObservableCollection<LocationViewModel>)await WarehouseGood.Storages.Reserve.ToViewModelListAsync();
                                 break;

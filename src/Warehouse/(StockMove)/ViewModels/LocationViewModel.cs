@@ -16,7 +16,7 @@ namespace Warehouse.Mobile
 
         public int Quantity { get => _storage.ToDictionary().ValueOrDefault<int>("Quantity"); }
 
-        //public string Location { get => _storage.ToDictionary().ValueOrDefault<string>("Location"); }
+        public string Location { get => _storage.ToDictionary().ValueOrDefault<string>("Location"); }
 
         public IStorage ToStorage()
         {

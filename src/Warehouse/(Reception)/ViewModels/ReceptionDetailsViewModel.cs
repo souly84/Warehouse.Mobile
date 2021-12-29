@@ -16,12 +16,17 @@ namespace Warehouse.Mobile.ViewModels
     {
         private readonly IScanner _scanner;
         private readonly IPageDialogService _dialog;
+        private readonly INavigationService _navigationService;
         private ReceptionWithUnkownGoods _reception;
 
-        public ReceptionDetailsViewModel(IScanner scanner, IPageDialogService dialog)
+        public ReceptionDetailsViewModel(
+            IScanner scanner,
+            IPageDialogService dialog,
+            INavigationService navigationService)
         {
             _scanner = scanner;
             _dialog = dialog;
+            _navigationService = navigationService;
         }
 
         async void INavigatedAware.OnNavigatedTo(INavigationParameters parameters)
@@ -118,6 +123,8 @@ namespace Warehouse.Mobile.ViewModels
             try
             {
                 await _reception.Confirmation().CommitAsync();
+                await _dialog.DisplayAlertAsync("Success", "Synchronization done with success", "Ok");
+                await _navigationService.GoBackAsync();
 
             }
             catch (Exception ex)

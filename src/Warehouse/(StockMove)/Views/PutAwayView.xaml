@@ -65,7 +65,7 @@
             </StackLayout>
 
             <StackLayout HorizontalOptions="CenterAndExpand">
-                <Label FontSize="25" >
+                <Label FontSize="25" Padding="0,25,0,0" TextColor="Green">
                     <Label.FormattedText>
                         <FormattedString>
                             <Span Text="Items to store: " />
