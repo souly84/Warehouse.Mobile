@@ -3,6 +3,7 @@ using Prism;
 using Prism.Ioc;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
+using Warehouse.Droid;
 using Warehouse.Scanner.SDK;
 
 namespace Warehouse.Mobile.Droid
@@ -18,6 +19,14 @@ namespace Warehouse.Mobile.Droid
 
         public void RegisterTypes(IContainerRegistry container)
         {
+            container.RegisterInstance<ICompany>(
+                new EbSoftCompany(
+                    new WebRequest.Elegant.WebRequest(
+                        "http://wdc-logitest.eurocenter.be/webservice/apitest.php",
+                        new LoggedMessageHandler()
+                    )
+                )
+            );
 
             container.RegisterInstance<IScanner>(new BarcodeScanner());
             //Services

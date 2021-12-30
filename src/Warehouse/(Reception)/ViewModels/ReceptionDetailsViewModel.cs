@@ -123,8 +123,17 @@ namespace Warehouse.Mobile.ViewModels
             try
             {
                 await _reception.Confirmation().CommitAsync();
-                await _dialog.DisplayAlertAsync("Success", "Synchronization done with success", "Ok");
-                await _navigationService.GoBackAsync();
+
+
+                await _navigationService
+                    .NavigateAsync(AppConstants.CustomPopupMessageViewId,
+                    new NavigationParameters
+                    {
+                    { "Severity", "Info"},
+                    { "Title", "Success!"},
+                    { "Message", "Your reception has been syncronized successfully."},
+                    { "ActionText", "GOT IT!"}
+                    });
 
             }
             catch (Exception ex)

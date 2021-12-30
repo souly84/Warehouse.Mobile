@@ -41,6 +41,7 @@ namespace Warehouse.Mobile
             containerRegistry.RegisterForNavigation<LoginView>();
             containerRegistry.RegisterForNavigation<SelectSupplierView, SelectSupplierViewModel>();
             containerRegistry.RegisterForNavigation<QuantityToMovePopupView, QuantityToMovePopupViewModel>();
+            containerRegistry.RegisterForNavigation<CustomPopupMessageView, CustomPopupMessageViewModel>();
             containerRegistry.RegisterForNavigation<MenuSelectionView>();
             containerRegistry.RegisterForNavigation<ReceptionDetailsView>();
             containerRegistry.RegisterForNavigation<PutAwayView>();
@@ -49,7 +50,7 @@ namespace Warehouse.Mobile
             //Services
             //containerRegistry.RegisterSingleton<ICentralServiceClient, CentralServiceClient>();
             //containerRegistry.RegisterInstance<ICompany>(new EbSoftCompany("http://wdc-logcnt.eurocenter.be/webservice/apiscanning.php"));
-            containerRegistry.RegisterInstance<ICompany>(new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php"));
+            //containerRegistry.RegisterInstance<ICompany>(new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php"));
             //containerRegistry.RegisterSingleton<ICompany, MockWarehouseCompany>();
 
         }

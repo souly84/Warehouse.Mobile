@@ -52,6 +52,7 @@ namespace Warehouse.Mobile
 
         public DelegateCommand ValidateCommand => validateCommand ?? (validateCommand = new DelegateCommand(async () =>
         {
+
             await _goodToMove
                 .Movement
                 .From(OriginLocation.ToStorage())

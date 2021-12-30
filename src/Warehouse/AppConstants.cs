@@ -11,6 +11,8 @@ namespace Warehouse.Mobile
         public const string PutAwayViewId = nameof(PutAwayView);
         public const string QuantityToMovePopupViewId = nameof(QuantityToMovePopupView);
         public const string StockMoveViewId = nameof(StockMoveView);
+        public const string CustomPopupMessageViewId = nameof(CustomPopupMessageView);
 
+        public static string Uri { get => "http://wdc-logitest.eurocenter.be/webservice/apitest.php"; }
     }
 }

@@ -7,16 +7,17 @@
     Title="Select supplier"
     xmlns:behaviors="clr-namespace:Warehouse.Mobile.Behavior"
     xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
+    xmlns:controls="clr-namespace:Warehouse.Mobile.Controls"
     x:Name="ThisPage"
     x:DataType="viewModels:SelectSupplierViewModel"
     >
-    <ContentView VerticalOptions="Center" Padding="5">
-        <StackLayout VerticalOptions="FillAndExpand">
+    <ContentView VerticalOptions="Center">
+        <StackLayout VerticalOptions="FillAndExpand" Spacing="0">
 
             <StackLayout
                 Spacing="0"
                 Orientation="Horizontal"
-                HeightRequest="80">
+                HeightRequest="70">
 
                <!--<CollectionView
                    BackgroundColor="White"
