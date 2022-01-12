@@ -5,6 +5,7 @@
     x:Class="Warehouse.Mobile.Views.MenuSelectionView"
     xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
     xmlns:viewmodels="clr-namespace:Warehouse.Mobile.ViewModels"
+    xmlns:neo="clr-namespace:Xamarin.Forms.NeoControls;assembly=Xamarin.Forms.NeoControls"
     Title="Main menu"
     x:DataType="viewmodels:MenuSelectionViewModel"
     NavigationPage.HasBackButton="True">
@@ -35,7 +36,7 @@
                     <ColumnDefinition/>
                 </Grid.ColumnDefinitions>
                 <StackLayout>
-                    <NeoButton BackgroundColor="#e3edf7" VerticalOptions="FillAndExpand" Command="{Binding GoToAvailableSuppliersCommand}">
+                    <neo:NeoButton BackgroundColor="#e3edf7" VerticalOptions="FillAndExpand" Command="{Binding GoToAvailableSuppliersCommand}">
                        <Grid VerticalOptions="FillAndExpand" Padding="15">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
@@ -68,13 +69,13 @@
                             Text="Good receipt PO" />
                         
                         </Grid>
-                    </NeoButton>
+                    </neo:NeoButton>
                 </StackLayout>
 
                 <StackLayout
                     Grid.Column="1">
 
-                    <NeoButton BackgroundColor="#e3edf7" VerticalOptions="FillAndExpand" Command="{Binding GoToPutAwayCommand}">
+                    <neo:NeoButton BackgroundColor="#e3edf7" VerticalOptions="FillAndExpand" Command="{Binding GoToPutAwayCommand}">
                        <Grid VerticalOptions="FillAndExpand" Padding="15">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
@@ -108,7 +109,7 @@
                             Text="Place received goods" />
                         
                     </Grid>
-                    </NeoButton>
+                    </neo:NeoButton>
 
                 </StackLayout>
 
@@ -116,7 +117,7 @@
                     Grid.Row="1"
                     Grid.Column="0">
 
-                     <NeoButton BackgroundColor="#e3edf7" VerticalOptions="FillAndExpand">
+                     <neo:NeoButton BackgroundColor="#e3edf7" VerticalOptions="FillAndExpand">
                        <Grid VerticalOptions="FillAndExpand" Padding="15">
                         <Grid.RowDefinitions>
                             <RowDefinition/>
@@ -150,7 +151,7 @@
                             Text="Move items location" />
                         
                         </Grid>
-                    </NeoButton>
+                    </neo:NeoButton>
                 </StackLayout>
 
                

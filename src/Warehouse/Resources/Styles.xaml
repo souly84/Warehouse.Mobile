@@ -3,6 +3,7 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
              xmlns:d="http://xamarin.com/schemas/2014/forms/design"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:neo="clr-namespace:Xamarin.Forms.NeoControls;assembly=Xamarin.Forms.NeoControls"
              mc:Ignorable="d">
     <Color x:Key="DefaultBackground">#F5F5F5</Color>
     <Color x:Key="Primary">#343F44</Color>
@@ -23,16 +24,6 @@
         <Setter Property="HorizontalTextAlignment" Value="Start" />
         <Setter Property="VerticalOptions" Value="Center" />
         <Setter Property="Margin" Value="30,0" />
-    </Style>
-
-     <Style x:Key="SupplierSelectionButton" TargetType="NeoButton" ApplyToDerivedTypes="True">
-        <Setter Property="CornerRadius" Value="35" />
-        <Setter Property="HeightRequest" Value="70" />
-        <Setter Property="WidthRequest" Value="70" />
-        <Setter Property="LightShadowColor" Value="Transparent" />
-        <Setter Property="VerticalOptions" Value="FillAndExpand" />
-        <Setter Property="HorizontalOptions" Value="EndAndExpand" />
-        <Setter Property="BackgroundColor" Value="{DynamicResource BackgroundColorViewEnd}"  />
     </Style>
 
     <Style x:Key="ReceptionGoodDescription" TargetType="Label" ApplyToDerivedTypes="True">
@@ -68,7 +59,17 @@
         <Setter Property="VerticalTextAlignment" Value="Center" />
     </Style>
 
-     <Style x:Key="ActionButton" TargetType="NeoButton" ApplyToDerivedTypes="True">
+    <Style x:Key="SupplierSelectionButton" TargetType="neo:NeoButton" ApplyToDerivedTypes="True">
+        <Setter Property="CornerRadius" Value="35" />
+        <Setter Property="HeightRequest" Value="70" />
+        <Setter Property="WidthRequest" Value="70" />
+        <Setter Property="LightShadowColor" Value="Transparent" />
+        <Setter Property="VerticalOptions" Value="FillAndExpand" />
+        <Setter Property="HorizontalOptions" Value="EndAndExpand" />
+        <Setter Property="BackgroundColor" Value="{DynamicResource BackgroundColorViewEnd}"  />
+    </Style>
+
+    <Style x:Key="ActionButton" TargetType="neo:NeoButton" ApplyToDerivedTypes="True">
         <Setter Property="CornerRadius" Value="35" />
         <Setter Property="HeightRequest" Value="70" />
         <Setter Property="WidthRequest" Value="70" />
