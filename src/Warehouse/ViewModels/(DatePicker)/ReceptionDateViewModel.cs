@@ -23,7 +23,7 @@ namespace Warehouse.Mobile.ViewModels
         private string _dayOfWeek;
         public string DayOfWeek
         {
-            get => _dateOfMonth;
+            get => _dayOfWeek;
             set => SetProperty(ref _dayOfWeek, value);
         }
 

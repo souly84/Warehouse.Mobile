@@ -1,6 +1,4 @@
-﻿using System;
-using System.Windows.Input;
-using MediaPrint;
+﻿using MediaPrint;
 using Prism.Commands;
 using Prism.Mvvm;
 using Warehouse.Core;
@@ -62,6 +60,11 @@ namespace Warehouse.Mobile.ViewModels
             return object.ReferenceEquals(this, obj)
                 || obj is IReceptionGood receptionGood
                 && _receptionGood.Equals(receptionGood);
+        }
+
+        public override int GetHashCode()
+        {
+            return _receptionGood.GetHashCode();
         }
     }
 }
