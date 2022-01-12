@@ -3,6 +3,7 @@ using Xunit;
 
 namespace Warehouse.Mobile.UnitTests
 {
+    [Collection(XUnitCollectionDefinitions.NavigationDependent)]
     public class MenuSelectionViewModelTests
     {
         private App _app;
@@ -10,6 +11,7 @@ namespace Warehouse.Mobile.UnitTests
         public MenuSelectionViewModelTests()
         {
             Xamarin.Forms.Mocks.MockForms.Init();
+            NavigationServiceExtensions.ResetPageNavigationRegistry();
             _app = new App(new MockPlatformInitializer());
         }
 
@@ -21,7 +23,7 @@ namespace Warehouse.Mobile.UnitTests
             );
             viewModel.GoToAvailableSuppliersCommand.Execute(null);
             //Assert.NotNull(
-               
+
             //);
         }
     }

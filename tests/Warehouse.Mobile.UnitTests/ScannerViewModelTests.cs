@@ -59,7 +59,7 @@ namespace Warehouse.Mobile.UnitTests
                new DialogPage
                {
                    Title = "Scanner initialization error",
-                   Message= "Test Exception",
+                   Message = "Test Exception",
                    CancelButton = "Ok"
                },
                dialog.ShownDialogs

@@ -2,7 +2,6 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -19,19 +18,9 @@
     <PackageReference Include="Prism.Forms" Version="8.1.97" />
     <PackageReference Include="Prism.Unity.Forms" Version="8.1.97" />
     <PackageReference Include="Xamarin.Forms.Mocks" Version="4.7.0.1" />
-    <PackageReference Include="Xamarin.CommunityToolkit" Version="1.3.1" PrivateAssets="all" />
-    <PackageReference Include="PresentationFramework" Version="4.0.0.0" />
-    <PackageReference Include="Xamarin.Forms.NeoControls" Version="1.1.1-pre" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Warehouse\Warehouse.Mobile.csproj" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Remove="Prism.Core" />
-    <None Remove="Prism.Forms" />
-    <None Remove="Prism.Unity.Forms" />
-    <None Remove="Xamarin.Forms.Mocks" />
-    <None Remove="PresentationFramework" />
   </ItemGroup>
 </Project>
