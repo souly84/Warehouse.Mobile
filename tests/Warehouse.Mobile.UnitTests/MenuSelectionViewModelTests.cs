@@ -1,4 +1,6 @@
-﻿using Warehouse.Mobile.ViewModels;
+﻿using Prism.Navigation;
+using Warehouse.Mobile.ViewModels;
+using Xamarin.Forms;
 using Xunit;
 
 namespace Warehouse.Mobile.UnitTests
@@ -13,6 +15,8 @@ namespace Warehouse.Mobile.UnitTests
             Xamarin.Forms.Mocks.MockForms.Init();
             NavigationServiceExtensions.ResetPageNavigationRegistry();
             _app = new App(new MockPlatformInitializer());
+            Application.Current = null;
+            Application.Current = _app;
         }
 
         [Fact]
@@ -22,8 +26,9 @@ namespace Warehouse.Mobile.UnitTests
                 _app.Navigation
             );
             viewModel.GoToAvailableSuppliersCommand.Execute(null);
-            //Assert.NotNull(
-
+            //Assert.Equal(
+            //    "",
+            //    (_app.Navigation as PageNavigationService).GetNavigationUriPath()
             //);
         }
     }

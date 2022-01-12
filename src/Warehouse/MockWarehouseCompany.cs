@@ -23,11 +23,12 @@ namespace Warehouse.Mobile
 
         public Task<IUser> LoginAsync(string userName, string password)
         {
-            throw new NotImplementedException();
+            throw new NotSupportedException();
         }
 
         public void PrintTo(IMedia media)
         {
+            // Empty for now
         }
     }
 }

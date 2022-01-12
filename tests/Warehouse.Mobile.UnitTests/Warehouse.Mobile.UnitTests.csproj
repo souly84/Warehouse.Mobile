@@ -18,9 +18,13 @@
     <PackageReference Include="Prism.Forms" Version="8.1.97" />
     <PackageReference Include="Prism.Unity.Forms" Version="8.1.97" />
     <PackageReference Include="Xamarin.Forms.Mocks" Version="4.7.0.1" />
+    <PackageReference Include="SkiaSharp.Views.Forms" Version="1.68.1.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Warehouse\Warehouse.Mobile.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Remove="SkiaSharp.Views.Forms" />
   </ItemGroup>
 </Project>

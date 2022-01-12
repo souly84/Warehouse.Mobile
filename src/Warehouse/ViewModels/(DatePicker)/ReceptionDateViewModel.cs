@@ -43,6 +43,7 @@ namespace Warehouse.Mobile.ViewModels
 
         public void SelectDate()
         {
+            // Its empty for now
         }
     }
 }
