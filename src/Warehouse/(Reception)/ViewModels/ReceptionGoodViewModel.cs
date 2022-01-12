@@ -42,14 +42,14 @@ namespace Warehouse.Mobile.ViewModels
         public string Oa { get => GoodData.ValueOrDefault<string>("oa"); }
 
         private DelegateCommand increaseQuantityCommand;
-        public DelegateCommand IncreaseQuantityCommand => increaseQuantityCommand ?? (increaseQuantityCommand = new DelegateCommand(async () =>
+        public DelegateCommand IncreaseQuantityCommand => increaseQuantityCommand ?? (increaseQuantityCommand = new DelegateCommand(() =>
         {
             _receptionGood.Confirmation.Increase(1);
             RaisePropertyChanged(nameof(ConfirmedQuantity));
         }));
 
         private DelegateCommand decreaseQuantityCommand;
-        public DelegateCommand DecreaseQuantityCommand => decreaseQuantityCommand ?? (decreaseQuantityCommand = new DelegateCommand(async () =>
+        public DelegateCommand DecreaseQuantityCommand => decreaseQuantityCommand ?? (decreaseQuantityCommand = new DelegateCommand(() =>
         {
              _receptionGood.Confirmation.Decrease(1);
             RaisePropertyChanged(nameof(ConfirmedQuantity));

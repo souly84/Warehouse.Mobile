@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using EbSoft.Warehouse.SDK;
-using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Warehouse.Core;
@@ -43,14 +42,10 @@ namespace Warehouse.Mobile.ViewModels
                 CurrentDate = new DateTime(2021, 12, 16);
                 Suppliers = await _company.Suppliers.For(CurrentDate).ToViewModelListAsync(_navigationService);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
-
+                // Ignore for now
             }
-            
         }
-
-
-        
     }
 }

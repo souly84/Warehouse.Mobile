@@ -75,7 +75,7 @@ namespace Warehouse.Mobile
             set => SetProperty(ref _checkInQuantity, value);
         }
 
-        public async Task InitializeAsync(INavigationParameters parameters)
+        public Task InitializeAsync(INavigationParameters parameters)
         {
             ReserveLocations = new ObservableCollection<LocationViewModel>
             {
@@ -100,6 +100,8 @@ namespace Warehouse.Mobile
                     Location = "42-1-1", LocationaType = LocationType.Race
                 }
             };
+
+            return Task.CompletedTask;
         }
 
         async void INavigatedAware.OnNavigatedTo(INavigationParameters parameters)
