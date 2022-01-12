@@ -5,7 +5,7 @@
     xmlns:viewModels="clr-namespace:Warehouse.Mobile.ViewModels"
     x:Class="Warehouse.Mobile.Views.SelectSupplierView"
     Title="Select supplier"
-    xmlns:controls="clr-namespace:Warehouse.Mobile.Controls;assembly=Warehouse.Mobile"
+    xmlns:neo="clr-namespace:Xamarin.Forms.NeoControls;assembly=Xamarin.Forms.NeoControls"
     xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
     x:Name="ThisPage"
     x:DataType="viewModels:SelectSupplierViewModel"
@@ -62,7 +62,7 @@
                                        Grid.ColumnSpan="2"
                                        Style="{DynamicResource SupplierNameLabel}"/>
 
-                                <NeoButton
+                                <neo:NeoButton
                                     Grid.Column="2"
                                     Command="{Binding GoToReceptionDetailsCommand}"
                                     Style="{DynamicResource SupplierSelectionButton}">
@@ -71,7 +71,7 @@
                                         FontFamily="icomoon"
                                         Text="{x:Static fonts:IcoMoon.IconNext}">
                                     </Label>
-                                </NeoButton>
+                                </neo:NeoButton>
                                     
                             </Grid>
                         </Frame>

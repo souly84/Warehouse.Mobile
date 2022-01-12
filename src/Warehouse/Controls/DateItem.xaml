@@ -1,10 +1,11 @@
-﻿ <NeoButton
+﻿ <neo:NeoButton
      xmlns="http://xamarin.com/schemas/2014/forms" 
        xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
        xmlns:d="http://xamarin.com/schemas/2014/forms/design"
        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+       xmlns:neo="clr-namespace:Xamarin.Forms.NeoControls;assembly=Xamarin.Forms.NeoControls"
        mc:Ignorable="d"
-     x:Class="Warehouse.Mobile.Controls.DateItem"
+        x:Class="Warehouse.Mobile.Controls.DateItem"
         Background="LightGray"
         HorizontalOptions="Start"
         CornerRadius="30"
@@ -34,4 +35,4 @@
     FontAttributes="Bold"
     Margin="0,0,0,10"/>
 </StackLayout>
-</NeoButton>
+</neo:NeoButton>

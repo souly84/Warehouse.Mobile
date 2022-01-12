@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using EbSoft.Warehouse.SDK;
 using MediaPrint;
-using Newtonsoft.Json.Linq;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
@@ -69,15 +68,12 @@ namespace Warehouse.Mobile
             set => SetProperty(ref _warehouseGood, value);
         }
 
-        
-
         private int? _checkInQuantity;
         public int? CheckInQuantity
         {
             get => _checkInQuantity;
             set => SetProperty(ref _checkInQuantity, value);
         }
-
 
         public async Task InitializeAsync(INavigationParameters parameters)
         {

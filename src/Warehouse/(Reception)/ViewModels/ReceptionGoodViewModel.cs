@@ -30,8 +30,6 @@ namespace Warehouse.Mobile.ViewModels
             _receptionGood = receptionGood;
         }
 
-        
-
         public int Total { get; set; }
 
         public int ConfirmedQuantity
@@ -45,9 +43,7 @@ namespace Warehouse.Mobile.ViewModels
 
         public string Oa { get => GoodData.ValueOrDefault<string>("oa"); }
 
-
         private DelegateCommand increaseQuantityCommand;
-
         public DelegateCommand IncreaseQuantityCommand => increaseQuantityCommand ?? (increaseQuantityCommand = new DelegateCommand(async () =>
         {
             _receptionGood.Confirmation.Increase(1);
@@ -55,7 +51,6 @@ namespace Warehouse.Mobile.ViewModels
         }));
 
         private DelegateCommand decreaseQuantityCommand;
-
         public DelegateCommand DecreaseQuantityCommand => decreaseQuantityCommand ?? (decreaseQuantityCommand = new DelegateCommand(async () =>
         {
              _receptionGood.Confirmation.Decrease(1);
@@ -68,8 +63,5 @@ namespace Warehouse.Mobile.ViewModels
                 || obj is IReceptionGood receptionGood
                 && _receptionGood.Equals(receptionGood);
         }
-
-
-
     }
 }

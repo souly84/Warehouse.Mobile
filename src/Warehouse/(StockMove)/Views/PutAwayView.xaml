@@ -2,15 +2,16 @@
 <ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:controls1="clr-namespace:Warehouse.Mobile.Controls;assembly=Warehouse.Mobile"
+    xmlns:controls="clr-namespace:Warehouse.Mobile.Controls;assembly=Warehouse.Mobile"
     xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
     xmlns:viewModels="clr-namespace:Warehouse.Mobile.ViewModels"
     Title="Put Away"
+    x:DataType="fonts:PutAwayViewModel"
     x:Class="Warehouse.Mobile.PutAwayView">
     <!--<NavigationPage.TitleView>
         <StackLayout>
             <Label Text="Put Away"></Label>
-              <controls1:MaterialSearchBar
+              <controls:MaterialSearchBar
             HorizontalOptions="FillAndExpand"
             Margin="0,0,20,0"
             BackgroundColor="White"
@@ -33,7 +34,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                     <controls1:MaterialSearchBar
+                    <controls:MaterialSearchBar
                          HorizontalOptions="FillAndExpand"
                          BackgroundColor="White"
                          CornerRadius="5"
@@ -48,7 +49,7 @@
                         TextColor="{DynamicResource TextsColor}"
                         Style="{DynamicResource ReceptionGoodCategoryIcon}"
                         FontFamily="warehouseIcons"
-                        Text="{x:Static fonts:IcoMoon.Barcode}"/> 
+                        Text="{x:Static fonts:IcoMoon.Barcode}"/>
                 </Grid>
             </StackLayout>
 
@@ -56,94 +57,93 @@
             <!--Product Is Recognized-->
             <StackLayout IsVisible="{Binding IsRecognizedProduct}">
                 <StackLayout Orientation="Horizontal" Padding="35" >
-                 <Grid>
-                     <Grid.ColumnDefinitions>
-                         <ColumnDefinition/>
-                         <ColumnDefinition Width="Auto"/>
-                     </Grid.ColumnDefinitions>
-                      <controls1:MaterialSearchBar
-                HorizontalOptions="FillAndExpand"
-                BackgroundColor="White"
-                CornerRadius="5"
-                TextColor="White"
-                CancelButtonColor="White"
-                Placeholder="Scan location"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <controls:MaterialSearchBar
+                            HorizontalOptions="FillAndExpand"
+                            BackgroundColor="White"
+                            CornerRadius="5"
+                            TextColor="White"
+                            CancelButtonColor="White"
+                            Placeholder="Scan location"/>
+                        <Label
+                            Grid.Column="1"
+                            HorizontalOptions="EndAndExpand"
+                            TextColor="{DynamicResource TextsColor}"
+                            Style="{DynamicResource ReceptionGoodCategoryIcon}"
+                            FontFamily="warehouseIcons"
+                            Text="{x:Static fonts:IcoMoon.Barcode}"/>
+                    </Grid>
 
-                <Label
-                    Grid.Column="1"
-                    HorizontalOptions="EndAndExpand"
-                    TextColor="{DynamicResource TextsColor}"
-                    Style="{DynamicResource ReceptionGoodCategoryIcon}"
-                    FontFamily="warehouseIcons"
-                    Text="{x:Static fonts:IcoMoon.Barcode}"/> 
-                 </Grid>
-               
-            </StackLayout>
+                </StackLayout>
 
-            <StackLayout HorizontalOptions="CenterAndExpand">
-                <Label Text="{Binding Quantity}" FontSize="25" />
-            </StackLayout>
+                <StackLayout HorizontalOptions="CenterAndExpand">
+                    <!--<Label Text="{Binding Quantity}" FontSize="25" />-->
+                </StackLayout>
 
 
-            <StackLayout HeightRequest="150">
-                <Label Text="Existing Race Locations" />
-                <Frame
-                    BackgroundColor="White"
-                    CornerRadius="10">
-                    <CollectionView
+                <StackLayout HeightRequest="150">
+                    <Label Text="Existing Race Locations" />
+                    <Frame
+                        BackgroundColor="White"
+                        CornerRadius="10">
+                        <CollectionView
                          ItemsSource="{Binding RaceLocations}"
-                        ItemsLayout="HorizontalList" >
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="viewModels:LocationViewModel">
-                                <Frame CornerRadius="10" >
-                                    <StackLayout Orientation="Horizontal">
-                                        <Label
-                                        FontFamily="materialicons"
-                                        FontSize="25"
-                                        Text="{x:Static fonts:MaterialIcons.MapMarker}"
-                                            VerticalTextAlignment="Center"/> 
-                                    <Label Text="{Binding Location}"  VerticalTextAlignment="Center" FontSize="18"/>
-                                    </StackLayout>
-                                    
-                                </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                         ItemsLayout="HorizontalList" >
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="viewModels:LocationViewModel">
+                                    <Frame CornerRadius="10" >
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label
+                                                FontFamily="materialicons"
+                                                FontSize="25"
+                                                Text="{x:Static fonts:MaterialIcons.MapMarker}"
+                                                VerticalTextAlignment="Center"/>
+                                            <Label Text="{Binding Location}"  VerticalTextAlignment="Center" FontSize="18"/>
+                                        </StackLayout>
 
-                        
-                </Frame>
-            </StackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
 
-            <StackLayout HeightRequest="150">
-                <Label Text="Existing Reserve Locations" />
-                <Frame
+
+                    </Frame>
+                </StackLayout>
+
+                <StackLayout HeightRequest="150">
+                    <Label Text="Existing Reserve Locations" />
+                    <Frame
                     BackgroundColor="White"
                     CornerRadius="10">
-                    <CollectionView
+                        <CollectionView
                          ItemsSource="{Binding ReserveLocations}"
                         ItemsLayout="HorizontalList" >
-                        <CollectionView.ItemTemplate>
-                            <DataTemplate x:DataType="viewModels:LocationViewModel">
-                                <Frame CornerRadius="10" >
-                                    <StackLayout Orientation="Horizontal">
-                                        <Label
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate x:DataType="viewModels:LocationViewModel">
+                                    <Frame CornerRadius="10" >
+                                        <StackLayout Orientation="Horizontal">
+                                            <Label
                                         FontFamily="materialicons"
                                         FontSize="25"
                                         Text="{x:Static fonts:MaterialIcons.MapMarker}"
-                                            VerticalTextAlignment="Center"/> 
-                                    <Label Text="{Binding Location}"  VerticalTextAlignment="Center" FontSize="18"/>
-                                    </StackLayout>
-                                    
-                                </Frame>
-                            </DataTemplate>
-                        </CollectionView.ItemTemplate>
-                    </CollectionView>
+                                            VerticalTextAlignment="Center"/>
+                                            <Label Text="{Binding Location}"  VerticalTextAlignment="Center" FontSize="18"/>
+                                        </StackLayout>
 
-                        
-                </Frame>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+
+
+                    </Frame>
+                </StackLayout>
             </StackLayout>
-            </StackLayout>
-             
+
         </StackLayout>
     </ContentView>
 </ContentPage>

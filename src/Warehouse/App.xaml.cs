@@ -9,7 +9,9 @@ using Warehouse.Core.Plugins;
 using Warehouse.Mobile.ViewModels;
 using Warehouse.Mobile.Views;
 using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
 
+[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace Warehouse.Mobile
 {
     public partial class App : PrismApplication
@@ -17,7 +19,6 @@ namespace Warehouse.Mobile
         public App(IPlatformInitializer initializer)
             : base(initializer)
         {
-            InitializeComponent();
         }
 
         public INavigationService Navigation => NavigationService;
@@ -26,6 +27,7 @@ namespace Warehouse.Mobile
 
         protected override void OnInitialized()
         {
+            InitializeComponent();
             _ = NavigateToMainPageAsync();
         }
 
@@ -43,13 +45,9 @@ namespace Warehouse.Mobile
             );
         }
 
-        private async Task NavigateToMainPageAsync()
+        private Task NavigateToMainPageAsync()
         {
-            var result = await NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(MenuSelectionView)}" );
-            if (result.Exception != null)
-            {
-                throw result.Exception;
-            }
+            return NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(MenuSelectionView)}" );
         }
     }
 }
