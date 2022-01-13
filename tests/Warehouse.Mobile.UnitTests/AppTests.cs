@@ -1,53 +1,24 @@
-﻿using System;
-using Xamarin.Forms.Xaml;
-using Xunit;
+﻿using Xunit;
 
 namespace Warehouse.Mobile.UnitTests
 {
     [Collection(XUnitCollectionDefinitions.NavigationDependent)]
     public class AppTests
     {
+        private App _app;
+
         public AppTests()
         {
             Xamarin.Forms.Mocks.MockForms.Init();
             NavigationServiceExtensions.ResetPageNavigationRegistry();
-        }
-
-        [Fact]
-        public void Startup()
-        {
-            Assert.NotNull(
-                new App(new MockPlatformInitializer())
-            );
-        }
-
-        internal static string GetPathForType(Type type)
-        {
-            var assembly = type.Assembly;
-            foreach (XamlResourceIdAttribute xria in assembly.GetCustomAttributes(typeof(XamlResourceIdAttribute), true))
-            {
-                if (xria.Type == type)
-                    return xria.Path;
-            }
-            return null;
-        }
-
-        internal static string GetResourceIdForType(Type type)
-        {
-            var assembly = type.Assembly;
-            foreach (XamlResourceIdAttribute xria in assembly.GetCustomAttributes(typeof(XamlResourceIdAttribute), true))
-            {
-                if (xria.Type == type)
-                    return xria.ResourceId;
-            }
-            return null;
+            _app = new App(new MockPlatformInitializer());
         }
 
         [Fact]
         public void ScannerInitialized()
         {
             Assert.NotNull(
-                new App(new MockPlatformInitializer()).Scanner
+               _app.Scanner
             );
         }
 
@@ -55,7 +26,16 @@ namespace Warehouse.Mobile.UnitTests
         public void NavigationInitialized()
         {
             Assert.NotNull(
-                new App(new MockPlatformInitializer()).Navigation
+                _app.Navigation
+            );
+        }
+
+        [Fact]
+        public void MenuSelectionView_AsDefaultViewOnApplicationStartup()
+        {
+            Assert.Equal(
+                "/NavigationPage/MenuSelectionView",
+                _app.GetNavigationUriPath()
             );
         }
     }

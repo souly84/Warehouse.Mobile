@@ -1,5 +1,4 @@
-﻿using Prism.Navigation;
-using Warehouse.Mobile.ViewModels;
+﻿using Warehouse.Mobile.ViewModels;
 using Xamarin.Forms;
 using Xunit;
 
@@ -22,14 +21,12 @@ namespace Warehouse.Mobile.UnitTests
         [Fact]
         public void SuppliersNavigation()
         {
-            var viewModel = new MenuSelectionViewModel(
-                _app.Navigation
+            _app.CurrentViewModel<MenuSelectionViewModel>()
+                .GoToAvailableSuppliersCommand.Execute(null);
+            Assert.Equal(
+                "/NavigationPage/MenuSelectionView/SelectSupplierView?useModalNavigation=true",
+                _app.GetNavigationUriPath()
             );
-            viewModel.GoToAvailableSuppliersCommand.Execute(null);
-            //Assert.Equal(
-            //    "",
-            //    (_app.Navigation as PageNavigationService).GetNavigationUriPath()
-            //);
         }
     }
 }
