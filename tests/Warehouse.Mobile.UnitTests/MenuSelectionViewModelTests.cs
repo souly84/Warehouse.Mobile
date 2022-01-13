@@ -1,5 +1,6 @@
-﻿using Warehouse.Mobile.ViewModels;
-using Xamarin.Forms;
+﻿using System;
+using Warehouse.Mobile.UnitTests.Extensions;
+using Warehouse.Mobile.ViewModels;
 using Xunit;
 
 namespace Warehouse.Mobile.UnitTests
@@ -7,15 +8,14 @@ namespace Warehouse.Mobile.UnitTests
     [Collection(XUnitCollectionDefinitions.NavigationDependent)]
     public class MenuSelectionViewModelTests
     {
-        private App _app;
+        private App _app = XamarinFormsTests.InitPrismApplication();
 
-        public MenuSelectionViewModelTests()
+        [Fact]
+        public void ArgumentNullReferenceExceptionWhenNavigationServiceNull()
         {
-            Xamarin.Forms.Mocks.MockForms.Init();
-            NavigationServiceExtensions.ResetPageNavigationRegistry();
-            _app = new App(new MockPlatformInitializer());
-            Application.Current = null;
-            Application.Current = _app;
+            _app.CurrentViewModel<MenuSelectionViewModel>()
+                .GoToAvailableSuppliersCommand.Execute(null);
+            Assert.Throws<ArgumentNullException>(() => new MenuSelectionViewModel(null));
         }
 
         [Fact]
@@ -27,6 +27,21 @@ namespace Warehouse.Mobile.UnitTests
                 "/NavigationPage/MenuSelectionView/SelectSupplierView?useModalNavigation=true",
                 _app.GetNavigationUriPath()
             );
+
+            Assert.IsType<SelectSupplierViewModel>(_app.CurrentViewModel<object>());
+        }
+
+        [Fact]
+        public void PutAwayNavigation()
+        {
+            _app.CurrentViewModel<MenuSelectionViewModel>()
+                .GoToPutAwayCommand.Execute(null);
+            Assert.Equal(
+                "/NavigationPage/MenuSelectionView/PutAwayView",
+                _app.GetNavigationUriPath()
+            );
+
+            Assert.IsType<PutAwayViewModel>(_app.CurrentViewModel<object>());
         }
     }
 }

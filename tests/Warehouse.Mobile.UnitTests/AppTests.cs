@@ -1,18 +1,12 @@
-﻿using Xunit;
+﻿using Warehouse.Mobile.UnitTests.Extensions;
+using Xunit;
 
 namespace Warehouse.Mobile.UnitTests
 {
     [Collection(XUnitCollectionDefinitions.NavigationDependent)]
     public class AppTests
     {
-        private App _app;
-
-        public AppTests()
-        {
-            Xamarin.Forms.Mocks.MockForms.Init();
-            NavigationServiceExtensions.ResetPageNavigationRegistry();
-            _app = new App(new MockPlatformInitializer());
-        }
+        private App _app = XamarinFormsTests.InitPrismApplication();
 
         [Fact]
         public void ScannerInitialized()
