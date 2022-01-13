@@ -18,8 +18,21 @@ namespace Warehouse.Mobile
         }
 
         public MockWarehouseCompany(IWarehouse warehouse)
+            : this(
+                  warehouse,
+                  new ListOfEntities<ISupplier>(
+                    new NamedMockSupplier("Electrolux"),
+                    new NamedMockSupplier("Bosh"),
+                    new NamedMockSupplier("Samsung")
+                  )
+              )
+        {
+        }
+
+        public MockWarehouseCompany(IWarehouse warehouse, IEntities<ISupplier> suppliers)
         {
             Warehouse = warehouse;
+            Suppliers = suppliers;
         }
 
         public IEntities<ICustomer> Customers => throw new NotImplementedException();
@@ -28,13 +41,7 @@ namespace Warehouse.Mobile
 
         public IWarehouse Warehouse { get; }
 
-        public IEntities<ISupplier> Suppliers =>
-            new ListOfEntities<ISupplier>(
-                new NamedMockSupplier("Electrolux"),
-                new NamedMockSupplier("Bosh"),
-                new NamedMockSupplier("Samsung")
-            )
-        ;
+        public IEntities<ISupplier> Suppliers { get; }
 
         public Task<IUser> LoginAsync(string userName, string password)
         {

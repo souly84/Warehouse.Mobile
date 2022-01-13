@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using MediaPrint;
+﻿using MediaPrint;
 using Prism.Commands;
 using Prism.Navigation;
 using Warehouse.Core;
@@ -24,12 +22,11 @@ namespace Warehouse.Mobile.ViewModels
 
         private DelegateCommand goToReceptionDetailsCommand;
 
-        public DelegateCommand GoToReceptionDetailsCommand => goToReceptionDetailsCommand ?? (goToReceptionDetailsCommand = new DelegateCommand(async () =>
-        {
-            await _navigationService.NavigateAsync(AppConstants.ReceptionDetailsViewId, new NavigationParameters { { "Supplier", _supplier } });
-        }));
-
+        public DelegateCommand GoToReceptionDetailsCommand => goToReceptionDetailsCommand ?? (goToReceptionDetailsCommand = new DelegateCommand(() =>
+            _navigationService.NavigateAsync(
+                AppConstants.ReceptionDetailsViewId,
+                new NavigationParameters { { "Supplier", _supplier } }
+            )
+        ));
     }
-
-    
 }
