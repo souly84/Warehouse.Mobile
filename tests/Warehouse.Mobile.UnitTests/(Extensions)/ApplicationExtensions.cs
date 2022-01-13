@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Prism.Common;
 using Prism.Navigation;
 using Warehouse.Core.Plugins;
@@ -28,6 +29,11 @@ namespace Warehouse.Mobile.UnitTests
             (app.Scanner as MockScanner).Scan(
                 new ScanningResult(barcodeData, "CODE128", DateTime.Now.TimeOfDay)
             );
+        }
+
+        public static Task<INavigationResult> GoBackAsync(this App app)
+        {
+            return app.PageNavigationService().GoBackAsync();
         }
     }
 }

@@ -17,11 +17,43 @@ namespace Warehouse.Mobile.ViewModels
         private readonly IScanner _scanner;
         private readonly IPageDialogService _dialog;
         private ReceptionWithUnkownGoods _reception;
+        private IList<ReceptionGoodViewModel> _receptionGoods;
+        private DelegateCommand validateReceptionCommand;
 
         public ReceptionDetailsViewModel(IScanner scanner, IPageDialogService dialog)
         {
             _scanner = scanner;
             _dialog = dialog;
+        }
+
+        public IList<ReceptionGoodViewModel> ReceptionGoods
+        {
+            get => _receptionGoods;
+            set => SetProperty(ref _receptionGoods, value);
+        }
+
+        public DelegateCommand ValidateReceptionCommand => validateReceptionCommand ?? (validateReceptionCommand = new DelegateCommand(async () =>
+        {
+            try
+            {
+                await _reception.Confirmation().CommitAsync();
+
+            }
+            catch (Exception ex)
+            {
+                await _dialog.DisplayAlertAsync("Syncro error", ex.Message, "Ok");
+            }
+        }));
+
+        public async Task InitializeAsync(INavigationParameters parameters)
+        {
+            if (!parameters.ContainsKey("Supplier"))
+            {
+                throw new InvalidOperationException("No supplier selected");
+            }
+            var sup = parameters.GetValue<ISupplier>("Supplier");
+            _reception = new ReceptionWithUnkownGoods(await sup.Receptions.FirstAsync());
+            ReceptionGoods = await _reception.NeedConfirmation().ToViewModelListAsync();
         }
 
         async void INavigatedAware.OnNavigatedTo(INavigationParameters parameters)
@@ -92,39 +124,5 @@ namespace Warehouse.Mobile.ViewModels
                 }
             });
         }
-
-        private IList<ReceptionGoodViewModel> _receptionGoods;
-
-        public IList<ReceptionGoodViewModel> ReceptionGoods
-        {
-            get => _receptionGoods;
-            set => SetProperty(ref _receptionGoods, value);
-        }
-
-        public async Task InitializeAsync(INavigationParameters parameters)
-        {
-            if (!parameters.ContainsKey("Supplier"))
-            {
-                throw new InvalidOperationException("No supplier selected");
-            }
-            var sup = parameters.GetValue<ISupplier>("Supplier");
-            _reception = new ReceptionWithUnkownGoods(await sup.Receptions.FirstAsync());
-            ReceptionGoods = await _reception.NeedConfirmation().ToViewModelListAsync();
-        }
-
-        private DelegateCommand validateReceptionCommand;
-
-        public DelegateCommand ValidateReceptionCommand => validateReceptionCommand ?? (validateReceptionCommand = new DelegateCommand(async () =>
-        {
-            try
-            {
-                await _reception.Confirmation().CommitAsync();
-
-            }
-            catch (Exception ex)
-            {
-                await _dialog.DisplayAlertAsync("Syncro error", ex.Message, "Ok");
-            }
-        }));
     }
 }

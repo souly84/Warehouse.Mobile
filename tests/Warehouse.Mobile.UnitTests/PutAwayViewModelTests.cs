@@ -1,4 +1,5 @@
-﻿using Warehouse.Core;
+﻿using System.Threading.Tasks;
+using Warehouse.Core;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.UnitTests.Extensions;
 using Warehouse.Mobile.ViewModels;
@@ -37,7 +38,17 @@ namespace Warehouse.Mobile.UnitTests
                 _app.Scanner.State
             );
         }
-        
+
+        [Fact]
+        public async Task ScannerDisabled()
+        {
+            await _app.GoBackAsync();
+            Assert.Equal(
+                ScannerState.Opened,
+                _app.Scanner.State
+            );
+        }
+
         [Fact]
         public void ScanGoodBarcode()
         {
@@ -53,7 +64,9 @@ namespace Warehouse.Mobile.UnitTests
                     )
                 )
             );
-            app.CurrentViewModel<MenuSelectionViewModel>().GoToPutAwayCommand.Execute(null);
+            app.CurrentViewModel<MenuSelectionViewModel>()
+               .GoToPutAwayCommand
+               .Execute(null);
             app.Scan("123456");
             Assert.Equal(
                 new MockWarehouseGood("1", 1, "123456"),

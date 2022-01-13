@@ -12,7 +12,7 @@ namespace Warehouse.Mobile.UnitTests
 
         public SelectSupplierViewModelTests()
         {
-            // Go to put away
+            // Go to suppliers
             _app.CurrentViewModel<MenuSelectionViewModel>().GoToAvailableSuppliersCommand.Execute(null);
         }
 

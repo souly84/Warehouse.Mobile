@@ -8,6 +8,12 @@ namespace Warehouse.Mobile.ViewModels
     public class ReceptionGoodViewModel : BindableBase
     {
         private readonly IReceptionGood _receptionGood;
+
+        public ReceptionGoodViewModel(IReceptionGood receptionGood)
+        {
+            _receptionGood = receptionGood;
+        }
+
         public bool IsMockedReceptionGood { get => _receptionGood is MockReceptionGood; }
 
         private DictionaryMedia _goodData;
@@ -21,11 +27,6 @@ namespace Warehouse.Mobile.ViewModels
                 }
                 return _goodData;
             }
-        }
-
-        public ReceptionGoodViewModel(IReceptionGood receptionGood)
-        {
-            _receptionGood = receptionGood;
         }
 
         public int Total { get; set; }
