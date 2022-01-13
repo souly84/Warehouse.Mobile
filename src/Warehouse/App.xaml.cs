@@ -40,9 +40,12 @@ namespace Warehouse.Mobile
             containerRegistry.RegisterForNavigation<MenuSelectionView>();
             containerRegistry.RegisterForNavigation<ReceptionDetailsView>();
             containerRegistry.RegisterForNavigation<PutAwayView>();
-            containerRegistry.RegisterInstance<ICompany>(
-                new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php")
-            );
+            if (!containerRegistry.IsRegistered<ICompany>())
+            {
+               containerRegistry.RegisterInstance<ICompany>(
+                   new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php")
+               );
+            }
         }
 
         private Task NavigateToMainPageAsync()

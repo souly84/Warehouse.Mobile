@@ -98,7 +98,7 @@
       <Version>1.0.0.212</Version>
     </PackageReference>
     <PackageReference Include="Warehouse.Core">
-      <Version>1.0.0.230</Version>
+      <Version>1.0.0.259</Version>
     </PackageReference>
     <PackageReference Include="Honeywell.BarcodeReader">
       <Version>1.32.7.10</Version>

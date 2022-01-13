@@ -24,7 +24,7 @@ namespace Warehouse.Mobile.UnitTests
             _app.CurrentViewModel<MenuSelectionViewModel>()
                 .GoToAvailableSuppliersCommand.Execute(null);
             Assert.Equal(
-                "/NavigationPage/MenuSelectionView/SelectSupplierView?useModalNavigation=true",
+                "/NavigationPage/MenuSelectionView/SelectSupplierView",
                 _app.GetNavigationUriPath()
             );
 

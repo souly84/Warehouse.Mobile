@@ -1,5 +1,7 @@
-﻿using Prism.Common;
+﻿using System;
+using Prism.Common;
 using Prism.Navigation;
+using Warehouse.Core.Plugins;
 
 namespace Warehouse.Mobile.UnitTests
 {
@@ -19,6 +21,13 @@ namespace Warehouse.Mobile.UnitTests
         public static string GetNavigationUriPath(this App app)
         {
             return app.PageNavigationService().GetNavigationUriPath();
+        }
+
+        public static void Scan(this App app, string barcodeData)
+        {
+            (app.Scanner as MockScanner).Scan(
+                new ScanningResult(barcodeData, "CODE128", DateTime.Now.TimeOfDay)
+            );
         }
     }
 }

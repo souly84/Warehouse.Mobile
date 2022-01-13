@@ -156,15 +156,19 @@ namespace Warehouse.Mobile
                         .Warehouse
                         .Goods.For(barcode.BarcodeData)
                         .FirstAsync();
-                    CheckInStorage = await WarehouseGood?.Storages?
-                        .FirstAsync(x => x.ToDictionary().ValueOrDefault<string>("location")
-                        .Contains("CHECK IN"));
-                    CheckInQuantity = CheckInStorage?.ToDictionary().ValueOrDefault<int>("Quantity");
+                    CheckInStorage = await WarehouseGood
+                        .Storages
+                        .PutAway.FirstAsync();
+                    CheckInQuantity = CheckInStorage.ToDictionary().ValueOrDefault<int>("Quantity");
 
                 }
                 catch (Exception ex)
                 {
-                    await _dialog.DisplayAlertAsync("Error scanning", ex.Message, "ok");
+                    await _dialog.DisplayAlertAsync(
+                        "Error scanning",
+                        ex.Message,
+                        "ok"
+                    );
                 }
             });
         }
