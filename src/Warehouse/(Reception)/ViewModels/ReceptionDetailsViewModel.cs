@@ -37,7 +37,6 @@ namespace Warehouse.Mobile.ViewModels
             try
             {
                 await _reception.Confirmation().CommitAsync();
-
             }
             catch (Exception ex)
             {

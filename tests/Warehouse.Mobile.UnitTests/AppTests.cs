@@ -6,7 +6,7 @@ namespace Warehouse.Mobile.UnitTests
     [Collection(XUnitCollectionDefinitions.NavigationDependent)]
     public class AppTests
     {
-        private App _app = XamarinFormsTests.InitPrismApplication();
+        private App _app = WarehouseMobile.Application();
 
         [Fact]
         public void ScannerInitialized()

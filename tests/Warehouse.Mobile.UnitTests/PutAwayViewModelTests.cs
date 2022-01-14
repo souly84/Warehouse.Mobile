@@ -1,22 +1,20 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
-using Warehouse.Mobile.UnitTests.Extensions;
-using Warehouse.Mobile.ViewModels;
+using Warehouse.Mobile.Tests;
+using Warehouse.Mobile.UnitTests.Mocks;
 using Xunit;
+using static Warehouse.Mobile.Tests.MockPageDialogService;
 
 namespace Warehouse.Mobile.UnitTests
 {
     [Collection(XUnitCollectionDefinitions.NavigationDependent)]
     public class PutAwayViewModelTests
     {
-        private App _app = XamarinFormsTests.InitPrismApplication();
-
-        public PutAwayViewModelTests()
-        {
-            // Go to put away
-            _app.CurrentViewModel<MenuSelectionViewModel>().GoToPutAwayCommand.Execute(null);
-        }
+        private App _app = WarehouseMobile
+            .Application()
+            .GoToPutAway();
 
         [Fact]
         public void ReserveLocations()
@@ -50,78 +48,118 @@ namespace Warehouse.Mobile.UnitTests
         }
 
         [Fact]
+        public void AlertMessageIfScannerCanNotBeEnabled()
+        {
+            var dialog = new MockPageDialogService();
+            WarehouseMobile.Application(
+                new MockPlatformInitializer(
+                    scanner: new FailedBarcodeScanner(new InvalidOperationException("Error message")),
+                    pageDialogService: dialog
+                )
+            ).GoToPutAway();
+            Assert.Contains(
+                new DialogPage {
+                    Title = "Scanner initialization error",
+                    Message = "Error message",
+                    CancelButton = "Ok"
+                },
+                dialog.ShownDialogs
+            );
+        }
+
+        [Fact]
+        public async Task AlertMessageIfScannerCanNotBeDisabled()
+        {
+            var dialog = new MockPageDialogService();
+            var app = WarehouseMobile.Application(
+                new MockPlatformInitializer(
+                    scanner: new FailedBarcodeScanner(new InvalidOperationException("Error message text")),
+                    pageDialogService: dialog
+                )
+            ).GoToPutAway();
+            await app.GoBackAsync();
+            Assert.Contains(
+                new DialogPage
+                {
+                    Title = "Scanner deinitialization error",
+                    Message = "Error message text",
+                    CancelButton = "Ok"
+                },
+                dialog.ShownDialogs
+            );
+        }
+
+        [Fact]
         public void ScanGoodBarcode()
         {
-            var app = XamarinFormsTests.InitPrismApplication(
-                new MockWarehouseCompany(
-                    new MockWarehouse(
-                        new ListOfEntities<IWarehouseGood>(
-                            new MockWarehouseGood("1", 1, "123456")
-                        ),
-                        new ListOfEntities<IStorage>(
-                            new MockStorage(new MockWarehouseGood("1", 1, "123456"))
-                        )
-                    )
-                )
-            );
-            app.CurrentViewModel<MenuSelectionViewModel>()
-               .GoToPutAwayCommand
-               .Execute(null);
-            app.Scan("123456");
             Assert.Equal(
                 new MockWarehouseGood("1", 1, "123456"),
-                app.CurrentViewModel<PutAwayViewModel>().WarehouseGood
+                WarehouseMobile.Application(
+                    new MockWarehouseCompany(
+                        new MockWarehouse(
+                            new ListOfEntities<IWarehouseGood>(
+                                new MockWarehouseGood("1", 1, "123456")
+                            ),
+                            new ListOfEntities<IStorage>(
+                                new MockStorage(new MockWarehouseGood("1", 1, "123456"))
+                            )
+                        )
+                    )
+                ).GoToPutAway()
+                 .Scan("123456")
+                 .CurrentViewModel<PutAwayViewModel>()
+                 .WarehouseGood
             );
         }
 
         [Fact]
         public void CheckinStorage()
         {
-            var app = XamarinFormsTests.InitPrismApplication(
-                new MockWarehouseCompany(
-                    new MockWarehouse(
-                        new ListOfEntities<IWarehouseGood>(
-                            new MockWarehouseGood("1", 1, "123456")
-                        ),
-                        new ListOfEntities<IStorage>(
-                            new MockStorage(
-                                "ST01",
+            Assert.NotNull(
+                WarehouseMobile.Application(
+                    new MockWarehouseCompany(
+                        new MockWarehouse(
+                            new ListOfEntities<IWarehouseGood>(
                                 new MockWarehouseGood("1", 1, "123456")
+                            ),
+                            new ListOfEntities<IStorage>(
+                                new MockStorage(
+                                    "ST01",
+                                    new MockWarehouseGood("1", 1, "123456")
+                                )
                             )
                         )
                     )
-                )
-            );
-            app.CurrentViewModel<MenuSelectionViewModel>().GoToPutAwayCommand.Execute(null);
-            app.Scan("123456");
-            Assert.NotNull(
-                app.CurrentViewModel<PutAwayViewModel>().CheckInStorage
+                ).GoToPutAway()
+                 .Scan("123456")
+                 .CurrentViewModel<PutAwayViewModel>()
+                 .CheckInStorage
             );
         }
 
         [Fact]
         public void CheckinStorageQuantity()
         {
-            var app = XamarinFormsTests.InitPrismApplication(
-                new MockWarehouseCompany(
-                    new MockWarehouse(
-                        new ListOfEntities<IWarehouseGood>(
-                            new MockWarehouseGood("1", 1, "123456")
-                        ),
-                        new ListOfEntities<IStorage>(
-                            new MockStorage(
-                                "ST01",
+            Assert.Equal(
+                0,
+                WarehouseMobile.Application(
+                    new MockWarehouseCompany(
+                        new MockWarehouse(
+                            new ListOfEntities<IWarehouseGood>(
                                 new MockWarehouseGood("1", 1, "123456")
+                            ),
+                            new ListOfEntities<IStorage>(
+                                new MockStorage(
+                                    "ST01",
+                                    new MockWarehouseGood("1", 1, "123456")
+                                )
                             )
                         )
                     )
-                )
-            );
-            app.CurrentViewModel<MenuSelectionViewModel>().GoToPutAwayCommand.Execute(null);
-            app.Scan("123456");
-            Assert.Equal(
-                0,
-                app.CurrentViewModel<PutAwayViewModel>().CheckInQuantity
+                ).GoToPutAway()
+                 .Scan("123456")
+                 .CurrentViewModel<PutAwayViewModel>()
+                 .CheckInQuantity
             );
         }
     }

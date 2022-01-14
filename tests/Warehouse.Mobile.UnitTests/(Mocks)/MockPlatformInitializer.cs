@@ -10,17 +10,24 @@ namespace Warehouse.Mobile.UnitTests
     internal class MockPlatformInitializer : IPlatformInitializer
     {
         private readonly ICompany _company;
+        private readonly IScanner _scanner;
+        private readonly IPageDialogService _pageDialogService;
 
-        public MockPlatformInitializer(ICompany company)
+        public MockPlatformInitializer(
+            ICompany company = null,
+            IScanner scanner = null,
+            IPageDialogService pageDialogService = null)
         {
-            _company = company;
+            _company = company ?? new MockWarehouseCompany();
+            _scanner = scanner ?? new MockScanner();
+            _pageDialogService = pageDialogService ?? new MockPageDialogService();
         }
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
-            containerRegistry.RegisterInstance<IScanner>(new MockScanner());
+            containerRegistry.RegisterInstance<IScanner>(_scanner);
             containerRegistry.RegisterInstance<ICompany>(_company);
-            containerRegistry.RegisterInstance<IPageDialogService>(new MockPageDialogService());
+            containerRegistry.RegisterInstance<IPageDialogService>(_pageDialogService);
         }
     }
 }

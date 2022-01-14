@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Warehouse.Mobile.UnitTests.Extensions;
 using Warehouse.Mobile.ViewModels;
 using Xunit;
 
@@ -8,13 +7,9 @@ namespace Warehouse.Mobile.UnitTests
     [Collection(XUnitCollectionDefinitions.NavigationDependent)]
     public class SelectSupplierViewModelTests
     {
-        private App _app = XamarinFormsTests.InitPrismApplication();
-
-        public SelectSupplierViewModelTests()
-        {
-            // Go to suppliers
-            _app.CurrentViewModel<MenuSelectionViewModel>().GoToAvailableSuppliersCommand.Execute(null);
-        }
+        private App _app = WarehouseMobile
+            .Application()
+            .GoToSuppliers();
 
         [Fact]
         public void Suppliers()
@@ -28,6 +23,17 @@ namespace Warehouse.Mobile.UnitTests
             Assert.NotEqual(
                 System.DateTime.MinValue,
                 _app.CurrentViewModel<SelectSupplierViewModel>().CurrentDate
+            );
+        }
+
+        [Fact]
+        public void SupplierName()
+        {
+            Assert.Equal(
+                "Electrolux",
+                _app.CurrentViewModel<SelectSupplierViewModel>()
+                    .Suppliers.First()
+                    .Name
             );
         }
 
