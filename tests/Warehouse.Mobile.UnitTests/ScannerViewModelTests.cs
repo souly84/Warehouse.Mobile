@@ -80,7 +80,7 @@ namespace Warehouse.Mobile.UnitTests
             Assert.Contains(
               new DialogPage
               {
-                  Title = "Scanner initialization error",
+                  Title = "Scanner deinitialization error",
                   Message = "Test Exception",
                   CancelButton = "Ok"
               },

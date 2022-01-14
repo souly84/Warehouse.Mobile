@@ -51,7 +51,7 @@ namespace Warehouse.Mobile.ViewModels
             catch (Exception ex)
             {
                 _dialog.DisplayAlertAsync(
-                    "Scanner initialization error",
+                    "Scanner deinitialization error",
                     ex.Message,
                     "Ok"
                 ).FireAndForget();
