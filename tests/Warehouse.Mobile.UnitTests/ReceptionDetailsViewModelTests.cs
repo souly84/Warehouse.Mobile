@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.Tests;
-using Warehouse.Mobile.UnitTests.Extensions;
 using Warehouse.Mobile.UnitTests.Mocks;
 using Warehouse.Mobile.ViewModels;
 using Xunit;

@@ -1,5 +1,4 @@
-﻿using Warehouse.Mobile.UnitTests.Extensions;
-using Xunit;
+﻿using Xunit;
 
 namespace Warehouse.Mobile.UnitTests
 {
