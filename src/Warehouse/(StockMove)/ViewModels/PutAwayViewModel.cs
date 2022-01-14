@@ -160,14 +160,13 @@ namespace Warehouse.Mobile
                         .Storages
                         .PutAway.FirstAsync();
                     CheckInQuantity = CheckInStorage.ToDictionary().ValueOrDefault<int>("Quantity");
-
                 }
                 catch (Exception ex)
                 {
                     await _dialog.DisplayAlertAsync(
                         "Error scanning",
                         ex.Message,
-                        "ok"
+                        "Ok"
                     );
                 }
             });

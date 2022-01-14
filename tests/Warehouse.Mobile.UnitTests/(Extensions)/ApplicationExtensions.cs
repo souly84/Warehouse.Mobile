@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Prism.Common;
 using Prism.Navigation;
 using Warehouse.Core.Plugins;
+using Warehouse.Mobile.UnitTests.Mocks;
 using Warehouse.Mobile.ViewModels;
 
 namespace Warehouse.Mobile.UnitTests
@@ -28,9 +29,26 @@ namespace Warehouse.Mobile.UnitTests
 
         public static App Scan(this App app, string barcodeData)
         {
-            (app.Scanner as MockScanner).Scan(
-                new ScanningResult(barcodeData, "CODE128", DateTime.Now.TimeOfDay)
+            return app.Scan(
+                new ScanningResult(
+                    barcodeData,
+                    "CODE128",
+                    DateTime.Now.TimeOfDay
+                )
             );
+        }
+
+        public static App Scan(this App app, IScanningResult scanningResult)
+        {
+            if (app.Scanner is MockScanner scanner)
+            {
+                scanner.Scan(scanningResult);
+            }
+            else
+            {
+                ((ITestScanner)app.Scanner).Scan(scanningResult);
+            }
+
             return app;
         }
 

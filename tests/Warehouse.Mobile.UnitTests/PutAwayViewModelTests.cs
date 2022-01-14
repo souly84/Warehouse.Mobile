@@ -48,6 +48,27 @@ namespace Warehouse.Mobile.UnitTests
         }
 
         [Fact]
+        public void AlertMessage_OnScanError()
+        {
+            var dialog = new MockPageDialogService();
+            WarehouseMobile.Application(
+                new MockPlatformInitializer(
+                    pageDialogService: dialog
+                )
+            ).GoToPutAway()
+             .Scan(new ErrorScanningResult("Error message22"));
+            Assert.Contains(
+                new DialogPage
+                {
+                    Title = "Error scanning",
+                    Message = "Error message22",
+                    CancelButton = "Ok"
+                },
+                dialog.ShownDialogs
+            );
+        }
+
+        [Fact]
         public void AlertMessageIfScannerCanNotBeEnabled()
         {
             var dialog = new MockPageDialogService();

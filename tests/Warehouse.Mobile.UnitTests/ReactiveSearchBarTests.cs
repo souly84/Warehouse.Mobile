@@ -10,15 +10,31 @@ namespace Warehouse.Mobile.UnitTests
         [Fact]
         public async Task KeyPressed_OnTextChange_AfterKeyPressedDelay()
         {
-            var keyPressed = false;
+            var keyPressedCount = 0;
             var searchbar = new ReactiveSearchBar();
             searchbar.KeyPressedCommand = new Command(() =>
             {
-                keyPressed = true;
+                keyPressedCount++;
             });
             searchbar.Text = "Hello";
             await Task.Delay(ReactiveSearchBar.TextChangedKeyPressedDelayInMilliseconds * 2);
-            Assert.True(keyPressed);
+            Assert.Equal(1, keyPressedCount);
+        }
+
+        [Fact]
+        public async Task KeyPressedOnlyOnce_OnTextChange_AfterKeyPressedDelay()
+        {
+            var keyPressedCount = 0;
+            var searchbar = new ReactiveSearchBar();
+            searchbar.KeyPressedCommand = new Command(() =>
+            {
+                keyPressedCount++;
+            });
+            searchbar.Text = "Hello";
+            searchbar.Text = "Hello1";
+            searchbar.Text = "Hello2";
+            await Task.Delay(ReactiveSearchBar.TextChangedKeyPressedDelayInMilliseconds * 2);
+            Assert.Equal(1, keyPressedCount);
         }
     }
 }

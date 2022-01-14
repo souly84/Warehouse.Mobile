@@ -119,7 +119,7 @@ namespace Warehouse.Mobile.ViewModels
                 }
                 catch (Exception ex)
                 {
-                    await _dialog.DisplayAlertAsync("Error scanning", ex.Message, "ok");
+                    await _dialog.DisplayAlertAsync("Error scanning", ex.Message, "Ok");
                 }
             });
         }
