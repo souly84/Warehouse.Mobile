@@ -16,17 +16,9 @@ namespace Warehouse.Mobile
 {
     public partial class App : PrismApplication
     {
-        private readonly string _ebSoftServerRootUri;
-
         public App(IPlatformInitializer initializer)
-            : this(initializer, "http://wdc-logitest.eurocenter.be/webservice/apitest.php")
-        {
-        }
-
-        public App(IPlatformInitializer initializer, string ebSoftServerRootUri)
             : base(initializer)
         {
-            _ebSoftServerRootUri = ebSoftServerRootUri;
         }
 
         public INavigationService Navigation => NavigationService;
@@ -51,7 +43,7 @@ namespace Warehouse.Mobile
             if (!containerRegistry.IsRegistered<ICompany>())
             {
                containerRegistry.RegisterInstance<ICompany>(
-                   new EbSoftCompany(_ebSoftServerRootUri)
+                   new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php")
                );
             }
         }
