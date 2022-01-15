@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
+using Warehouse.Core;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.Tests;
 using Warehouse.Mobile.UnitTests.Mocks;
@@ -110,6 +113,84 @@ namespace Warehouse.Mobile.UnitTests
                     CancelButton = "Ok"
                 },
                 dialog.ShownDialogs
+            );
+        }
+
+        [Fact]
+        public void ScannedGoodBarcodeIncreaseConfirmedQuantity()
+        {
+            var app = WarehouseMobile
+                .Application(
+                    new MockWarehouseCompany(
+                        new NamedMockSupplier(
+                            "Electrolux",
+                            new MockReception(
+                                new MockReceptionGood("1", 5, "1111"),
+                                new MockReceptionGood("2", 2, "2222"),
+                                new MockReceptionGood("3", 4, "3333")
+                            )
+                        )
+                    )
+                ).GoToReceptionDetails()
+                 .Scan("1111", "2222");
+            Assert.Equal(2,
+                app.CurrentViewModel<ReceptionDetailsViewModel>()
+                    .ReceptionGoods
+                    .Sum(good => good.ConfirmedQuantity)
+            );
+        }
+
+        [Fact]
+        public void ScannedUnknownGoodBarcodeAppearsInReceptionGoodsCollectionAsUnknownGood()
+        {
+            var app = WarehouseMobile
+                .Application(
+                    new MockWarehouseCompany(
+                        new NamedMockSupplier(
+                            "Electrolux",
+                            new MockReception(
+                                new MockReceptionGood("1", 5, "1111"),
+                                new MockReceptionGood("2", 2, "2222"),
+                                new MockReceptionGood("3", 4, "3333")
+                            )
+                        )
+                    )
+                ).GoToReceptionDetails()
+                 .Scan("UknownBarcode", "2222");
+            Assert.Equal(4,
+                app.CurrentViewModel<ReceptionDetailsViewModel>()
+                   .ReceptionGoods
+                   .Count
+            );
+        }
+
+        [Fact]
+        public async Task ReceptionValidationSendsConfirmedGoodsToServer()
+        {
+            var reception = new MockReception(
+                new MockReceptionGood("1", 5, "1111"),
+                new MockReceptionGood("2", 2, "2222"),
+                new MockReceptionGood("3", 4, "3333")
+            );
+            WarehouseMobile.Application(
+                new MockWarehouseCompany(
+                    new NamedMockSupplier(
+                        "Electrolux",
+                        reception
+                    )
+                )
+            ).GoToReceptionDetails()
+             .Scan("UknownBarcode", "1111", "2222")
+             .CurrentViewModel<ReceptionDetailsViewModel>()
+             .ValidateReceptionCommand.Execute();
+            Assert.Equal(
+                new List<IGoodConfirmation>
+                {
+                    (await new MockReceptionGood("1", 5, "1111").PartiallyConfirmed(1)).Confirmation,
+                    (await new MockReceptionGood("2", 2, "2222").PartiallyConfirmed(1)).Confirmation,
+                 //   (await new MockReceptionGood("", 1, "UknownBarcode").PartiallyConfirmed(1)).Confirmation
+                },
+                reception.ValidatedGoods
             );
         }
     }

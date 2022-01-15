@@ -52,15 +52,14 @@ namespace Warehouse.Mobile.ViewModels
         private DelegateCommand decreaseQuantityCommand;
         public DelegateCommand DecreaseQuantityCommand => decreaseQuantityCommand ?? (decreaseQuantityCommand = new DelegateCommand(() =>
         {
-             _receptionGood.Confirmation.Decrease(1);
+            _receptionGood.Confirmation.Decrease(1);
             RaisePropertyChanged(nameof(ConfirmedQuantity));
         }));
 
         public override bool Equals(object obj)
         {
             return object.ReferenceEquals(this, obj)
-                || obj is IReceptionGood receptionGood
-                && _receptionGood.Equals(receptionGood);
+                || _receptionGood.Equals(obj);
         }
 
         public override int GetHashCode()

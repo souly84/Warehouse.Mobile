@@ -29,6 +29,24 @@ namespace Warehouse.Mobile
         {
         }
 
+        public MockWarehouseCompany(params ISupplier[] suppliers)
+            : this(
+                   new ListOfEntities<ISupplier>(suppliers)
+              )
+        {
+        }
+
+        public MockWarehouseCompany(IEntities<ISupplier> suppliers)
+            : this(
+                  new MockWarehouse(
+                    new ListOfEntities<IWarehouseGood>(),
+                    new ListOfEntities<IStorage>()
+                  ),
+                  suppliers
+              )
+        {
+        }
+
         public MockWarehouseCompany(IWarehouse warehouse, IEntities<ISupplier> suppliers)
         {
             Warehouse = warehouse;
