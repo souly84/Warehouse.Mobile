@@ -7,7 +7,7 @@ namespace Warehouse.Mobile.Controls
 {
     public class ReactiveSearchBar : SearchBar
     {
-        public static int TextChangedKeyPressedDelayInMilliseconds = 300;
+        public const int TextChangedKeyPressedDelayInMilliseconds = 300;
 
         private CancellationTokenSource _cts;
 

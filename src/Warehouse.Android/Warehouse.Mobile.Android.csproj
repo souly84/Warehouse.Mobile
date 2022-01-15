@@ -105,6 +105,9 @@
     </PackageReference>
   </ItemGroup>
   <ItemGroup>
+    <SonarQubeSetting Include="sonar.coverage.exclusions">
+        <Value>**/*.cs</Value>
+    </SonarQubeSetting>
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
