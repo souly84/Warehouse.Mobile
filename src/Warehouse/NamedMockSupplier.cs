@@ -20,6 +20,11 @@ namespace Warehouse.Mobile
         {
         }
 
+        public NamedMockSupplier(string supplierName, params IReceptionGood[] goods)
+            : this(supplierName, new MockReception(goods))
+        {
+        }
+
         public NamedMockSupplier(string supplierName, params IReception[] receptions)
            : this(supplierName, new MockSupplier(receptions))
         {
