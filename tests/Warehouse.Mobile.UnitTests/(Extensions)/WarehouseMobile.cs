@@ -1,4 +1,5 @@
 ﻿using Prism;
+using Prism.Ioc;
 using Warehouse.Core;
 
 namespace Warehouse.Mobile.UnitTests
@@ -17,6 +18,7 @@ namespace Warehouse.Mobile.UnitTests
 
         public static App Application(IPlatformInitializer platformInitializer)
         {
+            ContainerLocator.ResetContainer();
             Xamarin.Forms.Mocks.MockForms.Init();
             NavigationServiceExtensions.ResetPageNavigationRegistry();
             var app = new App(platformInitializer);

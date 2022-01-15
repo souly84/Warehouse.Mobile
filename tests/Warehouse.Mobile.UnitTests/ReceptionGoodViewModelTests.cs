@@ -102,5 +102,34 @@ namespace Warehouse.Mobile.UnitTests
                     .First().Total
             );
         }
+
+        [Fact]
+        public void IncreaseQuantityCommandIncreasesConfirmedQuantity()
+        {
+            var goodViewModel = _app
+                    .CurrentViewModel<ReceptionDetailsViewModel>()
+                    .ReceptionGoods
+                    .First();
+            goodViewModel.IncreaseQuantityCommand.Execute();
+            Assert.Equal(
+                1,
+                goodViewModel.ConfirmedQuantity
+            );
+        }
+
+        [Fact]
+        public void DecreaseQuantityCommandDecreasesConfirmedQuantity()
+        {
+            var goodViewModel = _app
+                    .CurrentViewModel<ReceptionDetailsViewModel>()
+                    .ReceptionGoods
+                    .First();
+            goodViewModel.IncreaseQuantityCommand.Execute();
+            goodViewModel.DecreaseQuantityCommand.Execute();
+            Assert.Equal(
+                0,
+                goodViewModel.ConfirmedQuantity
+            );
+        }
     }
 }

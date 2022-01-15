@@ -47,6 +47,11 @@ namespace Warehouse.Mobile.UnitTests
             return app;
         }
 
+        public static T Resolve<T>(this App app)
+        {
+            return (T)app.Container.Resolve(typeof(T));
+        }
+
         public static Task<INavigationResult> GoBackAsync(this App app)
         {
             return app.PageNavigationService().GoBackAsync();

@@ -1,5 +1,4 @@
-﻿using System;
-using Warehouse.Mobile.Extensions;
+﻿using Warehouse.Mobile.Extensions;
 using Xamarin.Forms;
 
 namespace Warehouse.Mobile.Controls

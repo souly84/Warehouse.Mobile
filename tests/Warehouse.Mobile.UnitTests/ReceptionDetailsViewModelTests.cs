@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Prism.Navigation;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.Tests;
@@ -117,7 +118,7 @@ namespace Warehouse.Mobile.UnitTests
         }
 
         [Fact]
-        public void ScannedGoodBarcodeIncreaseConfirmedQuantity()
+        public void ScanBarcodeIncreasesGoodConfirmedQuantity()
         {
             var app = WarehouseMobile
                 .Application(
@@ -193,5 +194,70 @@ namespace Warehouse.Mobile.UnitTests
                 reception.ValidatedGoods
             );
         }
+
+        [Fact]
+        public void ConfirmedGoodDisappearsFromTheList()
+        {
+            var app = WarehouseMobile
+                .Application(
+                    new MockWarehouseCompany(
+                        new NamedMockSupplier(
+                            "Electrolux",
+                            new MockReception(
+                                new MockReceptionGood("1", 5, "1111"),
+                                new MockReceptionGood("2", 2, "2222"),
+                                new MockReceptionGood("3", 4, "3333")
+                            )
+                        )
+                    )
+                ).GoToReceptionDetails()
+                 .Scan("2222", "2222");
+            Assert.Equal(2,
+                app.CurrentViewModel<ReceptionDetailsViewModel>()
+                    .ReceptionGoods
+                    .Count
+            );
+        }
+
+        [Fact]
+        public Task InitializeAsyncThrowsInvalidOperationExceptionWhenNoSupplierHasBeenPassed()
+        {
+            return Assert.ThrowsAsync<InvalidOperationException>(
+                () => new ReceptionDetailsViewModel(
+                    new MockScanner(),
+                    new MockPageDialogService()
+                ).InitializeAsync(new NavigationParameters())
+            );
+        }
+
+        [Fact]
+        public void AlertMessageIfValidateReceptionCommandError()
+        {
+            var dialog = new MockPageDialogService();
+            WarehouseMobile.Application(
+                new MockPlatformInitializer(
+                    new MockWarehouseCompany(
+                        new NamedMockSupplier(
+                            "Electrolux",
+                            new ValidateExceptionReception(new InvalidOperationException("Test error message"))
+                        )
+                    ),
+                    pageDialogService: dialog
+                )
+            ).GoToReceptionDetails()
+             .CurrentViewModel<ReceptionDetailsViewModel>()
+             .ValidateReceptionCommand.Execute();
+            Assert.Contains(
+                new DialogPage
+                {
+                    Title = "Syncro error",
+                    Message = "Test error message",
+                    CancelButton = "Ok"
+                },
+                dialog.ShownDialogs
+            );
+        }
+
+        // Uknown good with barcode included into ValidateReceptionCommand
     }
 }

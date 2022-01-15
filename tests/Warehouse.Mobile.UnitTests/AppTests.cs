@@ -1,4 +1,8 @@
-﻿using Xunit;
+﻿using EbSoft.Warehouse.SDK;
+using Prism.Ioc;
+using Warehouse.Core;
+using Warehouse.Mobile.UnitTests.Mocks;
+using Xunit;
 
 namespace Warehouse.Mobile.UnitTests
 {
@@ -29,6 +33,16 @@ namespace Warehouse.Mobile.UnitTests
             Assert.Equal(
                 "/NavigationPage/MenuSelectionView",
                 _app.GetNavigationUriPath()
+            );
+        }
+
+        [Fact]
+        public void EbSoftCompanyRegisteredByDefault()
+        {
+            Assert.IsType<EbSoftCompany>(
+                WarehouseMobile.Application(
+                    new NoCompanyMockPlatformInitializer()
+                ).Resolve<ICompany>()
             );
         }
     }
