@@ -92,13 +92,13 @@ namespace Warehouse.Mobile.UnitTests
         public async Task AlertMessageIfScannerCanNotBeDisabled()
         {
             var dialog = new MockPageDialogService();
-            var app = WarehouseMobile.Application(
+            await WarehouseMobile.Application(
                 new MockPlatformInitializer(
                     scanner: new FailedBarcodeScanner(new InvalidOperationException("Error message text")),
                     pageDialogService: dialog
                 )
-            ).GoToPutAway();
-            await app.GoBackAsync();
+            ).GoToPutAway()
+             .GoBackAsync();
             Assert.Contains(
                 new DialogPage
                 {
