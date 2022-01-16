@@ -53,12 +53,9 @@ namespace Warehouse.Mobile.UnitTests
         public void AlertMessageIfOnScannError()
         {
             var dialog = new MockPageDialogService();
-            WarehouseMobile.Application(
-                new MockPlatformInitializer(
-                    pageDialogService: dialog
-                )
-            ).GoToReceptionDetails()
-             .Scan(new ErrorScanningResult("Error message22"));
+            WarehouseMobile.Application(dialog)
+                .GoToReceptionDetails()
+                .Scan(new ErrorScanningResult("Error message22"));
             Assert.Contains(
                 new DialogPage
                 {
@@ -97,15 +94,15 @@ namespace Warehouse.Mobile.UnitTests
         public async Task AlertMessageIfScannerCanNotBeDisabled()
         {
             var dialog = new MockPageDialogService();
-            var app = WarehouseMobile.Application(
+            await WarehouseMobile.Application(
                 new MockPlatformInitializer(
                     scanner: new FailedBarcodeScanner(
                         new InvalidOperationException("Error message text")
                     ),
                     pageDialogService: dialog
                 )
-            ).GoToReceptionDetails();
-            await app.GoBackAsync();
+            ).GoToReceptionDetails()
+             .GoBackAsync();
             Assert.Contains(
                 new DialogPage
                 {
@@ -120,22 +117,15 @@ namespace Warehouse.Mobile.UnitTests
         [Fact]
         public void ScanBarcodeIncreasesGoodConfirmedQuantity()
         {
-            var app = WarehouseMobile
-                .Application(
-                    new MockWarehouseCompany(
-                        new NamedMockSupplier(
-                            "Electrolux",
-                            new MockReception(
-                                new MockReceptionGood("1", 5, "1111"),
-                                new MockReceptionGood("2", 2, "2222"),
-                                new MockReceptionGood("3", 4, "3333")
-                            )
-                        )
-                    )
+            Assert.Equal(
+                2,
+                WarehouseMobile.Application(
+                    new MockReceptionGood("1", 5, "1111"),
+                    new MockReceptionGood("2", 2, "2222"),
+                    new MockReceptionGood("3", 4, "3333")
                 ).GoToReceptionDetails()
-                 .Scan("1111", "2222");
-            Assert.Equal(2,
-                app.CurrentViewModel<ReceptionDetailsViewModel>()
+                 .Scan("1111", "2222")
+                 .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
                     .Sum(good => good.ConfirmedQuantity)
             );
@@ -144,24 +134,17 @@ namespace Warehouse.Mobile.UnitTests
         [Fact]
         public void ScannedUnknownGoodBarcodeAppearsInReceptionGoodsCollectionAsUnknownGood()
         {
-            var app = WarehouseMobile
-                .Application(
-                    new MockWarehouseCompany(
-                        new NamedMockSupplier(
-                            "Electrolux",
-                            new MockReception(
-                                new MockReceptionGood("1", 5, "1111"),
-                                new MockReceptionGood("2", 2, "2222"),
-                                new MockReceptionGood("3", 4, "3333")
-                            )
-                        )
-                    )
+            Assert.Equal(
+                4,
+                WarehouseMobile.Application(
+                    new MockReceptionGood("1", 5, "1111"),
+                    new MockReceptionGood("2", 2, "2222"),
+                    new MockReceptionGood("3", 4, "3333")
                 ).GoToReceptionDetails()
-                 .Scan("UknownBarcode", "2222");
-            Assert.Equal(4,
-                app.CurrentViewModel<ReceptionDetailsViewModel>()
-                   .ReceptionGoods
-                   .Count
+                 .Scan("UknownBarcode", "2222")
+                 .CurrentViewModel<ReceptionDetailsViewModel>()
+                    .ReceptionGoods
+                    .Count
             );
         }
 
@@ -174,12 +157,7 @@ namespace Warehouse.Mobile.UnitTests
                 new MockReceptionGood("3", 4, "3333")
             );
             WarehouseMobile.Application(
-                new MockWarehouseCompany(
-                    new NamedMockSupplier(
-                        "Electrolux",
-                        reception
-                    )
-                )
+                new NamedMockSupplier("Electrolux", reception)
             ).GoToReceptionDetails()
              .Scan("UknownBarcode", "1111", "2222")
              .CurrentViewModel<ReceptionDetailsViewModel>()
@@ -198,22 +176,15 @@ namespace Warehouse.Mobile.UnitTests
         [Fact]
         public void ConfirmedGoodDisappearsFromTheList()
         {
-            var app = WarehouseMobile
-                .Application(
-                    new MockWarehouseCompany(
-                        new NamedMockSupplier(
-                            "Electrolux",
-                            new MockReception(
-                                new MockReceptionGood("1", 5, "1111"),
-                                new MockReceptionGood("2", 2, "2222"),
-                                new MockReceptionGood("3", 4, "3333")
-                            )
-                        )
-                    )
+            Assert.Equal(
+                2,
+                WarehouseMobile.Application(
+                    new MockReceptionGood("1", 5, "1111"),
+                    new MockReceptionGood("2", 2, "2222"),
+                    new MockReceptionGood("3", 4, "3333")
                 ).GoToReceptionDetails()
-                 .Scan("2222", "2222");
-            Assert.Equal(2,
-                app.CurrentViewModel<ReceptionDetailsViewModel>()
+                 .Scan("2222", "2222")
+                 .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
                     .Count
             );

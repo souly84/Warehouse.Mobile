@@ -1,6 +1,8 @@
 ﻿using Prism;
 using Prism.Ioc;
+using Prism.Services;
 using Warehouse.Core;
+using Warehouse.Core.Plugins;
 
 namespace Warehouse.Mobile.UnitTests
 {
@@ -11,9 +13,35 @@ namespace Warehouse.Mobile.UnitTests
             return Application(new MockWarehouseCompany());
         }
 
+        public static App Application(params IReceptionGood[] receprionGoods)
+        {
+            return Application(
+                 new NamedMockSupplier(
+                     "Electrolux",
+                     new MockReception(
+                         receprionGoods
+                     )
+                 )
+            );
+        }
+
+        public static App Application(ISupplier supplier)
+        {
+            return Application(
+                new MockWarehouseCompany(supplier)
+            );
+        }
+
         public static App Application(ICompany company)
         {
             return Application(new MockPlatformInitializer(company));
+        }
+
+        public static App Application(IPageDialogService dialogService)
+        {
+            return Application(
+                new MockPlatformInitializer(pageDialogService: dialogService)
+            );
         }
 
         public static App Application(IPlatformInitializer platformInitializer)
