@@ -17,6 +17,21 @@ namespace Warehouse.Mobile
         {
         }
 
+        public MockWarehouseCompany(params IWarehouseGood[] goods)
+            : this(
+                  new MockWarehouse(
+                      new ListOfEntities<IWarehouseGood>(goods),
+                      new ListOfEntities<IStorage>(
+                          new MockStorage(
+                              "ST01",
+                              goods
+                          )
+                      )
+                  )
+              )
+        {
+        }
+
         public MockWarehouseCompany(IWarehouse warehouse)
             : this(
                   warehouse,

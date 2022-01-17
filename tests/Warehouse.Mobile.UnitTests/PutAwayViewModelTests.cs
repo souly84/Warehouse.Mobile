@@ -51,12 +51,10 @@ namespace Warehouse.Mobile.UnitTests
         public void AlertMessage_OnScanError()
         {
             var dialog = new MockPageDialogService();
-            WarehouseMobile.Application(
-                new MockPlatformInitializer(
-                    pageDialogService: dialog
-                )
-            ).GoToPutAway()
-             .Scan(new ErrorScanningResult("Error message22"));
+            WarehouseMobile
+                .Application(dialog)
+                .GoToPutAway()
+                .Scan(new ErrorScanningResult("Error message22"));
             Assert.Contains(
                 new DialogPage
                 {
@@ -74,7 +72,9 @@ namespace Warehouse.Mobile.UnitTests
             var dialog = new MockPageDialogService();
             WarehouseMobile.Application(
                 new MockPlatformInitializer(
-                    scanner: new FailedBarcodeScanner(new InvalidOperationException("Error message")),
+                    scanner: new FailedBarcodeScanner(
+                        new InvalidOperationException("Error message")
+                    ),
                     pageDialogService: dialog
                 )
             ).GoToPutAway();
@@ -94,7 +94,9 @@ namespace Warehouse.Mobile.UnitTests
             var dialog = new MockPageDialogService();
             await WarehouseMobile.Application(
                 new MockPlatformInitializer(
-                    scanner: new FailedBarcodeScanner(new InvalidOperationException("Error message text")),
+                    scanner: new FailedBarcodeScanner(
+                        new InvalidOperationException("Error message text")
+                    ),
                     pageDialogService: dialog
                 )
             ).GoToPutAway()
@@ -117,14 +119,7 @@ namespace Warehouse.Mobile.UnitTests
                 new MockWarehouseGood("1", 1, "123456"),
                 WarehouseMobile.Application(
                     new MockWarehouseCompany(
-                        new MockWarehouse(
-                            new ListOfEntities<IWarehouseGood>(
-                                new MockWarehouseGood("1", 1, "123456")
-                            ),
-                            new ListOfEntities<IStorage>(
-                                new MockStorage(new MockWarehouseGood("1", 1, "123456"))
-                            )
-                        )
+                        new MockWarehouseGood("1", 1, "123456")
                     )
                 ).GoToPutAway()
                  .Scan("123456")
@@ -139,17 +134,7 @@ namespace Warehouse.Mobile.UnitTests
             Assert.NotNull(
                 WarehouseMobile.Application(
                     new MockWarehouseCompany(
-                        new MockWarehouse(
-                            new ListOfEntities<IWarehouseGood>(
-                                new MockWarehouseGood("1", 1, "123456")
-                            ),
-                            new ListOfEntities<IStorage>(
-                                new MockStorage(
-                                    "ST01",
-                                    new MockWarehouseGood("1", 1, "123456")
-                                )
-                            )
-                        )
+                        new MockWarehouseGood("1", 1, "123456")
                     )
                 ).GoToPutAway()
                  .Scan("123456")
@@ -165,17 +150,7 @@ namespace Warehouse.Mobile.UnitTests
                 0,
                 WarehouseMobile.Application(
                     new MockWarehouseCompany(
-                        new MockWarehouse(
-                            new ListOfEntities<IWarehouseGood>(
-                                new MockWarehouseGood("1", 1, "123456")
-                            ),
-                            new ListOfEntities<IStorage>(
-                                new MockStorage(
-                                    "ST01",
-                                    new MockWarehouseGood("1", 1, "123456")
-                                )
-                            )
-                        )
+                        new MockWarehouseGood("1", 1, "123456")
                     )
                 ).GoToPutAway()
                  .Scan("123456")
