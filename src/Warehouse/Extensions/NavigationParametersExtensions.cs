@@ -12,5 +12,11 @@ namespace Warehouse.Mobile.Extensions
                 throw new InvalidOperationException($"Mandatory param not provided: {key}");
             }
         }
+
+        public static T Value<T>(this INavigationParameters parameters, string key)
+        {
+            parameters.CheckMandatory(key);
+            return parameters.GetValue<T>(key);
+        }
     }
 }

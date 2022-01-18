@@ -60,24 +60,6 @@ namespace Warehouse.Mobile.Droid
             _app.Scanner.CloseAsync().ConfigureAwait(false);
         }
 
-        protected override void OnResume()
-        {
-            base.OnResume();
-            _ = application.Scanner.OpenAsync();
-        }
-
-        protected override void OnPause()
-        {
-            base.OnPause();
-            _ = application.Scanner.CloseAsync();
-        }
-
-        protected override void OnDestroy()
-        {
-            base.OnDestroy();
-            _ = application.Scanner.CloseAsync();
-        }
-
         public override void OnBackPressed()
         {
             PopupPlugin.OnBackPressed();

@@ -1,9 +1,5 @@
 ﻿using System;
-<<<<<<< HEAD
-using System.Threading.Tasks;
-=======
 using System.Windows.Input;
->>>>>>> main
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;

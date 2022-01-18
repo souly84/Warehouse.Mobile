@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+     <GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
     <IsPackable>false</IsPackable>
   </PropertyGroup>
 
@@ -27,5 +28,6 @@
   
   <ItemGroup>
     <None Remove="Newtonsoft.Json" />
+    <None Remove="Prism.Plugin.Popups" />
   </ItemGroup>
 </Project>

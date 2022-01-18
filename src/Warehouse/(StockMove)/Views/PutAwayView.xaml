@@ -63,7 +63,7 @@
                          <ColumnDefinition/>
                          <ColumnDefinition Width="Auto"/>
                      </Grid.ColumnDefinitions>
-                      <controls1:MaterialSearchBar
+                      <controls:MaterialSearchBar
                 HorizontalOptions="FillAndExpand"
                 BackgroundColor="White"
                 CornerRadius="5"

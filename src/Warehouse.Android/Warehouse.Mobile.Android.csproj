@@ -102,6 +102,7 @@
     </PackageReference>
  <PackageReference Include="Prism.Plugin.Popups">
       <Version>8.0.76</Version>
+      </PackageReference>
     <PackageReference Include="Warehouse.Core">
       <Version>1.0.0.259</Version>
     </PackageReference>

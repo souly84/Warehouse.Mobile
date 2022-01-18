@@ -23,7 +23,6 @@ namespace Warehouse.Mobile
         }
 
         public INavigationService Navigation => NavigationService;
-        public IScanner Scanner => Container.Resolve<IScanner>();
 
         public IScanner Scanner => Container.Resolve<IScanner>();
 
