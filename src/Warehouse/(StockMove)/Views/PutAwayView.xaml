@@ -64,12 +64,13 @@
                          <ColumnDefinition Width="Auto"/>
                      </Grid.ColumnDefinitions>
                       <controls:MaterialSearchBar
-                HorizontalOptions="FillAndExpand"
-                BackgroundColor="White"
-                CornerRadius="5"
-                TextColor="White"
-                CancelButtonColor="White"
-                Placeholder="Scan location"/>
+                          HorizontalOptions="FillAndExpand"
+                          BackgroundColor="White"
+                          CornerRadius="5"
+                          TextColor="{DynamicResource TextsColor}"
+                          CancelButtonColor="White"
+                          Text="{Binding DestinationBarcode}"
+                          Placeholder="Scan location"/>
 
                 <Label
                     Grid.Column="1"
@@ -143,6 +144,15 @@
                 </Frame>
             </StackLayout>
             </StackLayout>
+            <StackLayout
+                VerticalOptions="EndAndExpand"
+                HorizontalOptions="Center">
+                <Label
+                    Text="{Binding StatusMessage}"
+                    FontSize="14"
+                    TextColor="Green"/>
+            </StackLayout>
+             
         </StackLayout>
     </ContentView>
 </ContentPage>

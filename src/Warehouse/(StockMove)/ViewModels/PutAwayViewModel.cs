@@ -54,6 +54,20 @@ namespace Warehouse.Mobile
             set => SetProperty(ref _scannedBarcode, value);
         }
 
+        private string _statusMessage;
+        public string StatusMessage
+        {
+            get => _statusMessage;
+            set => SetProperty(ref _statusMessage, value);
+        }
+
+        private string _destinationBarcode;
+        public string DestinationBarcode
+        {
+            get => _destinationBarcode;
+            set => SetProperty(ref _destinationBarcode, value);
+        }
+
         private bool _isRecognizedProduct;
         public bool IsRecognizedProduct
         {
@@ -74,6 +88,14 @@ namespace Warehouse.Mobile
             get => _checkInQuantity;
             set => SetProperty(ref _checkInQuantity, value);
         }
+
+        private DelegateCommand goToPopupCommand;
+
+        public DelegateCommand GoToPopupCommand => goToPopupCommand ?? (goToPopupCommand = new DelegateCommand(async () =>
+        {
+            await _navigationService.NavigateAsync(
+                       AppConstants.QuantityToMovePopupViewId);
+        }));
 
         public Task InitializeAsync(INavigationParameters parameters)
         {
@@ -106,16 +128,68 @@ namespace Warehouse.Mobile
 
         protected override async Task OnScanAsync(IScanningResult barcode)
         {
-            ScannedBarcode = barcode.BarcodeData;
-            IsRecognizedProduct = true;
-            WarehouseGood = await _company
-                .Warehouse
-                .Goods.For(barcode.BarcodeData)
-                .FirstAsync();
-            CheckInStorage = await WarehouseGood
-                .Storages
-                .PutAway.FirstAsync();
-            CheckInQuantity = CheckInStorage.ToDictionary().ValueOrDefault<int>("Quantity");
+            switch (barcode.Symbology.ToLower())
+            {
+                case "code128":
+                    {
+                        DestinationBarcode = barcode.BarcodeData;
+                        if (CheckInQuantity > 1)
+                        {
+                            await _navigationService.NavigateAsync(
+                            AppConstants.QuantityToMovePopupViewId,
+                                new NavigationParameters
+                                {
+                                    { "Origin", PutAwayStorage },
+                                    { "Destination", barcode.BarcodeData },
+                                    { "Good", WarehouseGood }
+                                }
+                            );
+                        }
+                        else
+                        {
+                            await WarehouseGood
+                                .Movement
+                                .From(PutAwayStorage.ToStorage())
+                                .MoveToAsync(
+                                    await WarehouseGood.Storages.ByBarcodeAsync(_company.Warehouse, barcode.BarcodeData),
+                                    1
+                            );
+                        }
+
+                        StatusMessage = "Item successfully assigned";
+                        ResetFields();
+                        
+                        break;
+                    }
+                default:
+                    {
+                        ScannedBarcode = barcode.BarcodeData;
+                        WarehouseGood = await _company
+                            .Warehouse
+                            .Goods.For(barcode.BarcodeData)
+                            .FirstAsync();
+
+                        var checkIn = await WarehouseGood.Storages.PutAway.ToViewModelListAsync();
+                        if (checkIn.Count == 0)
+                        {
+                            await _dialog.DisplayAlertAsync("Error", "This item is not present in the check in area", "ok");
+                            return;
+                        }
+                        IsRecognizedProduct = true;
+                        PutAwayStorage = checkIn.First();
+                        RaceLocations = (ObservableCollection<LocationViewModel>)await WarehouseGood.Storages.Race.ToViewModelListAsync();
+                        ReserveLocations = (ObservableCollection<LocationViewModel>)await WarehouseGood.Storages.Reserve.ToViewModelListAsync();
+                        break;
+                    }
+            }
+        }
+
+        private void ResetFields()
+        {
+            ScannedBarcode = "";
+            DestinationBarcode = "";
+            IsRecognizedProduct = false;
+            PutAwayStorage = null;
         }
     }
 }

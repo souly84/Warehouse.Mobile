@@ -43,9 +43,8 @@ namespace Warehouse.Mobile
             containerRegistry.RegisterForNavigation<SelectSupplierView, SelectSupplierViewModel>();
             containerRegistry.RegisterForNavigation<MenuSelectionView>();
             containerRegistry.RegisterForNavigation<ReceptionDetailsView>();
-            containerRegistry.RegisterForNavigation<QuantityToMovePopupView, QuantityToMovePopupViewModel>();
-
             containerRegistry.RegisterForNavigation<PutAwayView>();
+            containerRegistry.RegisterForNavigation<StockMoveView>();
             if (!containerRegistry.IsRegistered<ICompany>())
             {
                containerRegistry.RegisterInstance<ICompany>(

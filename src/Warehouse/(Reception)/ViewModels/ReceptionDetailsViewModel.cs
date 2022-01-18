@@ -54,19 +54,22 @@ namespace Warehouse.Mobile.ViewModels
 
         protected override async Task OnScanAsync(IScanningResult barcode)
         {
-            var good = await _reception.ByBarcodeAsync(barcode.BarcodeData);
-            var goodVm = ReceptionGoods.FirstOrDefault(x => x.Equals(good));
-            if (goodVm != null)
+            if (barcode.Symbology.ToLower() == "ean13")
             {
-                goodVm.IncreaseQuantityCommand.Execute();
-                if (await good.ConfirmedAsync())
+                var good = await _reception.ByBarcodeAsync(barcode.BarcodeData);
+                var goodVm = ReceptionGoods.FirstOrDefault(x => x.Equals(good));
+                if (goodVm != null)
                 {
-                    ReceptionGoods.Remove(goodVm);
+                    goodVm.IncreaseQuantityCommand.Execute();
+                    if (await good.ConfirmedAsync())
+                    {
+                        ReceptionGoods.Remove(goodVm);
+                    }
                 }
-            }
-            else
-            {
-                ReceptionGoods.Insert(0, new ReceptionGoodViewModel(good));
+                else
+                {
+                    ReceptionGoods.Insert(0, new ReceptionGoodViewModel(good));
+                }
             }
         }
     }
