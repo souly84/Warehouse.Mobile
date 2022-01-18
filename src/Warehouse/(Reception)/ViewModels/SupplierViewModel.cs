@@ -24,12 +24,11 @@ namespace Warehouse.Mobile.ViewModels
 
         private DelegateCommand goToReceptionDetailsCommand;
 
-        public DelegateCommand GoToReceptionDetailsCommand => goToReceptionDetailsCommand ?? (goToReceptionDetailsCommand = new DelegateCommand(async () =>
-        {
-            await _navigationService.NavigateAsync(AppConstants.ReceptionDetailsViewId, new NavigationParameters { { "Supplier", _supplier } });
-        }));
-
+        public DelegateCommand GoToReceptionDetailsCommand => goToReceptionDetailsCommand ?? (goToReceptionDetailsCommand = new DelegateCommand(() =>
+            _navigationService.NavigateAsync(
+                AppConstants.ReceptionDetailsViewId,
+                new NavigationParameters { { "Supplier", _supplier } }
+            )
+        ));
     }
-
-    
 }

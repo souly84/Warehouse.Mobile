@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:viewModels="clr-namespace:Warehouse.Mobile.ViewModels"
     xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
+    xmlns:neo="clr-namespace:Xamarin.Forms.NeoControls;assembly=Xamarin.Forms.NeoControls"
     Title="Receptions"
     NavigationPage.HasBackButton="True"
     x:DataType="viewModels:ReceptionDetailsViewModel"
@@ -91,15 +92,15 @@
             </CollectionView>
 
             <StackLayout Orientation="Horizontal"  VerticalOptions="EndAndExpand" Spacing="0" HeightRequest="90" HorizontalOptions="CenterAndExpand">
-                <NeoButton
+                <neo:NeoButton
                     Style="{DynamicResource ActionButton}">
                     <Label
                         Style="{DynamicResource ButtonActionIcon}"
                         FontFamily="icomoon"
                         Text="{x:Static fonts:IcoMoon.History}">
                     </Label>
-                </NeoButton>
-                <NeoButton
+                </neo:NeoButton>
+                <neo:NeoButton
                     Style="{DynamicResource ActionButton}"
                     Command="{Binding ValidateReceptionCommand}">
                     <Label
@@ -107,7 +108,7 @@
                         FontFamily="icomoon"
                         Text="{x:Static fonts:IcoMoon.Validate}">
                     </Label>
-                </NeoButton>
+                </neo:NeoButton>
             </StackLayout>
         </StackLayout>
 

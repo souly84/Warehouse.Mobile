@@ -9,14 +9,20 @@ using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Warehouse.Core.Plugins;
 using Prism.Plugin.Popups;
+using Warehouse.Droid.Permissions;
 
 namespace Warehouse.Mobile.Droid
 {
-    [Activity(Label = "Warehouse", Icon = "@mipmap/icon", Theme = "@style/MainTheme", ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation)]
+    [Activity(Label = "Warehouse",
+        Icon = "@mipmap/icon",
+        Theme = "@style/MainTheme",
+        ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
+        Name = "warehouse.mobile.android.mainactivity")]
     public class MainActivity : FormsAppCompatActivity
     {
-        public INavigationService Navigation => ((App)App.Current).Navigation;
-        private App application;
+        private App _app;
+
+        public INavigationService Navigation => _app.Navigation;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -25,16 +31,33 @@ namespace Warehouse.Mobile.Droid
 
             base.OnCreate(savedInstanceState);
             global::Rg.Plugins.Popup.Popup.Init(this);
-
-            global::Xamarin.Forms.Forms.Init(this, savedInstanceState);
-            global::Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
-
-            application = new App(new AndroidInitializer(this));
-
-            LoadApplication(application);
+            Xamarin.Forms.Forms.Init(this, savedInstanceState);
+            Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
+            _app = new App(new AndroidInitializer(this));
+            LoadApplication(_app);
 
             AppCenter.Start("dbafbbc1-b7fc-4dec-b29e-36015da6bc4e",
                    typeof(Analytics), typeof(Crashes));
+
+            new ManifestPermissions(this).Request();
+        }
+
+        protected override async void OnResume()
+        {
+            base.OnResume();
+            await _app.Scanner.OpenAsync();
+        }
+
+        protected override void OnPause()
+        {
+            base.OnPause();
+            _app.Scanner.CloseAsync().ConfigureAwait(false);
+        }
+
+        protected override void OnDestroy()
+        {
+            base.OnDestroy();
+            _app.Scanner.CloseAsync().ConfigureAwait(false);
         }
 
         protected override void OnResume()

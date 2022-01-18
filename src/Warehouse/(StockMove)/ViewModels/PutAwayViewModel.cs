@@ -11,14 +11,11 @@ using Prism.Services;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.ViewModels;
-using Xamarin.Forms;
 
 namespace Warehouse.Mobile
 {
-    public class PutAwayViewModel : BindableBase, IInitializeAsync, INavigatedAware
+    public class PutAwayViewModel : ScannerViewModel, IInitializeAsync
     {
-        private readonly IScanner _scanner;
-        private readonly IPageDialogService _dialog;
         private readonly ICompany _company;
         private readonly INavigationService _navigationService;
 
@@ -27,9 +24,8 @@ namespace Warehouse.Mobile
             IPageDialogService dialog,
             ICompany company,
             INavigationService navigationService)
+            : base(scanner, dialog)
         {
-            _scanner = scanner;
-            _dialog = dialog;
             _company = company;
             _navigationService = navigationService;
         }
@@ -76,8 +72,6 @@ namespace Warehouse.Mobile
             set => SetProperty(ref _warehouseGood, value);
         }
 
-        
-
         private int? _checkInQuantity;
         public int? CheckInQuantity
         {
@@ -85,8 +79,7 @@ namespace Warehouse.Mobile
             set => SetProperty(ref _checkInQuantity, value);
         }
 
-
-        public async Task InitializeAsync(INavigationParameters parameters)
+        public Task InitializeAsync(INavigationParameters parameters)
         {
             ReserveLocations = new ObservableCollection<LocationViewModel>
             {
@@ -111,100 +104,22 @@ namespace Warehouse.Mobile
                     Location = "42-1-1", LocationaType = LocationType.Race
                 }
             };
+
+            return Task.CompletedTask;
         }
 
-        async void INavigatedAware.OnNavigatedTo(INavigationParameters parameters)
+        protected override async Task OnScanAsync(IScanningResult barcode)
         {
-            try
-            {
-                _scanner.OnScan += OnScan;
-                if (_scanner.State == ScannerState.Closed)
-                {
-                    await _scanner.OpenAsync();
-                }
-
-                await _scanner.EnableAsync(true);
-            }
-            catch (Exception ex)
-            {
-                _scanner.OnScan -= OnScan;
-                _dialog.DisplayAlertAsync(
-                    "Scanner initialization error",
-                    ex.Message,
-                    "Ok"
-                ).FireAndForget();
-            }
+            ScannedBarcode = barcode.BarcodeData;
+            IsRecognizedProduct = true;
+            WarehouseGood = await _company
+                .Warehouse
+                .Goods.For(barcode.BarcodeData)
+                .FirstAsync();
+            CheckInStorage = await WarehouseGood
+                .Storages
+                .PutAway.FirstAsync();
+            CheckInQuantity = CheckInStorage.ToDictionary().ValueOrDefault<int>("Quantity");
         }
-
-        async void INavigatedAware.OnNavigatedFrom(INavigationParameters parameters)
-        {
-            try
-            {
-                _scanner.OnScan -= OnScan;
-                await _scanner.EnableAsync(false);
-            }
-            catch (Exception ex)
-            {
-                _dialog.DisplayAlertAsync(
-                    "Scanner initialization error",
-                    ex.Message,
-                    "Ok"
-                ).FireAndForget();
-            }
-        }
-
-        protected virtual void OnScan(object sender, IScanningResult barcode)
-        {
-            Device.BeginInvokeOnMainThread(async () =>
-            {
-                try
-                {
-                    switch (barcode.Symbology.ToLower())
-                    {
-                        case "code128":
-                            {
-                                await _navigationService.NavigateAsync(
-                                    AppConstants.QuantityToMovePopupViewId,
-                                    new NavigationParameters
-                                    {
-                                        { "Origin", CheckInStorage },
-                                        { "Destination", barcode.BarcodeData },
-                                        { "Good", WarehouseGood }
-                                    }
-                                );
-                                break;
-                            }
-                        default:
-                            {
-                                ScannedBarcode = barcode.BarcodeData;
-                                IsRecognizedProduct = true;
-                                WarehouseGood = await _company
-                                    .Warehouse
-                                    .Goods.For(barcode.BarcodeData)
-                                    .FirstAsync();
-                                CheckInStorage = await WarehouseGood?.Storages?
-                                    .FirstAsync(x => x.ToDictionary().ValueOrDefault<string>("location")
-                                    .Contains("CHECK IN"));
-                                CheckInQuantity = CheckInStorage?.ToDictionary().ValueOrDefault<int>("Quantity");
-                                break;
-                            }
-                    }
-                    
-
-                }
-                catch (Exception ex)
-                {
-                    await _dialog.DisplayAlertAsync("Error scanning", ex.Message, "ok");
-                }
-            });
-        }
-
-        private DelegateCommand goToPopupCommand;
-
-        public DelegateCommand GoToPopupCommand => goToPopupCommand ?? (goToPopupCommand = new DelegateCommand(async () =>
-        {
-            await _navigationService.NavigateAsync(
-                       AppConstants.QuantityToMovePopupViewId);
-        }));
     }
 }

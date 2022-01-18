@@ -2,11 +2,27 @@
 <ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:controls1="clr-namespace:Warehouse.Mobile.Controls;assembly=Warehouse.Mobile"
+    xmlns:controls="clr-namespace:Warehouse.Mobile.Controls;assembly=Warehouse.Mobile"
     xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
     xmlns:viewModels="clr-namespace:Warehouse.Mobile.ViewModels"
     Title="Put Away"
+    x:DataType="fonts:PutAwayViewModel"
     x:Class="Warehouse.Mobile.PutAwayView">
+    <!--<NavigationPage.TitleView>
+        <StackLayout>
+            <Label Text="Put Away"></Label>
+              <controls:MaterialSearchBar
+            HorizontalOptions="FillAndExpand"
+            Margin="0,0,20,0"
+            BackgroundColor="White"
+            CornerRadius="5"
+            TextColor="White"
+            CancelButtonColor="White"
+            Placeholder="EAN/Hope"/>
+        </StackLayout>
+        
+      
+    </NavigationPage.TitleView>-->
 
     <ContentView VerticalOptions="FillAndExpand" Padding="5" BackgroundColor="{DynamicResource MainColor}">
         <StackLayout VerticalOptions="FillAndExpand" BackgroundColor="{DynamicResource MainColor}">
@@ -18,7 +34,7 @@
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
 
-                     <controls1:MaterialSearchBar
+                    <controls:MaterialSearchBar
                          HorizontalOptions="FillAndExpand"
                          BackgroundColor="White"
                          CornerRadius="5"
@@ -124,12 +140,9 @@
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
-
-                        
                 </Frame>
             </StackLayout>
             </StackLayout>
-             
         </StackLayout>
     </ContentView>
 </ContentPage>

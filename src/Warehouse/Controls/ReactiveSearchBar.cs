@@ -7,7 +7,9 @@ namespace Warehouse.Mobile.Controls
 {
     public class ReactiveSearchBar : SearchBar
     {
-        private CancellationTokenSource? cts;
+        public const int TextChangedKeyPressedDelayInMilliseconds = 300;
+
+        private CancellationTokenSource _cts;
 
         public static readonly BindableProperty KeyPressedCommandProperty = BindableProperty.Create(
             nameof(KeyPressedCommand),
@@ -28,9 +30,9 @@ namespace Warehouse.Mobile.Controls
 
         private void OnTextChanged(object sender, TextChangedEventArgs e)
         {
-            cts?.Cancel();
-            cts = new CancellationTokenSource();
-            Task.Delay(300, cts.Token)
+            _cts?.Cancel();
+            _cts = new CancellationTokenSource();
+            Task.Delay(TextChangedKeyPressedDelayInMilliseconds, _cts.Token)
                 .ContinueWith(
                     _ =>
                     {
@@ -39,7 +41,7 @@ namespace Warehouse.Mobile.Controls
                             KeyPressedCommand.Execute(null);
                         }
                     },
-                    cts.Token)
+                    _cts.Token)
                 .ConfigureAwait(false);
         }
     }

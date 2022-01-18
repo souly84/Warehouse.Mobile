@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Windows.Input;
 using MediaPrint;
 using Prism.Commands;
@@ -10,6 +10,12 @@ namespace Warehouse.Mobile.ViewModels
     public class ReceptionGoodViewModel : BindableBase
     {
         private readonly IReceptionGood _receptionGood;
+
+        public ReceptionGoodViewModel(IReceptionGood receptionGood)
+        {
+            _receptionGood = receptionGood;
+        }
+
         public bool IsMockedReceptionGood { get => _receptionGood is MockReceptionGood; }
 
         private DictionaryMedia _goodData;
@@ -25,13 +31,6 @@ namespace Warehouse.Mobile.ViewModels
             }
         }
 
-        public ReceptionGoodViewModel(IReceptionGood receptionGood)
-        {
-            _receptionGood = receptionGood;
-        }
-
-        
-
         public int Total { get; set; }
 
         public int ConfirmedQuantity
@@ -45,31 +44,29 @@ namespace Warehouse.Mobile.ViewModels
 
         public string Oa { get => GoodData.ValueOrDefault<string>("oa"); }
 
-
         private DelegateCommand increaseQuantityCommand;
-
-        public DelegateCommand IncreaseQuantityCommand => increaseQuantityCommand ?? (increaseQuantityCommand = new DelegateCommand(async () =>
+        public DelegateCommand IncreaseQuantityCommand => increaseQuantityCommand ?? (increaseQuantityCommand = new DelegateCommand(() =>
         {
             _receptionGood.Confirmation.Increase(1);
             RaisePropertyChanged(nameof(ConfirmedQuantity));
         }));
 
         private DelegateCommand decreaseQuantityCommand;
-
-        public DelegateCommand DecreaseQuantityCommand => decreaseQuantityCommand ?? (decreaseQuantityCommand = new DelegateCommand(async () =>
+        public DelegateCommand DecreaseQuantityCommand => decreaseQuantityCommand ?? (decreaseQuantityCommand = new DelegateCommand(() =>
         {
-             _receptionGood.Confirmation.Decrease(1);
+            _receptionGood.Confirmation.Decrease(1);
             RaisePropertyChanged(nameof(ConfirmedQuantity));
         }));
 
         public override bool Equals(object obj)
         {
             return object.ReferenceEquals(this, obj)
-                || obj is IReceptionGood receptionGood
-                && _receptionGood.Equals(receptionGood);
+                || _receptionGood.Equals(obj);
         }
 
-
-
+        public override int GetHashCode()
+        {
+            return _receptionGood.GetHashCode();
+        }
     }
 }

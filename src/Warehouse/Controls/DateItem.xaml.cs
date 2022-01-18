@@ -1,21 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
 namespace Warehouse.Mobile.Controls
 {
     public partial class DateItem 
     {
-        public static BindableProperty TextColorProperty =
+        public static readonly BindableProperty TextColorProperty =
            BindableProperty.Create(nameof(TextColor), typeof(Color), typeof(DateItem),
                propertyChanged: OnTextColorChanged);
 
-        public static BindableProperty DateProperty =
+        public static readonly BindableProperty DateProperty =
            BindableProperty.Create(nameof(Date), typeof(DateTime), typeof(DateItem),
                propertyChanged: OnDateChanged);
 
@@ -35,7 +29,6 @@ namespace Warehouse.Mobile.Controls
             set => SetValue(DateProperty, value);
             get => (DateTime)GetValue(DateProperty);
         }
-
 
         private static void OnTextColorChanged(BindableObject bindable, object oldvalue, object newvalue)
         {

@@ -1,7 +1,7 @@
 ﻿using System;
 using Prism.Mvvm;
 
-namespace Warehouse.Mobile
+namespace Warehouse.Mobile.ViewModels
 {
     public class LocationViewModel : BindableBase
     {

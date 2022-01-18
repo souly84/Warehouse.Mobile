@@ -1,5 +1,4 @@
-﻿using System;
-using MediaPrint;
+﻿using MediaPrint;
 using Warehouse.Core;
 
 namespace Warehouse.Mobile.ViewModels
@@ -14,6 +13,5 @@ namespace Warehouse.Mobile.ViewModels
         }
 
         public ISupplier Name { get => ((IPrintable)_receptionGood).ToDictionary().ValueOrDefault<ISupplier>("Supplier"); }
-
     }
 }

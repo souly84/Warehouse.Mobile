@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using Prism.Mvvm;
 
@@ -11,13 +10,13 @@ namespace Warehouse.Mobile.ViewModels.DatePicker
         {
             AllowedDates = new ObservableCollection<ReceptionDateViewModel>
             {
+                new ReceptionDateViewModel(DateTime.Now.AddDays(-3)),
+                new ReceptionDateViewModel(DateTime.Now.AddDays(-2)),
+                new ReceptionDateViewModel(DateTime.Now.AddDays(-1)),
                 new ReceptionDateViewModel(DateTime.Now),
-                new ReceptionDateViewModel(DateTime.Now),
-                new ReceptionDateViewModel(DateTime.Now),
-                new ReceptionDateViewModel(DateTime.Now),
-                new ReceptionDateViewModel(DateTime.Now),
-                new ReceptionDateViewModel(DateTime.Now),
-                new ReceptionDateViewModel(DateTime.Now),
+                new ReceptionDateViewModel(DateTime.Now.AddDays(1)),
+                new ReceptionDateViewModel(DateTime.Now.AddDays(2)),
+                new ReceptionDateViewModel(DateTime.Now.AddDays(3)),
             };
         }
 

@@ -2,9 +2,8 @@
 using System.Threading.Tasks;
 using Prism.Navigation;
 using Warehouse.Core;
-using Warehouse.Mobile.ViewModels;
 
-namespace Warehouse.Mobile.Views
+namespace Warehouse.Mobile.ViewModels
 {
     public class LoginViewModel : IInitializeAsync
     {

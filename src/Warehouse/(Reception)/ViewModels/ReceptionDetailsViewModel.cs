@@ -8,98 +8,39 @@ using Prism.Navigation;
 using Prism.Services;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
-using Xamarin.Forms;
 
 namespace Warehouse.Mobile.ViewModels
 {
-    public class ReceptionDetailsViewModel : BindableBase, IInitializeAsync, INavigatedAware
+    public class ReceptionDetailsViewModel : ScannerViewModel, IInitializeAsync
     {
-        private readonly IScanner _scanner;
         private readonly IPageDialogService _dialog;
         private ReceptionWithUnkownGoods _reception;
+        private IList<ReceptionGoodViewModel> _receptionGoods;
+        private DelegateCommand validateReceptionCommand;
 
         public ReceptionDetailsViewModel(IScanner scanner, IPageDialogService dialog)
+            : base(scanner, dialog)
         {
-            _scanner = scanner;
             _dialog = dialog;
         }
-
-        async void INavigatedAware.OnNavigatedTo(INavigationParameters parameters)
-        {
-            try
-            {
-                _scanner.OnScan += OnScan;
-                if (_scanner.State == ScannerState.Closed)
-                {
-                    await _scanner.OpenAsync();
-                }
-
-                await _scanner.EnableAsync(true);
-            }
-            catch (Exception ex)
-            {
-                _scanner.OnScan -= OnScan;
-                _dialog.DisplayAlertAsync(
-                    "Scanner initialization error",
-                    ex.Message,
-                    "Ok"
-                ).FireAndForget();
-            }
-        }
-
-        async void INavigatedAware.OnNavigatedFrom(INavigationParameters parameters)
-        {
-            try
-            {
-                _scanner.OnScan -= OnScan;
-                await _scanner.EnableAsync(false);
-            }
-            catch (Exception ex)
-            {
-                _dialog.DisplayAlertAsync(
-                    "Scanner initialization error",
-                    ex.Message,
-                    "Ok"
-                ).FireAndForget();
-            }
-        }
-
-        protected virtual void OnScan(object sender, IScanningResult barcode)
-        {
-            Device.BeginInvokeOnMainThread(async () =>
-            {
-                try
-                {
-                    var good = await _reception.ByBarcodeAsync(barcode.BarcodeData);
-                    var goodVm = ReceptionGoods.FirstOrDefault(x => x.Equals(good));
-                    if (goodVm != null)
-                    {
-                        goodVm.IncreaseQuantityCommand.Execute();
-                        if (await good.ConfirmedAsync())
-                        {
-                            ReceptionGoods.Remove(goodVm);
-                        }
-                    }
-                    else
-                    {
-                        ReceptionGoods.Insert(0, new ReceptionGoodViewModel(good));
-                    }
-
-                }
-                catch (Exception ex)
-                {
-                    await _dialog.DisplayAlertAsync("Error scanning", ex.Message, "ok");
-                }
-            });
-        }
-
-        private IList<ReceptionGoodViewModel> _receptionGoods;
 
         public IList<ReceptionGoodViewModel> ReceptionGoods
         {
             get => _receptionGoods;
             set => SetProperty(ref _receptionGoods, value);
         }
+
+        public DelegateCommand ValidateReceptionCommand => validateReceptionCommand ?? (validateReceptionCommand = new DelegateCommand(async () =>
+        {
+            try
+            {
+                await _reception.Confirmation().CommitAsync();
+            }
+            catch (Exception ex)
+            {
+                await _dialog.DisplayAlertAsync("Syncro error", ex.Message, "Ok");
+            }
+        }));
 
         public async Task InitializeAsync(INavigationParameters parameters)
         {
@@ -112,19 +53,22 @@ namespace Warehouse.Mobile.ViewModels
             ReceptionGoods = await _reception.NeedConfirmation().ToViewModelListAsync();
         }
 
-        private DelegateCommand validateReceptionCommand;
-
-        public DelegateCommand ValidateReceptionCommand => validateReceptionCommand ?? (validateReceptionCommand = new DelegateCommand(async () =>
+        protected override async Task OnScanAsync(IScanningResult barcode)
         {
-            try
+            var good = await _reception.ByBarcodeAsync(barcode.BarcodeData);
+            var goodVm = ReceptionGoods.FirstOrDefault(x => x.Equals(good));
+            if (goodVm != null)
             {
-                await _reception.Confirmation().CommitAsync();
-
+                goodVm.IncreaseQuantityCommand.Execute();
+                if (await good.ConfirmedAsync())
+                {
+                    ReceptionGoods.Remove(goodVm);
+                }
             }
-            catch (Exception ex)
+            else
             {
-                await _dialog.DisplayAlertAsync("Syncro error", ex.Message, "Ok");
+                ReceptionGoods.Insert(0, new ReceptionGoodViewModel(good));
             }
-        }));
+        }
     }
 }

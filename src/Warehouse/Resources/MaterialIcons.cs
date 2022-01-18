@@ -2907,7 +2907,7 @@ namespace Warehouse.Mobile
         public const string SurroundSound51 = "\uf7f1";
         public const string SurroundSound71 = "\uf7f2";
         public const string TelevisionClassic = "\uf7f3";
-        public const string TextboxPassword = "\uf7f4";
+        public const string PasswordTextboxIcon = "\uf7f4";
         public const string ThoughtBubble = "\uf7f5";
         public const string ThoughtBubbleOutline = "\uf7f6";
         public const string Trackpad = "\uf7f7";

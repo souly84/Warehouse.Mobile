@@ -20,15 +20,17 @@ namespace Warehouse.Mobile
         public App(IPlatformInitializer initializer)
             : base(initializer)
         {
-            InitializeComponent();
         }
 
         public INavigationService Navigation => NavigationService;
         public IScanner Scanner => Container.Resolve<IScanner>();
 
-        protected override async void OnInitialized()
+        public IScanner Scanner => Container.Resolve<IScanner>();
+
+        protected override void OnInitialized()
         {
-            await NavigateToMainPageAsync();
+            InitializeComponent();
+            _ = NavigateToMainPageAsync();
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -37,29 +39,25 @@ namespace Warehouse.Mobile
             containerRegistry.RegisterPopupNavigationService();
             containerRegistry.RegisterForNavigation<NavigationPage>();
 
-            //Pages
-            containerRegistry.RegisterForNavigation<LoginView>();
+            //Services
+            containerRegistry.RegisterForNavigation<LoginView, LoginViewModel>();
             containerRegistry.RegisterForNavigation<SelectSupplierView, SelectSupplierViewModel>();
-            containerRegistry.RegisterForNavigation<QuantityToMovePopupView, QuantityToMovePopupViewModel>();
             containerRegistry.RegisterForNavigation<MenuSelectionView>();
             containerRegistry.RegisterForNavigation<ReceptionDetailsView>();
+            containerRegistry.RegisterForNavigation<QuantityToMovePopupView, QuantityToMovePopupViewModel>();
+
             containerRegistry.RegisterForNavigation<PutAwayView>();
-
-            //Services
-            //containerRegistry.RegisterSingleton<ICentralServiceClient, CentralServiceClient>();
-            //containerRegistry.RegisterInstance<ICompany>(new EbSoftCompany("http://wdc-logcnt.eurocenter.be/webservice/apiscanning.php"));
-            containerRegistry.RegisterInstance<ICompany>(new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php"));
-            //containerRegistry.RegisterSingleton<ICompany, MockWarehouseCompany>();
-
+            if (!containerRegistry.IsRegistered<ICompany>())
+            {
+               containerRegistry.RegisterInstance<ICompany>(
+                   new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php")
+               );
+            }
         }
 
-        private async Task NavigateToMainPageAsync()
+        private Task NavigateToMainPageAsync()
         {
-            var result = await NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(PutAwayView)}" );
-            if (result.Exception != null)
-            {
-                throw result.Exception;
-            }
+            return NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(MenuSelectionView)}" );
         }
     }
 }
