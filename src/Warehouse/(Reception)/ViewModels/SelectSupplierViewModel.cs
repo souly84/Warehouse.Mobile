@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using EbSoft.Warehouse.SDK;
-using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Warehouse.Core;

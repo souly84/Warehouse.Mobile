@@ -1,13 +1,8 @@
-﻿using System;
-using System.Threading.Tasks;
-using Prism.Commands;
+﻿using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
-using Prism.Services;
 using Warehouse.Core;
-using Warehouse.Core.Plugins;
 using Warehouse.Mobile.Extensions;
-using Xamarin.Forms;
 
 namespace Warehouse.Mobile
 {
@@ -35,9 +30,6 @@ namespace Warehouse.Mobile
             get => _destinationLocation;
             set => SetProperty(ref _destinationLocation, value);
         }
-
-        
-
 
         public void Initialize(INavigationParameters parameters)
         {

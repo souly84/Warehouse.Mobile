@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using MediaPrint;
+﻿using MediaPrint;
 using Prism.Commands;
 using Prism.Navigation;
 using Warehouse.Core;

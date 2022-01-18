@@ -1,5 +1,3 @@
-using System;
-using System.Windows.Input;
 using MediaPrint;
 using Prism.Commands;
 using Prism.Mvvm;

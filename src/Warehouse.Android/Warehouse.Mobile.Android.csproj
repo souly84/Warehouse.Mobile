@@ -56,9 +56,6 @@
     <Reference Include="System.ServiceModel" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Xml" />
-    <Reference Include="EbSoft.Warehouse.SDK">
-      <HintPath>..\..\EbSoft.Warehouse.SDK.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Prism.Core">

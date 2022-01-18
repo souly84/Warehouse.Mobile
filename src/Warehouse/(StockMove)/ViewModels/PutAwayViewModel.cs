@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using EbSoft.Warehouse.SDK;
 using MediaPrint;
-using Newtonsoft.Json.Linq;
-using Prism.Commands;
-using Prism.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
 using Warehouse.Core;
