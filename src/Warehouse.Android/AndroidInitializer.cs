@@ -1,4 +1,5 @@
-﻿using Prism;
+﻿using EbSoft.Warehouse.SDK;
+using Prism;
 using Prism.Ioc;
 using Warehouse.Core.Plugins;
 using Warehouse.Scanner.SDK;

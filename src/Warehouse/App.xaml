@@ -3,16 +3,12 @@
     x:Class="Warehouse.Mobile.App"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:prism="http://prismlibrary.com">
+    xmlns:prism="clr-namespace:Prism.Unity;assembly=Prism.Unity.Forms">
     <Application.Resources>
         <ResourceDictionary>
-            <Color x:Key="DefaultBackground">#F5F5F5</Color>
-            <Color x:Key="Primary">#E50000</Color>
-            <Color x:Key="PrimaryLight">#EF6666</Color>
-            <Color x:Key="PrimaryDark">#890000</Color>
-            <Color x:Key="Secondary">#ffc617</Color>
-            <Color x:Key="SecondaryLight">#FFD34A</Color>
-            <Color x:Key="FakeBlack">#1c1c1c</Color>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="Resources/Styles.xaml" />
+            </ResourceDictionary.MergedDictionaries>
         </ResourceDictionary>
     </Application.Resources>
 </prism:PrismApplication>

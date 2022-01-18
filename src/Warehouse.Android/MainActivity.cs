@@ -20,7 +20,7 @@ namespace Warehouse.Mobile.Droid
     {
         private App _app;
 
-        public INavigationService Navigation => ((App)App.Current).Navigation;
+        public INavigationService Navigation => _app.Navigation;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {

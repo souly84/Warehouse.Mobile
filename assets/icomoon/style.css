@@ -1,0 +1,60 @@
+@font-face {
+  font-family: 'icomoon';
+  src:  url('fonts/icomoon.eot?15c7sl');
+  src:  url('fonts/icomoon.eot?15c7sl#iefix') format('embedded-opentype'),
+    url('fonts/icomoon.ttf?15c7sl') format('truetype'),
+    url('fonts/icomoon.woff?15c7sl') format('woff'),
+    url('fonts/icomoon.svg?15c7sl#icomoon') format('svg');
+  font-weight: normal;
+  font-style: normal;
+  font-display: block;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: 'icomoon' !important;
+  speak: never;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  line-height: 1;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.icon-BR_Iconpng:before {
+  content: "\e900";
+  color: #544f5f;
+}
+.icon-Destination_Iconpng:before {
+  content: "\e901";
+}
+.icon-History_Iconpng:before {
+  content: "\e902";
+  color: #544f5f;
+}
+.icon-Menu_Iconpng:before {
+  content: "\e903";
+  color: #544f5f;
+}
+.icon-Next_Iconpng:before {
+  content: "\e904";
+}
+.icon-PurAway_Iconpng:before {
+  content: "\e905";
+  color: #544f5f;
+}
+.icon-Reception_Iconpng-1:before {
+  content: "\e906";
+  color: #544f5f;
+}
+.icon-StockMove_Iconpng:before {
+  content: "\e907";
+}
+.icon-Validate_Iconpng:before {
+  content: "\e908";
+  color: #544f5f;
+}

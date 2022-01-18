@@ -1,8 +1,10 @@
-﻿using Prism;
+﻿using EbSoft.Warehouse.SDK;
+using Prism;
 using Prism.Ioc;
 using Prism.Navigation;
 using Prism.Unity;
 using System.Threading.Tasks;
+using Warehouse.Core;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.ViewModels;
 using Warehouse.Mobile.Views;
@@ -17,7 +19,6 @@ namespace Warehouse.Mobile
         public App(IPlatformInitializer initializer)
             : base(initializer)
         {
-            InitializeComponent();
         }
 
         public INavigationService Navigation => NavigationService;
@@ -26,6 +27,7 @@ namespace Warehouse.Mobile
 
         protected override void OnInitialized()
         {
+            InitializeComponent();
             _ = NavigateToMainPageAsync();
         }
 
@@ -33,16 +35,22 @@ namespace Warehouse.Mobile
         {
             //Navigations
             containerRegistry.RegisterForNavigation<NavigationPage>();
-            containerRegistry.RegisterForNavigation<LoginPage, LoginViewModel>();
+            containerRegistry.RegisterForNavigation<LoginView, LoginViewModel>();
+            containerRegistry.RegisterForNavigation<SelectSupplierView, SelectSupplierViewModel>();
+            containerRegistry.RegisterForNavigation<MenuSelectionView>();
+            containerRegistry.RegisterForNavigation<ReceptionDetailsView>();
+            containerRegistry.RegisterForNavigation<PutAwayView>();
+            if (!containerRegistry.IsRegistered<ICompany>())
+            {
+               containerRegistry.RegisterInstance<ICompany>(
+                   new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php")
+               );
+            }
         }
 
-        private async Task NavigateToMainPageAsync()
+        private Task NavigateToMainPageAsync()
         {
-            var result = await NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(LoginPage)}" );
-            if (result.Exception != null)
-            {
-                throw result.Exception;
-            }
+            return NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(MenuSelectionView)}" );
         }
     }
 }

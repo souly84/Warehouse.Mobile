@@ -1,27 +1,21 @@
-﻿using Xunit;
+﻿using EbSoft.Warehouse.SDK;
+using Prism.Ioc;
+using Warehouse.Core;
+using Warehouse.Mobile.UnitTests.Mocks;
+using Xunit;
 
 namespace Warehouse.Mobile.UnitTests
 {
+    [Collection(XUnitCollectionDefinitions.NavigationDependent)]
     public class AppTests
     {
-        public AppTests()
-        {
-            Xamarin.Forms.Mocks.MockForms.Init();
-        }
-
-        [Fact]
-        public void Startup()
-        {
-            Assert.NotNull(
-                new App(new MockPlatformInitializer())
-            );
-        }
+        private App _app = WarehouseMobile.Application();
 
         [Fact]
         public void ScannerInitialized()
         {
             Assert.NotNull(
-                new App(new MockPlatformInitializer()).Scanner
+               _app.Scanner
             );
         }
 
@@ -29,7 +23,26 @@ namespace Warehouse.Mobile.UnitTests
         public void NavigationInitialized()
         {
             Assert.NotNull(
-                new App(new MockPlatformInitializer()).Navigation
+                _app.Navigation
+            );
+        }
+
+        [Fact]
+        public void MenuSelectionView_AsDefaultViewOnApplicationStartup()
+        {
+            Assert.Equal(
+                "/NavigationPage/MenuSelectionView",
+                _app.GetNavigationUriPath()
+            );
+        }
+
+        [Fact]
+        public void EbSoftCompanyRegisteredByDefault()
+        {
+            Assert.IsType<EbSoftCompany>(
+                WarehouseMobile.Application(
+                    new NoCompanyMockPlatformInitializer()
+                ).Resolve<ICompany>()
             );
         }
     }

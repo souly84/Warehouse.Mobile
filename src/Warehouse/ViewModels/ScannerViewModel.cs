@@ -4,6 +4,7 @@ using Prism.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
 using Warehouse.Core.Plugins;
+using Xamarin.Forms;
 
 namespace Warehouse.Mobile.ViewModels
 {
@@ -51,15 +52,31 @@ namespace Warehouse.Mobile.ViewModels
             catch (Exception ex)
             {
                 _dialog.DisplayAlertAsync(
-                    "Scanner initialization error",
+                    "Scanner deinitialization error",
                     ex.Message,
                     "Ok"
                 ).FireAndForget();
             }
         }
 
-        protected virtual void OnScan(object sender, IScanningResult barcode)
+        protected virtual Task OnScanAsync(IScanningResult barcode)
         {
+            return Task.CompletedTask;
+        }
+
+        private void OnScan(object sender, IScanningResult barcode)
+        {
+            Device.BeginInvokeOnMainThread(async () =>
+            {
+                try
+                {
+                    await OnScanAsync(barcode);
+                }
+                catch (Exception ex)
+                {
+                    await _dialog.DisplayAlertAsync("Error scanning", ex.Message, "Ok");
+                }
+            });
         }
     }
 }
