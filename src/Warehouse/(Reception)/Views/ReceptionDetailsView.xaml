@@ -12,6 +12,7 @@
      <ContentView VerticalOptions="Center" Padding="5">
         <StackLayout VerticalOptions="FillAndExpand">
                 <CollectionView
+                    x:Name="ReceptionDetailsCollectionView"
                     VerticalOptions="FillAndExpand"
                     ItemsSource="{Binding ReceptionGoods}">
                     <CollectionView.ItemTemplate>

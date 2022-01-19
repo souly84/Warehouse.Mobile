@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Prism.Commands;
@@ -15,7 +16,7 @@ namespace Warehouse.Mobile.ViewModels
     {
         private readonly IPageDialogService _dialog;
         private ReceptionWithExtraConfirmedGoods _reception;
-        private IList<ReceptionGoodViewModel> _receptionGoods;
+        private ObservableCollection<ReceptionGoodViewModel> _receptionGoods;
         private DelegateCommand validateReceptionCommand;
 
         public ReceptionDetailsViewModel(IScanner scanner, IPageDialogService dialog)
@@ -24,7 +25,7 @@ namespace Warehouse.Mobile.ViewModels
             _dialog = dialog;
         }
 
-        public IList<ReceptionGoodViewModel> ReceptionGoods
+        public ObservableCollection<ReceptionGoodViewModel> ReceptionGoods
         {
             get => _receptionGoods;
             set => SetProperty(ref _receptionGoods, value);
@@ -73,10 +74,8 @@ namespace Warehouse.Mobile.ViewModels
                 }
                 else
                 {
-                    
                     await _dialog.DisplayAlertAsync("Warning", "The item has already been scanned!", "Ok");
                     ReceptionGoods.Insert(0, new ReceptionGoodViewModel(good));
-                    ReceptionGoods = ReceptionGoods.ToList();
                 }
             }
         }
