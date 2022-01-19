@@ -75,7 +75,7 @@ namespace Warehouse.Mobile.UnitTests
                 _app
                     .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
-                    .First().IsMockedReceptionGood
+                    .First().IsUnkownGood
             );
         }
 

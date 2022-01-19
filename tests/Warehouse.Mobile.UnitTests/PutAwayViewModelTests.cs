@@ -129,7 +129,7 @@ namespace Warehouse.Mobile.UnitTests
         }
 
         [Fact]
-        public void CheckinStorage()
+        public void PutAwayStorage()
         {
             Assert.NotNull(
                 WarehouseMobile.Application(
@@ -139,7 +139,7 @@ namespace Warehouse.Mobile.UnitTests
                 ).GoToPutAway()
                  .Scan("123456")
                  .CurrentViewModel<PutAwayViewModel>()
-                 .CheckInStorage
+                 .PutAwayStorage
             );
         }
 

@@ -7,13 +7,14 @@ using Prism.Navigation;
 using Prism.Services;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
+using Warehouse.Mobile.Reception;
 
 namespace Warehouse.Mobile.ViewModels
 {
     public class ReceptionDetailsViewModel : ScannerViewModel, IInitializeAsync
     {
         private readonly IPageDialogService _dialog;
-        private ReceptionWithUnkownGoods _reception;
+        private ReceptionWithExtraConfirmedGoods _reception;
         private IList<ReceptionGoodViewModel> _receptionGoods;
         private DelegateCommand validateReceptionCommand;
 
@@ -48,7 +49,11 @@ namespace Warehouse.Mobile.ViewModels
                 throw new InvalidOperationException("No supplier selected");
             }
             var sup = parameters.GetValue<ISupplier>("Supplier");
-            _reception = new ReceptionWithUnkownGoods(await sup.Receptions.FirstAsync());
+            _reception = new ReceptionWithExtraConfirmedGoods(
+                new ReceptionWithUnkownGoods(
+                    await sup.Receptions.FirstAsync()
+                )
+            );
             ReceptionGoods = await _reception.NeedConfirmation().ToViewModelListAsync();
         }
 
@@ -68,7 +73,10 @@ namespace Warehouse.Mobile.ViewModels
                 }
                 else
                 {
+                    
+                    await _dialog.DisplayAlertAsync("Warning", "The item has already been scanned!", "Ok");
                     ReceptionGoods.Insert(0, new ReceptionGoodViewModel(good));
+                    ReceptionGoods = ReceptionGoods.ToList();
                 }
             }
         }

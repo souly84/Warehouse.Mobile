@@ -80,10 +80,16 @@
                                 </Grid>
                                 <Frame.Triggers>
                                      <DataTrigger
-                                        Binding="{Binding IsMockedReceptionGood}"
+                                        Binding="{Binding IsUnkownGood}"
                                         TargetType="Frame"
                                         Value="True">
                                         <Setter Property="BackgroundColor" Value="Red" />
+                                    </DataTrigger>
+                                     <DataTrigger
+                                        Binding="{Binding IsExtraConfirmedReceptionGood}"
+                                        TargetType="Frame"
+                                        Value="True">
+                                        <Setter Property="BackgroundColor" Value="Orange" />
                                     </DataTrigger>
                                 </Frame.Triggers>
                             </Frame>

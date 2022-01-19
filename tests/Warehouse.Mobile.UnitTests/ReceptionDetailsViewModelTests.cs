@@ -230,5 +230,23 @@ namespace Warehouse.Mobile.UnitTests
         }
 
         // Uknown good with barcode included into ValidateReceptionCommand
+
+        [Fact]
+        public void ScanAlreadyConfirmedItem()
+        {
+            Assert.Equal(
+                2,
+                WarehouseMobile.Application(
+                    new MockReceptionGood("1", 5, "1111"),
+                    new MockReceptionGood("2", 1, "2222"),
+                    new MockReceptionGood("3", 1, "2222"),
+                    new MockReceptionGood("4", 4, "3333")
+                ).GoToReceptionDetails()
+                 .Scan("2222", "2222")
+                 .CurrentViewModel<ReceptionDetailsViewModel>()
+                    .ReceptionGoods
+                    .Count
+            );
+        }
     }
 }

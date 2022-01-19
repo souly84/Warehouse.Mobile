@@ -13,4 +13,12 @@ namespace Warehouse.Mobile
         Race,
         Reserve
     }
-}       
+
+    public enum PopupSeverity
+    {
+        Info,
+        Warning,
+        Error
+    }
+
+}

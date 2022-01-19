@@ -1,7 +1,10 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Threading.Tasks;
 using EbSoft.Warehouse.SDK;
 using MediaPrint;
+using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
 using Warehouse.Core;
@@ -12,6 +15,8 @@ namespace Warehouse.Mobile
 {
     public class PutAwayViewModel : ScannerViewModel, IInitializeAsync
     {
+        private readonly IScanner _scanner;
+        private readonly IPageDialogService _dialog;
         private readonly ICompany _company;
         private readonly INavigationService _navigationService;
 
@@ -22,6 +27,8 @@ namespace Warehouse.Mobile
             INavigationService navigationService)
             : base(scanner, dialog)
         {
+            _scanner = scanner;
+            _dialog = dialog;
             _company = company;
             _navigationService = navigationService;
         }
@@ -38,13 +45,6 @@ namespace Warehouse.Mobile
         {
             get => _raceLocations;
             set => SetProperty(ref _raceLocations, value);
-        }
-
-        private IStorage _checkInStorage;
-        public IStorage CheckInStorage
-        {
-            get => _checkInStorage;
-            set => SetProperty(ref _checkInStorage, value);
         }
 
         private string _scannedBarcode;
@@ -82,11 +82,18 @@ namespace Warehouse.Mobile
             set => SetProperty(ref _warehouseGood, value);
         }
 
-        private int? _checkInQuantity;
-        public int? CheckInQuantity
+        private int _checkInQuantity;
+        public int CheckInQuantity
         {
             get => _checkInQuantity;
             set => SetProperty(ref _checkInQuantity, value);
+        }
+
+        private LocationViewModel _putAwayStorage;
+        public LocationViewModel PutAwayStorage
+        {
+            get => _putAwayStorage;
+            set => SetProperty(ref _putAwayStorage, value);
         }
 
         private DelegateCommand goToPopupCommand;
@@ -99,30 +106,6 @@ namespace Warehouse.Mobile
 
         public Task InitializeAsync(INavigationParameters parameters)
         {
-            ReserveLocations = new ObservableCollection<LocationViewModel>
-            {
-                new LocationViewModel
-                {
-                    Location = "41-1-3", LocationaType = LocationType.Reserve
-                },
-                new LocationViewModel
-                {
-                    Location = "42-1-2", LocationaType = LocationType.Reserve
-                }
-            };
-
-            RaceLocations = new ObservableCollection<LocationViewModel>
-            {
-                new LocationViewModel
-                {
-                    Location = "41-1-1", LocationaType = LocationType.Race
-                },
-                new LocationViewModel
-                {
-                    Location = "42-1-1", LocationaType = LocationType.Race
-                }
-            };
-
             return Task.CompletedTask;
         }
 

@@ -33,7 +33,7 @@ namespace Warehouse.Mobile.UnitTests
                 app.Scan(
                     new ScanningResult(
                         barcode,
-                        "CODE128",
+                        "EAN13",
                         DateTime.Now.TimeOfDay
                     )
                 );

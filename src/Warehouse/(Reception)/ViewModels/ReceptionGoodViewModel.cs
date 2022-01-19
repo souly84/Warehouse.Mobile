@@ -2,6 +2,7 @@ using MediaPrint;
 using Prism.Commands;
 using Prism.Mvvm;
 using Warehouse.Core;
+using Warehouse.Mobile.Reception;
 
 namespace Warehouse.Mobile.ViewModels
 {
@@ -14,7 +15,9 @@ namespace Warehouse.Mobile.ViewModels
             _receptionGood = receptionGood;
         }
 
-        public bool IsMockedReceptionGood { get => _receptionGood is MockReceptionGood; }
+        public bool IsUnkownGood { get => _receptionGood is MockReceptionGood; }
+
+        public bool IsExtraConfirmedReceptionGood { get => _receptionGood is ExtraConfirmedReceptionGood; }
 
         private DictionaryMedia _goodData;
         private DictionaryMedia GoodData

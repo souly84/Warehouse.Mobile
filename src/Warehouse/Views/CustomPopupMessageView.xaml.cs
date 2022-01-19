@@ -5,9 +5,9 @@ using Xamarin.Forms;
 
 namespace Warehouse.Mobile.Views
 {
-    public partial class StockMoveView : ContentPage
+    public partial class CustomPopupMessageView
     {
-        public StockMoveView()
+        public CustomPopupMessageView()
         {
             InitializeComponent();
         }

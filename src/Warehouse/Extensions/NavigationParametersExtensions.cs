@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using Prism.Navigation;
 
 namespace Warehouse.Mobile.Extensions
@@ -17,6 +19,20 @@ namespace Warehouse.Mobile.Extensions
         {
             parameters.CheckMandatory(key);
             return parameters.GetValue<T>(key);
+        }
+
+        public static async Task<bool> AllAsync<T>(
+            this IEnumerable<T> list,
+            Func<T, Task<bool>> predicateAsync)
+        {
+            foreach (var item in list)
+            {
+                if (!await predicateAsync(item))
+                {
+                    return false;
+                }
+            }
+            return true;
         }
     }
 }
