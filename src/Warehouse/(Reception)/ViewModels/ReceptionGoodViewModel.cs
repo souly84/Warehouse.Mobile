@@ -2,7 +2,6 @@ using MediaPrint;
 using Prism.Commands;
 using Prism.Mvvm;
 using Warehouse.Core;
-using Warehouse.Mobile.Reception;
 
 namespace Warehouse.Mobile.ViewModels
 {

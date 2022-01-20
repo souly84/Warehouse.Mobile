@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
@@ -9,7 +8,6 @@ using Prism.Services;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.Extensions;
-using Warehouse.Mobile.Reception;
 
 namespace Warehouse.Mobile.ViewModels
 {
@@ -73,7 +71,9 @@ namespace Warehouse.Mobile.ViewModels
                 else
                 {
                     await _dialog.DisplayAlertAsync("Warning", "The item has already been scanned!", "Ok");
-                    ReceptionGoods.Insert(0, new ReceptionGoodViewModel(good));
+                    goodViewModel = new ReceptionGoodViewModel(good);
+                    goodViewModel.IncreaseQuantityCommand.Execute();
+                    ReceptionGoods.Insert(0, goodViewModel);
                 }
             }
         }

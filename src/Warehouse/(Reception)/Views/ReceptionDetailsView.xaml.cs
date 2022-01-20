@@ -3,6 +3,7 @@ using System.Reflection;
 using Warehouse.Mobile.ViewModels;
 using Xamarin.Forms;
 using System.Linq;
+using System.Collections.Specialized;
 
 namespace Warehouse.Mobile.Views
 {
@@ -31,8 +32,17 @@ namespace Warehouse.Mobile.Views
 
         protected override void OnBindingContextChanged()
         {
-            base.OnBindingContextChanged();
             ReceptionDetailsViewModel vm = (ReceptionDetailsViewModel)BindingContext;
+            if (vm != null)
+            {
+                vm.PropertyChanged -= Vm_PropertyChanged;
+                if (vm.ReceptionGoods != null)
+                {
+                    vm.ReceptionGoods.CollectionChanged -= ReceptionGoods_CollectionChanged;
+                }
+            }
+            base.OnBindingContextChanged();
+            vm = (ReceptionDetailsViewModel)BindingContext;
             if (vm != null)
             {
                 vm.PropertyChanged += Vm_PropertyChanged;
@@ -47,13 +57,15 @@ namespace Warehouse.Mobile.Views
             }
         }
 
-        private void ReceptionGoods_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        /// <summary>
+        /// ReceptionDetailsCollectionView can be null once is running in unit tests.
+        /// </summary>
+        private void ReceptionGoods_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            if(e.Action == System.Collections.Specialized.NotifyCollectionChangedAction.Add)
+            if(e.Action == NotifyCollectionChangedAction.Add && ReceptionDetailsCollectionView != null)
             {
                 ReceptionDetailsCollectionView.ScrollTo(0);
             }
-
         }
     }
 }

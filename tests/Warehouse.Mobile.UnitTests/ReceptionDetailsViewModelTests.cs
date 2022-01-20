@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EbSoft.Warehouse.SDK;
-using Newtonsoft.Json.Linq;
 using Prism.Navigation;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
@@ -167,9 +165,9 @@ namespace Warehouse.Mobile.UnitTests
             Assert.Equal(
                 new List<IGoodConfirmation>
                 {
+                    (await new MockReceptionGood("", 1000, "UknownBarcode").PartiallyConfirmed(1)).Confirmation,
                     (await new MockReceptionGood("1", 5, "1111").PartiallyConfirmed(1)).Confirmation,
                     (await new MockReceptionGood("2", 2, "2222").PartiallyConfirmed(1)).Confirmation,
-                 //   (await new MockReceptionGood("", 1, "UknownBarcode").PartiallyConfirmed(1)).Confirmation
                 },
                 reception.ValidatedGoods
             );
@@ -231,10 +229,8 @@ namespace Warehouse.Mobile.UnitTests
             );
         }
 
-        // Uknown good with barcode included into ValidateReceptionCommand
-
         [Fact]
-        public void ScanAlreadyConfirmedItem()
+        public void ScanAlreadyConfirmedItem_AddsExtraConfirmedItemIntoCollection()
         {
             Assert.Equal(
                 2,
@@ -252,58 +248,61 @@ namespace Warehouse.Mobile.UnitTests
         }
 
         [Fact]
-        public void KnownProducr()
+        /*
+         * We scan 2222 barcode 3 times. The first scan should confirm the original good.
+         * 2 extra scans should create Extra Confirmed good in the list and increase its confirmed
+         * quantity to 2
+         */
+        public void ScanExtraConfirmedItem_IncreasesConfirmedQuantity()
         {
             Assert.Equal(
                 2,
                 WarehouseMobile.Application(
-                    new EbSoftReceptionGood(
-                        1,
-                        JObject.Parse(@"{
-                            ""id"": ""38"",
-                            ""oa"": ""OA848815"",
-                            ""article"": ""MIELE G7100SCICS"",
-                            ""qt"": ""2"",
-                            ""ean"": ""4002516061731"",
-                            ""qtin"": 0,
-                            ""error_code"": null,
-                            ""commentaire"": null,
-                            ""itemType"": ""electro""
-                        }")
-                    ),
-                    new EbSoftReceptionGood(
-                        1,
-                        JObject.Parse(@"{
-                            ""id"": ""39"",
-                            ""oa"": ""OA848816"",
-                            ""article"": ""MIELE G7100SCICS"",
-                            ""qt"": ""1"",
-                            ""ean"": ""4002516061732"",
-                            ""qtin"": 0,
-                            ""error_code"": null,
-                            ""commentaire"": null,
-                            ""itemType"": ""electro""
-                        }")
-                    ),
-                    new EbSoftReceptionGood(
-                        1,
-                        JObject.Parse(@"{
-                            ""id"": ""40"",
-                            ""oa"": ""OA848817"",
-                            ""article"": ""MIELE G7100SCICS"",
-                            ""qt"": ""2"",
-                            ""ean"": ""4002516061733"",
-                            ""qtin"": 0,
-                            ""error_code"": null,
-                            ""commentaire"": null,
-                            ""itemType"": ""electro""
-                        }")
-                    )
+                    new MockReceptionGood("1", 5, "1111"),
+                    new MockReceptionGood("2", 1, "2222"),
+                    new MockReceptionGood("4", 4, "3333")
                 ).GoToReceptionDetails()
-                 .Scan("4002516061732", "4002516061731", "UnknownBarcode", "4002516061731")
+                 .Scan("2222", "2222", "2222")
                  .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
-                    .Count
+                    .Sum(good => good.ConfirmedQuantity)
+            );
+        }
+
+        [Fact]
+        public async Task ReceptionValidationSendsExtraConfirmedGoodsToServer()
+        {
+            var reception = new MockReception(
+                new MockReceptionGood("1", 5, "1111"),
+                new MockReceptionGood("2", 1, "2222"),
+                new MockReceptionGood("3", 4, "3333")
+            );
+            WarehouseMobile.Application(
+                new NamedMockSupplier("Electrolux", reception)
+            ).GoToReceptionDetails()
+             .Scan("2222", "1111", "2222")
+             .CurrentViewModel<ReceptionDetailsViewModel>()
+             .ValidateReceptionCommand.Execute();
+
+            Assert.Equal(
+                (await new ExtraConfirmedReceptionGood(
+                        new MockReceptionGood("2", 1, "2222"),
+                        10000
+                    ).PartiallyConfirmed(1)).Confirmation,
+                reception.ValidatedGoods[0]
+            );
+
+            Assert.Equal(
+                new List<IGoodConfirmation>
+                {
+                    (await new ExtraConfirmedReceptionGood(
+                        new MockReceptionGood("2", 1, "2222"),
+                        10000
+                    ).PartiallyConfirmed(1)).Confirmation,
+                    (await new MockReceptionGood("1", 5, "1111").PartiallyConfirmed(1)).Confirmation,
+                    (await new MockReceptionGood("2", 1, "2222").PartiallyConfirmed(1)).Confirmation,
+                },
+                reception.ValidatedGoods
             );
         }
     }
