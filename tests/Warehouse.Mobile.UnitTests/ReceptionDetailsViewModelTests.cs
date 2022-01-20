@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EbSoft.Warehouse.SDK;
+using Newtonsoft.Json.Linq;
 using Prism.Navigation;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
@@ -243,6 +245,62 @@ namespace Warehouse.Mobile.UnitTests
                     new MockReceptionGood("4", 4, "3333")
                 ).GoToReceptionDetails()
                  .Scan("2222", "2222")
+                 .CurrentViewModel<ReceptionDetailsViewModel>()
+                    .ReceptionGoods
+                    .Count
+            );
+        }
+
+        [Fact]
+        public void KnownProducr()
+        {
+            Assert.Equal(
+                2,
+                WarehouseMobile.Application(
+                    new EbSoftReceptionGood(
+                        1,
+                        JObject.Parse(@"{
+                            ""id"": ""38"",
+                            ""oa"": ""OA848815"",
+                            ""article"": ""MIELE G7100SCICS"",
+                            ""qt"": ""2"",
+                            ""ean"": ""4002516061731"",
+                            ""qtin"": 0,
+                            ""error_code"": null,
+                            ""commentaire"": null,
+                            ""itemType"": ""electro""
+                        }")
+                    ),
+                    new EbSoftReceptionGood(
+                        1,
+                        JObject.Parse(@"{
+                            ""id"": ""39"",
+                            ""oa"": ""OA848816"",
+                            ""article"": ""MIELE G7100SCICS"",
+                            ""qt"": ""1"",
+                            ""ean"": ""4002516061732"",
+                            ""qtin"": 0,
+                            ""error_code"": null,
+                            ""commentaire"": null,
+                            ""itemType"": ""electro""
+                        }")
+                    ),
+                    new EbSoftReceptionGood(
+                        1,
+                        JObject.Parse(@"{
+                            ""id"": ""40"",
+                            ""oa"": ""OA848817"",
+                            ""article"": ""MIELE G7100SCICS"",
+                            ""qt"": ""2"",
+                            ""ean"": ""4002516061733"",
+                            ""qtin"": 0,
+                            ""error_code"": null,
+                            ""commentaire"": null,
+                            ""itemType"": ""electro""
+                        }")
+                    )
+                ).GoToReceptionDetails()
+                 .Scan("4002516061732", "4002516061731", "UnknownBarcode", "4002516061731")
                  .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
                     .Count

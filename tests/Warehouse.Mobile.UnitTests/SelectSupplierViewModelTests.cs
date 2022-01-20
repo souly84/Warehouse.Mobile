@@ -18,11 +18,12 @@ namespace Warehouse.Mobile.UnitTests
         }
 
         [Fact]
-        public void CurrenrDate()
+        public void SelectedDate_TodayByDefault()
         {
-            Assert.NotEqual(
-                System.DateTime.MinValue,
-                _app.CurrentViewModel<SelectSupplierViewModel>().CurrentDate
+            Assert.Equal(
+                System.DateTime.Now.Date,
+                _app.CurrentViewModel<SelectSupplierViewModel>()
+                    .SelectedDate.Date
             );
         }
 

@@ -19,13 +19,27 @@ namespace Warehouse.Mobile.UnitTests
         [Fact]
         public void ReserveLocations()
         {
-            Assert.NotEmpty(_app.CurrentViewModel<PutAwayViewModel>().ReserveLocations);
+            Assert.NotEmpty(
+                WarehouseMobile.Application(
+                    new MockWarehouseGood("1", 5, "1111")
+                ).GoToPutAway()
+                 .Scan("1111")
+                 .CurrentViewModel<PutAwayViewModel>()
+                 .ReserveLocations
+             );
         }
 
         [Fact]
         public void RaceLocations()
         {
-            Assert.NotEmpty(_app.CurrentViewModel<PutAwayViewModel>().RaceLocations);
+            Assert.NotEmpty(
+                WarehouseMobile.Application(
+                   new MockWarehouseGood("1", 5, "1111")
+                ).GoToPutAway()
+                .Scan("1111")
+                .CurrentViewModel<PutAwayViewModel>()
+                .RaceLocations
+            );
         }
 
         [Fact]

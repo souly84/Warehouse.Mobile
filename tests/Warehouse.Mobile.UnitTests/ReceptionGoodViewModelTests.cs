@@ -22,7 +22,7 @@ namespace Warehouse.Mobile.UnitTests
                                 ""article"": ""MIELE G7100SCICS"",
                                 ""qt"": ""2"",
                                 ""ean"": ""4002516061731"",
-                                ""qtin"": null,
+                                ""qtin"": 0,
                                 ""error_code"": null,
                                 ""commentaire"": null,
                                 ""itemType"": ""electro""
