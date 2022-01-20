@@ -8,6 +8,7 @@ using Prism.Navigation;
 using Prism.Services;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
+using Warehouse.Mobile.Extensions;
 using Warehouse.Mobile.Reception;
 
 namespace Warehouse.Mobile.ViewModels
@@ -45,14 +46,11 @@ namespace Warehouse.Mobile.ViewModels
 
         public async Task InitializeAsync(INavigationParameters parameters)
         {
-            if (!parameters.ContainsKey("Supplier"))
-            {
-                throw new InvalidOperationException("No supplier selected");
-            }
-            var sup = parameters.GetValue<ISupplier>("Supplier");
             _reception = new ReceptionWithExtraConfirmedGoods(
                 new ReceptionWithUnkownGoods(
-                    await sup.Receptions.FirstAsync()
+                    await parameters
+                        .Value<ISupplier>("Supplier")
+                        .Receptions.FirstAsync()
                 )
             );
             ReceptionGoods = await _reception.NeedConfirmation().ToViewModelListAsync();
@@ -63,13 +61,13 @@ namespace Warehouse.Mobile.ViewModels
             if (barcode.Symbology.ToLower() == "ean13")
             {
                 var good = await _reception.ByBarcodeAsync(barcode.BarcodeData);
-                var goodVm = ReceptionGoods.FirstOrDefault(x => x.Equals(good));
-                if (goodVm != null)
+                var goodViewModel = ReceptionGoods.FirstOrDefault(x => x.Equals(good));
+                if (goodViewModel != null)
                 {
-                    goodVm.IncreaseQuantityCommand.Execute();
+                    goodViewModel.IncreaseQuantityCommand.Execute();
                     if (await good.ConfirmedAsync())
                     {
-                        ReceptionGoods.Remove(goodVm);
+                        ReceptionGoods.Remove(goodViewModel);
                     }
                 }
                 else

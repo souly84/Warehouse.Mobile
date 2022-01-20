@@ -2,7 +2,6 @@
 using Prism.Ioc;
 using Prism.Services;
 using Warehouse.Core;
-using Warehouse.Core.Plugins;
 
 namespace Warehouse.Mobile.UnitTests
 {
@@ -25,10 +24,24 @@ namespace Warehouse.Mobile.UnitTests
             );
         }
 
+        public static App Application(params IWarehouseGood[] warehouseGoods)
+        {
+            return Application(
+                new MockWarehouseCompany(warehouseGoods)
+            );
+        }
+
         public static App Application(ISupplier supplier)
         {
             return Application(
                 new MockWarehouseCompany(supplier)
+            );
+        }
+
+        public static App Application(IWarehouse warehouse)
+        {
+            return Application(
+                new MockWarehouseCompany(warehouse)
             );
         }
 

@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using EbSoft.Warehouse.SDK;
-using MediaPrint;
 using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
@@ -13,9 +11,8 @@ using Warehouse.Mobile.ViewModels;
 
 namespace Warehouse.Mobile
 {
-    public class PutAwayViewModel : ScannerViewModel, IInitializeAsync
+    public class PutAwayViewModel : ScannerViewModel
     {
-        private readonly IScanner _scanner;
         private readonly IPageDialogService _dialog;
         private readonly ICompany _company;
         private readonly INavigationService _navigationService;
@@ -27,7 +24,6 @@ namespace Warehouse.Mobile
             INavigationService navigationService)
             : base(scanner, dialog)
         {
-            _scanner = scanner;
             _dialog = dialog;
             _company = company;
             _navigationService = navigationService;
@@ -98,16 +94,11 @@ namespace Warehouse.Mobile
 
         private DelegateCommand goToPopupCommand;
 
-        public DelegateCommand GoToPopupCommand => goToPopupCommand ?? (goToPopupCommand = new DelegateCommand(async () =>
-        {
-            await _navigationService.NavigateAsync(
-                       AppConstants.QuantityToMovePopupViewId);
-        }));
-
-        public Task InitializeAsync(INavigationParameters parameters)
-        {
-            return Task.CompletedTask;
-        }
+        public DelegateCommand GoToPopupCommand => goToPopupCommand ?? (goToPopupCommand = new DelegateCommand(() =>
+            _navigationService.NavigateAsync(
+                AppConstants.QuantityToMovePopupViewId
+            )
+        ));
 
         protected override async Task OnScanAsync(IScanningResult barcode)
         {
@@ -136,7 +127,7 @@ namespace Warehouse.Mobile
                                 .MoveToAsync(
                                     await WarehouseGood.Storages.ByBarcodeAsync(_company.Warehouse, barcode.BarcodeData),
                                     1
-                            );
+                                );
                         }
 
                         StatusMessage = "Item successfully assigned";
@@ -153,15 +144,18 @@ namespace Warehouse.Mobile
                             .FirstAsync();
 
                         var checkIn = await WarehouseGood.Storages.PutAway.ToViewModelListAsync();
-                        if (checkIn.Count == 0)
+                        if (!checkIn.Any())
                         {
-                            await _dialog.DisplayAlertAsync("Error", "This item is not present in the check in area", "ok");
+                            await _dialog.DisplayAlertAsync(
+                                "Error",
+                                "This item is not present in the check in area", "ok"
+                            );
                             return;
                         }
                         IsRecognizedProduct = true;
                         PutAwayStorage = checkIn.First();
-                        RaceLocations = (ObservableCollection<LocationViewModel>)await WarehouseGood.Storages.Race.ToViewModelListAsync();
-                        ReserveLocations = (ObservableCollection<LocationViewModel>)await WarehouseGood.Storages.Reserve.ToViewModelListAsync();
+                        RaceLocations = await WarehouseGood.Storages.Race.ToViewModelListAsync();
+                        ReserveLocations = await WarehouseGood.Storages.Reserve.ToViewModelListAsync();
                         break;
                     }
             }
