@@ -14,8 +14,8 @@ namespace Warehouse.Mobile.UnitTests.Mocks
             _exception = exception;
         }
 
-        public IEntities<IReceptionGood> Goods => new ListOfEntities<IReceptionGood>(
-            new MockReceptionGood("1", 1, "1111")
+        public IReceptionGoods Goods => new MockReceptionGoods(
+              new MockReceptionGood("1", 1, "1111")
         );
 
         public Task ValidateAsync(IList<IGoodConfirmation> goodsToValidate)

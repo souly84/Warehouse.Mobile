@@ -29,5 +29,6 @@
   <ItemGroup>
     <None Remove="Newtonsoft.Json" />
     <None Remove="Prism.Plugin.Popups" />
+    <None Remove="Warehouse.Core" />
   </ItemGroup>
 </Project>

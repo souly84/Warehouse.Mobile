@@ -32,23 +32,29 @@ namespace Warehouse.Mobile.IntegrationTests
         [Fact]
         public async Task NavigationCreated()
         {
-            using (var activity = new InstrumentationActivity<Droid.MainActivity>(instrument))
+            if (instrument != null)
             {
-                Assert.NotNull(
-                   (await activity.ActivityAsync()).Navigation
-                );
+                using (var activity = new InstrumentationActivity<Droid.MainActivity>(instrument))
+                {
+                    Assert.NotNull(
+                       (await activity.ActivityAsync()).Navigation
+                    );
+                }
             }
         }
 
         [Fact]
         public async Task MenuSelectionAsDefaultPage()
         {
-            using (var activity = new InstrumentationActivity<Droid.MainActivity>(instrument))
+            if (instrument != null)
             {
-                var mainActivity = await activity.ActivityAsync();
-                Assert.IsType<MenuSelectionViewModel>(
-                    mainActivity.App.CurrentViewModel<object>()
-                );
+                using (var activity = new InstrumentationActivity<Droid.MainActivity>(instrument))
+                {
+                    var mainActivity = await activity.ActivityAsync();
+                    Assert.IsType<MenuSelectionViewModel>(
+                        mainActivity.App.CurrentViewModel<object>()
+                    );
+                }
             }
         }
     }
