@@ -1,3 +1,4 @@
+using System;
 using MediaPrint;
 using Prism.Commands;
 using Prism.Mvvm;
@@ -11,12 +12,12 @@ namespace Warehouse.Mobile.ViewModels
 
         public ReceptionGoodViewModel(IReceptionGood receptionGood)
         {
-            _receptionGood = receptionGood;
+            _receptionGood = receptionGood ?? throw new ArgumentNullException(nameof(receptionGood));
         }
 
-        public bool IsUnkownGood { get => _receptionGood is MockReceptionGood; }
+        public bool IsUnkownGood => _receptionGood.IsUnknown;
 
-        public bool IsExtraConfirmedReceptionGood { get => _receptionGood is ExtraConfirmedReceptionGood; }
+        public bool IsExtraConfirmedReceptionGood => _receptionGood.IsExtraConfirmed;
 
         private DictionaryMedia _goodData;
         private DictionaryMedia GoodData
@@ -33,16 +34,13 @@ namespace Warehouse.Mobile.ViewModels
 
         public int Total { get; set; }
 
-        public int ConfirmedQuantity
-        {
-            get => _receptionGood.Confirmation.ToDictionary().Value<int>("Confirmed");
-        }
+        public int ConfirmedQuantity => _receptionGood.Confirmation.ToDictionary().Value<int>("Confirmed");
 
-        public string Name { get => GoodData.ValueOrDefault<string>("Article"); }
+        public string Name => GoodData.ValueOrDefault<string>("Article");
 
-        public int Quantity  { get => GoodData.ValueOrDefault<int>("Quantity"); }
+        public int Quantity => GoodData.ValueOrDefault<int>("Quantity");
 
-        public string Oa { get => GoodData.ValueOrDefault<string>("oa"); }
+        public string Oa => GoodData.ValueOrDefault<string>("oa");
 
         private DelegateCommand increaseQuantityCommand;
         public DelegateCommand IncreaseQuantityCommand => increaseQuantityCommand ?? (increaseQuantityCommand = new DelegateCommand(() =>
