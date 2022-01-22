@@ -14,6 +14,21 @@ namespace Warehouse.Mobile.UnitTests
         private readonly IPageDialogService _pageDialogService;
 
         public MockPlatformInitializer(
+            IReception reception,
+            IPageDialogService pageDialogService)
+            : this(
+                  company: new MockWarehouseCompany(
+                      new NamedMockSupplier(
+                          "Electrolux",
+                          reception
+                      )
+                  ),
+                  pageDialogService: pageDialogService
+              )
+        {
+        }
+
+        public MockPlatformInitializer(
             ICompany company = null,
             IScanner scanner = null,
             IPageDialogService pageDialogService = null)

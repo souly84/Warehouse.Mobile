@@ -15,11 +15,18 @@ namespace Warehouse.Mobile.UnitTests
         public static App Application(params IReceptionGood[] receprionGoods)
         {
             return Application(
+                 new MockReception(
+                     receprionGoods
+                 )
+            );
+        }
+
+        public static App Application(IReception reception)
+        {
+            return Application(
                  new NamedMockSupplier(
                      "Electrolux",
-                     new MockReception(
-                         receprionGoods
-                     )
+                     reception
                  )
             );
         }
