@@ -30,6 +30,8 @@
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <AndroidSupportedAbis>arm64-v8a;armeabi-v7a;x86</AndroidSupportedAbis>
     <AndroidDexTool>d8</AndroidDexTool>
+    <AndroidEnableMultiDex>true</AndroidEnableMultiDex>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -73,6 +75,10 @@
     <Compile Include="%28Extensions%29\AssertExtensions.cs" />
     <Compile Include="%28Extensions%29\ExceptionExtensions.cs" />
     <Compile Include="MainActivityTests.cs" />
+    <Compile Include="%28Extensions%29\ActivityName.cs" />
+    <Compile Include="%28Extensions%29\InstrumentationActivity.cs" />
+    <Compile Include="%28Extensions%29\ApplicationExtensions.cs" />
+    <Compile Include="%28Extensions%29\ScannerExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -103,6 +109,7 @@
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
+    <AndroidResource Include="Resources\values\styles.xml" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\AboutAssets.txt" />
@@ -128,18 +135,23 @@
     <PackageReference Include="Prism.Unity.Forms">
       <Version>8.1.97</Version>
     </PackageReference>
+    <PackageReference Include="Com.Airbnb.Xamarin.Forms.Lottie">
+      <Version>4.0.11</Version>
+    </PackageReference>
   </ItemGroup>
  
   <ItemGroup>
     <ProjectReference Include="..\..\src\Warehouse.Android\Warehouse.Mobile.Android.csproj">
       <Project>{C8824736-F378-44A4-86C3-7C0A346790C7}</Project>
       <Name>Warehouse.Mobile.Android</Name>
-      <ReferenceOutputAssembly>False</ReferenceOutputAssembly>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Warehouse\Warehouse.Mobile.csproj">
       <Project>{D14BE91B-55E2-42BE-957A-570E9608D51D}</Project>
       <Name>Warehouse.Mobile</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Resources\values\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

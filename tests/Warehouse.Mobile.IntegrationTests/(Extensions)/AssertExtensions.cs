@@ -4,7 +4,7 @@ using Newtonsoft.Json.Linq;
 using Xunit.Abstractions;
 using Warehouse.Mobile.Plugins;
 
-namespace Warehouse.Mobile.IntegrationTests.Extensions
+namespace Warehouse.Mobile.IntegrationTests
 {
     public static class Asserts
     {
