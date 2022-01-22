@@ -8,7 +8,7 @@ namespace Warehouse.Mobile.ViewModels
     public class CustomPopupMessageViewModel : BindableBase, IInitialize
     {
         private readonly INavigationService _navigationService;
-        private DelegateCommand _actionCommand;
+        private DelegateCommand? _actionCommand;
 
         public CustomPopupMessageViewModel(INavigationService navigationService)
         {
@@ -22,21 +22,21 @@ namespace Warehouse.Mobile.ViewModels
             set => SetProperty(ref _severity, value);
         }
 
-        private string _title;
+        private string _title = string.Empty;
         public string Title
         {
             get => _title;
             set => SetProperty(ref _title, value);
         }
 
-        private string _message;
+        private string _message = string.Empty;
         public string Message
         {
             get => _message;
             set => SetProperty(ref _message, value);
         }
 
-        private string _actionText;
+        private string _actionText = string.Empty;
         public string ActionText
         {
             get => _actionText;

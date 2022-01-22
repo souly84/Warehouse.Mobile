@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using EbSoft.Warehouse.SDK;
@@ -16,6 +17,7 @@ namespace Warehouse.Mobile
         private readonly IPageDialogService _dialog;
         private readonly ICompany _company;
         private readonly INavigationService _navigationService;
+        private DelegateCommand? goToPopupCommand;
 
         public PutAwayViewModel(
             IScanner scanner,
@@ -24,40 +26,40 @@ namespace Warehouse.Mobile
             INavigationService navigationService)
             : base(scanner, dialog)
         {
-            _dialog = dialog;
-            _company = company;
-            _navigationService = navigationService;
+            _dialog = dialog ?? throw new ArgumentNullException(nameof(dialog));
+            _company = company ?? throw new ArgumentNullException(nameof(company));
+            _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
         }
 
-        private ObservableCollection<LocationViewModel> _reserveLocations;
+        private ObservableCollection<LocationViewModel>? _reserveLocations;
         public ObservableCollection<LocationViewModel> ReserveLocations
         {
-            get => _reserveLocations;
+            get => _reserveLocations ?? new ObservableCollection<LocationViewModel>();
             set => SetProperty(ref _reserveLocations, value);
         }
 
-        private ObservableCollection<LocationViewModel> _raceLocations;
+        private ObservableCollection<LocationViewModel>? _raceLocations;
         public ObservableCollection<LocationViewModel> RaceLocations
         {
-            get => _raceLocations;
+            get => _raceLocations ?? new ObservableCollection<LocationViewModel>();
             set => SetProperty(ref _raceLocations, value);
         }
 
-        private string _scannedBarcode;
+        private string _scannedBarcode = string.Empty;
         public string ScannedBarcode
         {
             get => _scannedBarcode;
             set => SetProperty(ref _scannedBarcode, value);
         }
 
-        private string _statusMessage;
+        private string _statusMessage = string.Empty;
         public string StatusMessage
         {
             get => _statusMessage;
             set => SetProperty(ref _statusMessage, value);
         }
 
-        private string _destinationBarcode;
+        private string _destinationBarcode = string.Empty;
         public string DestinationBarcode
         {
             get => _destinationBarcode;
@@ -71,8 +73,8 @@ namespace Warehouse.Mobile
             set => SetProperty(ref _isRecognizedProduct, value);
         }
 
-        private IWarehouseGood _warehouseGood;
-        public IWarehouseGood WarehouseGood
+        private IWarehouseGood? _warehouseGood;
+        public IWarehouseGood? WarehouseGood
         {
             get => _warehouseGood;
             set => SetProperty(ref _warehouseGood, value);
@@ -85,14 +87,12 @@ namespace Warehouse.Mobile
             set => SetProperty(ref _checkInQuantity, value);
         }
 
-        private LocationViewModel _putAwayStorage;
-        public LocationViewModel PutAwayStorage
+        private LocationViewModel? _putAwayStorage;
+        public LocationViewModel? PutAwayStorage
         {
             get => _putAwayStorage;
             set => SetProperty(ref _putAwayStorage, value);
         }
-
-        private DelegateCommand goToPopupCommand;
 
         public DelegateCommand GoToPopupCommand => goToPopupCommand ?? (goToPopupCommand = new DelegateCommand(() =>
             _navigationService.NavigateAsync(
@@ -110,7 +110,7 @@ namespace Warehouse.Mobile
                         if (CheckInQuantity > 1)
                         {
                             await _navigationService.NavigateAsync(
-                            AppConstants.QuantityToMovePopupViewId,
+                                AppConstants.QuantityToMovePopupViewId,
                                 new NavigationParameters
                                 {
                                     { "Origin", PutAwayStorage },
@@ -121,6 +121,8 @@ namespace Warehouse.Mobile
                         }
                         else
                         {
+                            _ = WarehouseGood ?? throw new ArgumentNullException(nameof(WarehouseGood));
+                            _ = PutAwayStorage ?? throw new ArgumentNullException(nameof(PutAwayStorage));
                             await WarehouseGood
                                 .Movement
                                 .From(PutAwayStorage.ToStorage())

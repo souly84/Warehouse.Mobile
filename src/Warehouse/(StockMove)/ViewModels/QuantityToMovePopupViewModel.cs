@@ -1,4 +1,5 @@
-﻿using Prism.Commands;
+﻿using System;
+using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Warehouse.Core;
@@ -9,22 +10,21 @@ namespace Warehouse.Mobile
     public class QuantityToMovePopupViewModel : BindableBase, IInitialize
     {
         private readonly INavigationService _navigationService;
-        private IWarehouseGood _goodToMove;
-
+        private IWarehouseGood? _goodToMove;
 
         public QuantityToMovePopupViewModel(INavigationService navigationService)
         {
-            _navigationService = navigationService;
+            _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
         }
 
-        private IStorage _originLocation;
-        public IStorage OriginLocation
+        private IStorage? _originLocation;
+        public IStorage? OriginLocation
         {
             get => _originLocation;
             set => SetProperty(ref _originLocation, value);
         }
 
-        private string _destinationLocation;
+        private string _destinationLocation = string.Empty;
         public string DestinationLocation
         {
             get => _destinationLocation;
@@ -38,10 +38,12 @@ namespace Warehouse.Mobile
             _goodToMove = parameters.Value<IWarehouseGood>("Good");
         }
 
-        private DelegateCommand validateCommand;
+        private DelegateCommand? validateCommand;
 
         public DelegateCommand ValidateCommand => validateCommand ?? (validateCommand = new DelegateCommand(async () =>
         {
+            _ = _goodToMove ?? throw new ArgumentNullException(nameof(_goodToMove));
+            _ = OriginLocation ?? throw new ArgumentNullException(nameof(OriginLocation));
             await _goodToMove
                 .Movement
                 .From(OriginLocation)
@@ -52,7 +54,7 @@ namespace Warehouse.Mobile
             await _navigationService.GoBackAsync();
         }));
 
-        private DelegateCommand cancelCommand;
+        private DelegateCommand? cancelCommand;
         public DelegateCommand CancelCommand => cancelCommand ?? (cancelCommand = new DelegateCommand(async () =>
         {
             await _navigationService.GoBackAsync();

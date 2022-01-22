@@ -9,6 +9,7 @@ namespace Warehouse.Mobile.ViewModels
     public class ReceptionGoodViewModel : BindableBase
     {
         private readonly IReceptionGood _receptionGood;
+        private DictionaryMedia? _goodData;
 
         public ReceptionGoodViewModel(IReceptionGood receptionGood)
         {
@@ -19,7 +20,6 @@ namespace Warehouse.Mobile.ViewModels
 
         public bool IsExtraConfirmedReceptionGood => _receptionGood.IsExtraConfirmed;
 
-        private DictionaryMedia _goodData;
         private DictionaryMedia GoodData
         {
             get
@@ -42,14 +42,14 @@ namespace Warehouse.Mobile.ViewModels
 
         public string Oa => GoodData.ValueOrDefault<string>("oa");
 
-        private DelegateCommand increaseQuantityCommand;
+        private DelegateCommand? increaseQuantityCommand;
         public DelegateCommand IncreaseQuantityCommand => increaseQuantityCommand ?? (increaseQuantityCommand = new DelegateCommand(() =>
         {
             _receptionGood.Confirmation.Increase(1);
             RaisePropertyChanged(nameof(ConfirmedQuantity));
         }));
 
-        private DelegateCommand decreaseQuantityCommand;
+        private DelegateCommand? decreaseQuantityCommand;
         public DelegateCommand DecreaseQuantityCommand => decreaseQuantityCommand ?? (decreaseQuantityCommand = new DelegateCommand(() =>
         {
             _receptionGood.Confirmation.Decrease(1);

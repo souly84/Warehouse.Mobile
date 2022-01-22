@@ -1,4 +1,5 @@
-﻿using MediaPrint;
+﻿using System;
+using MediaPrint;
 using Prism.Mvvm;
 using Warehouse.Core;
 
@@ -7,11 +8,11 @@ namespace Warehouse.Mobile.ViewModels
     public class LocationViewModel : BindableBase
     {
         private readonly IStorage _storage;
-        private DictionaryMedia _storageData;
+        private DictionaryMedia? _storageData;
 
         public LocationViewModel(IStorage storage)
         {
-            _storage = storage;
+            _storage = storage ?? throw new ArgumentNullException(nameof(storage));
         }
 
         public int Quantity { get => StorageData().ValueOrDefault<int>("Quantity"); }

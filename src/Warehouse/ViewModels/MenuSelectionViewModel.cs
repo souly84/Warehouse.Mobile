@@ -9,8 +9,8 @@ namespace Warehouse.Mobile.ViewModels
     public class MenuSelectionViewModel : BindableBase
     {
         private readonly INavigationService _navigationService;
-        private ICommand goToAvailableSuppliersCommand;
-        private ICommand goToPutAwayCommand;
+        private ICommand? goToAvailableSuppliersCommand;
+        private ICommand? goToPutAwayCommand;
 
         public MenuSelectionViewModel(INavigationService navigationService)
         {

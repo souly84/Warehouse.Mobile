@@ -14,9 +14,9 @@ namespace Warehouse.Mobile.ViewModels
     public class ReceptionDetailsViewModel : ScannerViewModel, IInitializeAsync
     {
         private readonly IPageDialogService _dialog;
-        private ReceptionWithExtraConfirmedGoods _reception;
-        private ObservableCollection<ReceptionGoodViewModel> _receptionGoods;
-        private DelegateCommand validateReceptionCommand;
+        private ReceptionWithExtraConfirmedGoods? _reception;
+        private ObservableCollection<ReceptionGoodViewModel>? _receptionGoods;
+        private DelegateCommand? validateReceptionCommand;
 
         public ReceptionDetailsViewModel(IScanner scanner, IPageDialogService dialog)
             : base(scanner, dialog)
@@ -26,7 +26,7 @@ namespace Warehouse.Mobile.ViewModels
 
         public ObservableCollection<ReceptionGoodViewModel> ReceptionGoods
         {
-            get => _receptionGoods;
+            get => _receptionGoods ?? new ObservableCollection<ReceptionGoodViewModel>();
             set => SetProperty(ref _receptionGoods, value);
         }
 
@@ -34,6 +34,7 @@ namespace Warehouse.Mobile.ViewModels
         {
             try
             {
+                _ = _reception ?? throw new ArgumentNullException(nameof(_reception));
                 await _reception.Confirmation().CommitAsync();
             }
             catch (Exception ex)
@@ -58,6 +59,7 @@ namespace Warehouse.Mobile.ViewModels
         {
             if (barcode.Symbology.ToLower() == "ean13")
             {
+                _ = _reception ?? throw new ArgumentNullException(nameof(_reception));
                 var good = await _reception.ByBarcodeAsync(barcode.BarcodeData);
                 var goodViewModel = ReceptionGoods.FirstOrDefault(x => x.Equals(good));
                 if (goodViewModel != null)

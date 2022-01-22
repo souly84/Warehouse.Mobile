@@ -18,14 +18,14 @@ namespace Warehouse.Mobile.ViewModels
             ICompany company,
             INavigationService navigationService)
         {
-            _company = company;
-            _navigationService = navigationService;
+            _company = company ?? throw new ArgumentNullException(nameof(company));
+            _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
         }
 
-        private IList<SupplierViewModel> _suppliers;
+        private IList<SupplierViewModel>? _suppliers;
         public IList<SupplierViewModel> Suppliers
         {
-            get => _suppliers;
+            get => _suppliers ?? new List<SupplierViewModel>();
             set => SetProperty(ref _suppliers, value);
         }
 
@@ -49,7 +49,7 @@ namespace Warehouse.Mobile.ViewModels
             Suppliers = await _company.Suppliers.For(SelectedDate).ToViewModelListAsync(_navigationService);
         }
 
-        private DelegateCommand changeSelectedDateCommand;
+        private DelegateCommand? changeSelectedDateCommand;
         public DelegateCommand ChangeSelectedDateCommand => changeSelectedDateCommand ?? (changeSelectedDateCommand = new DelegateCommand(async () =>
         {
             await RefreshAvailableSupplierList();

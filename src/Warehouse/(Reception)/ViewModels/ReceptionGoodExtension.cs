@@ -9,8 +9,9 @@ namespace Warehouse.Mobile.ViewModels
     {
         public static async Task<ObservableCollection<ReceptionGoodViewModel>> ToViewModelListAsync(this IEntities<IReceptionGood> receptions)
         {
-            var receptionGoods = await receptions.ToListAsync();
-            return new ObservableCollection<ReceptionGoodViewModel>(receptionGoods.Select(x => new ReceptionGoodViewModel(x)));
+            return new ObservableCollection<ReceptionGoodViewModel>(
+                await receptions.SelectAsync(x => new ReceptionGoodViewModel(x))
+            );
         }
 
         public static async Task<ObservableCollection<ReceptionGoodViewModel>> ToViewModelListAsync(this IConfirmation confirmation)

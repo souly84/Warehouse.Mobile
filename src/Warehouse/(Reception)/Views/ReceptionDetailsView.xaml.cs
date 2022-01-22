@@ -27,12 +27,11 @@ namespace Warehouse.Mobile.Views
                 // Not all assemblies that referenced by the project implemented
                 // for netcore3.1 project and not available during the tests run
             }
-
         }
 
         protected override void OnBindingContextChanged()
         {
-            ReceptionDetailsViewModel vm = (ReceptionDetailsViewModel)BindingContext;
+            var vm = (ReceptionDetailsViewModel)BindingContext;
             if (vm != null)
             {
                 vm.PropertyChanged -= Vm_PropertyChanged;
