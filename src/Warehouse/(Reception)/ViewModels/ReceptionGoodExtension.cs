@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Warehouse.Core;
-using Warehouse.Mobile.ViewModels;
 
 namespace Warehouse.Mobile.ViewModels
 {

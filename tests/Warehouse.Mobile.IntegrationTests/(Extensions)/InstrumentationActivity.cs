@@ -29,8 +29,8 @@ namespace Warehouse.Mobile.IntegrationTests
             Intent intent = new Intent();
             intent.AddFlags(ActivityFlags.NewTask);
             intent.SetClassName(_instrumentation.TargetContext, activityName);
-            await Task.Run(() => _instrumentation.StartActivitySync(intent)).WithTimeout(10000);
-            var activity = (T)_instrumentation.WaitForMonitorWithTimeout(_monitor, 10000);
+            await Task.Run(() => _instrumentation.StartActivitySync(intent)).WithTimeout(30000);
+            var activity = (T)_instrumentation.WaitForMonitorWithTimeout(_monitor, 30000);
             _activities.Add(activity);
             return activity;
         }

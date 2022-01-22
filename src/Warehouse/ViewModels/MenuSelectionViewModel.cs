@@ -17,14 +17,12 @@ namespace Warehouse.Mobile.ViewModels
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
         }
 
-        public ICommand GoToAvailableSuppliersCommand => goToAvailableSuppliersCommand ?? (goToAvailableSuppliersCommand = new DelegateCommand(async () =>
-        {
-            await _navigationService.NavigateAsync(AppConstants.SupplierViewId);
-        }));
+        public ICommand GoToAvailableSuppliersCommand => goToAvailableSuppliersCommand ?? (goToAvailableSuppliersCommand = new DelegateCommand(() =>
+            _navigationService.NavigateAsync(AppConstants.SupplierViewId)
+        ));
 
-        public ICommand GoToPutAwayCommand => goToPutAwayCommand ?? (goToPutAwayCommand = new DelegateCommand(async () =>
-        {
-            await _navigationService.NavigateAsync(AppConstants.PutAwayViewId);
-        }));
+        public ICommand GoToPutAwayCommand => goToPutAwayCommand ?? (goToPutAwayCommand = new DelegateCommand(() =>
+            _navigationService.NavigateAsync(AppConstants.PutAwayViewId)
+        ));
     }
 }

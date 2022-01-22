@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Prism.Commands;
+﻿using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Warehouse.Mobile.Extensions;
@@ -10,6 +8,7 @@ namespace Warehouse.Mobile.ViewModels
     public class CustomPopupMessageViewModel : BindableBase, IInitialize
     {
         private readonly INavigationService _navigationService;
+        private DelegateCommand _actionCommand;
 
         public CustomPopupMessageViewModel(INavigationService navigationService)
         {
@@ -52,11 +51,8 @@ namespace Warehouse.Mobile.ViewModels
             ActionText = parameters.Value<string>("ActionText");
         }
 
-        private DelegateCommand _actionCommand;
-
-        public DelegateCommand ActionCommand => _actionCommand ?? (_actionCommand = new DelegateCommand(async () =>
-        {
-            await _navigationService.GoBackAsync();
-        }));
+        public DelegateCommand ActionCommand => _actionCommand ?? (_actionCommand = new DelegateCommand(() =>
+            _navigationService.GoBackAsync()
+        ));
     }
 }

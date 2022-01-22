@@ -18,7 +18,7 @@ namespace Warehouse.Mobile.ViewModels
             _navigationService = navigationService;
         }
 
-        public string Name => ((IPrintable)_supplier).ToDictionary().ValueOrDefault<string>("Name");
+        public string Name => _supplier.ToDictionary().ValueOrDefault<string>("Name");
 
         private DelegateCommand goToReceptionDetailsCommand;
 

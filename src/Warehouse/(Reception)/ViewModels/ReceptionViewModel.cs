@@ -12,6 +12,6 @@ namespace Warehouse.Mobile.ViewModels
             _receptionGood = receptionGood;
         }
 
-        public ISupplier Name { get => ((IPrintable)_receptionGood).ToDictionary().ValueOrDefault<ISupplier>("Supplier"); }
+        public ISupplier Name => _receptionGood.ToDictionary().ValueOrDefault<ISupplier>("Supplier");
     }
 }
