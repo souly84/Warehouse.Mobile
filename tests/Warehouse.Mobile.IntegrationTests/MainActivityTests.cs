@@ -11,7 +11,7 @@ namespace Warehouse.Mobile.IntegrationTests
         private TestInstrumentation instrument = TestInstrumentation.CurrentInstrumentation;
 
         [Fact]
-        public async Task ScannerEnabled()
+        public async Task ScannerOpened()
         {
             if (instrument != null)
             {
@@ -22,7 +22,7 @@ namespace Warehouse.Mobile.IntegrationTests
                         mainActivity.App.Scanner
                     );
                     Assert.Equal(
-                        ScannerState.Enabled,
+                        ScannerState.Opened,
                         mainActivity.App.Scanner.State
                     );
                 }
