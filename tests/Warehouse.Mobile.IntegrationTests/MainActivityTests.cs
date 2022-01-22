@@ -2,6 +2,7 @@
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.IntegrationTests.AndroidInstrumentations;
 using Warehouse.Mobile.ViewModels;
+using Warehouse.Scanner.SDK;
 using Xunit;
 
 namespace Warehouse.Mobile.IntegrationTests
@@ -21,6 +22,10 @@ namespace Warehouse.Mobile.IntegrationTests
                     Assert.NotNull(
                         mainActivity.App.Scanner
                     );
+
+                    await mainActivity.App.Scanner
+                        .WaitIfTransitionAsync(ScannerState.Closed)
+                        .WithTimeout(30000);
                     Assert.Equal(
                         ScannerState.Opened,
                         mainActivity.App.Scanner.State

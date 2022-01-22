@@ -7,7 +7,7 @@
     <ProjectGuid>{1C084773-3354-4EF2-9908-A91D4DD0897E}</ProjectGuid>
     <ProjectTypeGuids>{EFBA0AD7-5A72-4C68-AF49-83D382785DCF};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
     <OutputType>Library</OutputType>
-    <RootNamespace>StoreMobile.AppService.IntegrationTests</RootNamespace>
+    <RootNamespace>Warehouse.Mobile.IntegrationTests</RootNamespace>
     <AssemblyName>StoreMobile.AppService.IntegrationTests</AssemblyName>
     <TargetFrameworkVersion>v10.0</TargetFrameworkVersion>
     <AndroidApplication>True</AndroidApplication>
@@ -79,6 +79,7 @@
     <Compile Include="%28Extensions%29\InstrumentationActivity.cs" />
     <Compile Include="%28Extensions%29\ApplicationExtensions.cs" />
     <Compile Include="%28Extensions%29\ScannerExtensions.cs" />
+    <Compile Include="%28Extensions%29\TaskExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
