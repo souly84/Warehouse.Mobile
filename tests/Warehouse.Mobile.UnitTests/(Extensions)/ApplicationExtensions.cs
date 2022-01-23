@@ -65,6 +65,15 @@ namespace Warehouse.Mobile.UnitTests
             return app;
         }
 
+        public static App QuantityToMovePopup(this App app)
+        {
+            app.GoToPutAway()
+               .CurrentViewModel<PutAwayViewModel>()
+               .GoToPopupCommand
+               .Execute();
+            return app;
+        }
+
         public static App GoToReceptionDetails(this App app)
         {
             app.CurrentViewModel<MenuSelectionViewModel>()

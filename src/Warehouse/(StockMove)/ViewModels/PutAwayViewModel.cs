@@ -105,61 +105,61 @@ namespace Warehouse.Mobile
             switch (barcode.Symbology.ToLower())
             {
                 case "code128":
+                {
+                    DestinationBarcode = barcode.BarcodeData;
+                    if (CheckInQuantity > 1)
                     {
-                        DestinationBarcode = barcode.BarcodeData;
-                        if (CheckInQuantity > 1)
-                        {
-                            await _navigationService.NavigateAsync(
-                                AppConstants.QuantityToMovePopupViewId,
-                                new NavigationParameters
-                                {
-                                    { "Origin", PutAwayStorage },
-                                    { "Destination", barcode.BarcodeData },
-                                    { "Good", WarehouseGood }
-                                }
-                            );
-                        }
-                        else
-                        {
-                            _ = WarehouseGood ?? throw new ArgumentNullException(nameof(WarehouseGood));
-                            _ = PutAwayStorage ?? throw new ArgumentNullException(nameof(PutAwayStorage));
-                            await WarehouseGood
-                                .Movement
-                                .From(PutAwayStorage.ToStorage())
-                                .MoveToAsync(
-                                    await WarehouseGood.Storages.ByBarcodeAsync(_company.Warehouse, barcode.BarcodeData),
-                                    1
-                                );
-                        }
-
-                        StatusMessage = "Item successfully assigned";
-                        ResetFields();
-                        
-                        break;
+                        await _navigationService.NavigateAsync(
+                            AppConstants.QuantityToMovePopupViewId,
+                            new NavigationParameters
+                            {
+                                { "Origin", PutAwayStorage },
+                                { "Destination", barcode.BarcodeData },
+                                { "Good", WarehouseGood }
+                            }
+                        );
                     }
+                    else
+                    {
+                        _ = WarehouseGood ?? throw new ArgumentNullException(nameof(WarehouseGood));
+                        _ = PutAwayStorage ?? throw new ArgumentNullException(nameof(PutAwayStorage));
+                        await WarehouseGood
+                            .Movement
+                            .From(PutAwayStorage.ToStorage())
+                            .MoveToAsync(
+                                await WarehouseGood.Storages.ByBarcodeAsync(_company.Warehouse, barcode.BarcodeData),
+                                1
+                            );
+                    }
+
+                    StatusMessage = "Item successfully assigned";
+                    ResetFields();
+                    break;
+                }
                 default:
-                    {
-                        ScannedBarcode = barcode.BarcodeData;
-                        WarehouseGood = await _company
-                            .Warehouse
-                            .Goods.For(barcode.BarcodeData)
-                            .FirstAsync();
+                {
+                    ScannedBarcode = barcode.BarcodeData;
+                    WarehouseGood = await _company
+                        .Warehouse
+                        .Goods.For(barcode.BarcodeData)
+                        .FirstAsync();
 
-                        var checkIn = await WarehouseGood.Storages.PutAway.ToViewModelListAsync();
-                        if (!checkIn.Any())
-                        {
-                            await _dialog.DisplayAlertAsync(
-                                "Error",
-                                "This item is not present in the check in area", "ok"
-                            );
-                            return;
-                        }
-                        IsRecognizedProduct = true;
-                        PutAwayStorage = checkIn.First();
-                        RaceLocations = await WarehouseGood.Storages.Race.ToViewModelListAsync();
-                        ReserveLocations = await WarehouseGood.Storages.Reserve.ToViewModelListAsync();
-                        break;
+                    var checkIn = await WarehouseGood.Storages.PutAway.ToViewModelListAsync();
+                    if (!checkIn.Any())
+                    {
+                        await _dialog.DisplayAlertAsync(
+                            "Error",
+                            "This item is not present in the check in area",
+                            "Ok"
+                        );
+                        return;
                     }
+                    IsRecognizedProduct = true;
+                    PutAwayStorage = checkIn.First();
+                    RaceLocations = await WarehouseGood.Storages.Race.ToViewModelListAsync();
+                    ReserveLocations = await WarehouseGood.Storages.Reserve.ToViewModelListAsync();
+                    break;
+                }
             }
         }
 

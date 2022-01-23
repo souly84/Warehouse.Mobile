@@ -43,10 +43,10 @@ namespace Warehouse.Mobile.ViewModels
             set => SetProperty(ref _currentDate, value);
         }
 
-        public async Task InitializeAsync(INavigationParameters parameters)
+        public Task InitializeAsync(INavigationParameters parameters)
         {
             SelectedDate = DateTime.Now;
-            Suppliers = await _company.Suppliers.For(SelectedDate).ToViewModelListAsync(_navigationService);
+            return RefreshAvailableSupplierList();
         }
 
         private DelegateCommand? changeSelectedDateCommand;
@@ -57,7 +57,10 @@ namespace Warehouse.Mobile.ViewModels
 
         private async Task RefreshAvailableSupplierList()
         {
-            Suppliers = await _company.Suppliers.For(SelectedDate).ToViewModelListAsync(_navigationService);
+            Suppliers = await _company
+                .Suppliers
+                .For(SelectedDate)
+                .ToViewModelListAsync(_navigationService);
         }
     }
 }

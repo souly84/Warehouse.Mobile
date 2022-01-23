@@ -45,6 +45,8 @@ namespace Warehouse.Mobile
             containerRegistry.RegisterForNavigation<ReceptionDetailsView>();
             containerRegistry.RegisterForNavigation<PutAwayView>();
             containerRegistry.RegisterForNavigation<StockMoveView>();
+            // this registration was missed, is it done by purpose?
+            containerRegistry.RegisterForNavigation<QuantityToMovePopupView, QuantityToMovePopupViewModel>();
             if (!containerRegistry.IsRegistered<ICompany>())
             {
                containerRegistry.RegisterInstance<ICompany>(

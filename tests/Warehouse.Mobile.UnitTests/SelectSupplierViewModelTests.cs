@@ -1,4 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Prism.Navigation;
+using Warehouse.Core;
+using Warehouse.Mobile.UnitTests.Mocks;
 using Warehouse.Mobile.ViewModels;
 using Xunit;
 
@@ -11,10 +16,35 @@ namespace Warehouse.Mobile.UnitTests
             .Application()
             .GoToSuppliers();
 
+        public static IEnumerable<object[]> SelectSupplierViewModelData =>
+          new List<object[]>
+          {
+                new object[] { null, null },
+                new object[] { new MockWarehouseCompany(), null },
+                new object[] { null, new MockNavigationService() }
+          };
+
+        [Theory, MemberData(nameof(SelectSupplierViewModelData))]
+        public void ArgumentNullException(ICompany company, INavigationService navigationService)
+        {
+            Assert.Throws<ArgumentNullException>(
+                () => new SelectSupplierViewModel(company, navigationService)
+            );
+        }
+
         [Fact]
         public void Suppliers()
         {
             Assert.NotEmpty(_app.CurrentViewModel<SelectSupplierViewModel>().Suppliers);
+        }
+
+        [Fact]
+        public void ChangeSelectedDateCommand()
+        {
+            var vm = _app.CurrentViewModel<SelectSupplierViewModel>();
+            vm.CurrentDate = DateTime.Now.AddDays(1);
+            vm.ChangeSelectedDateCommand.Execute();
+            Assert.NotEmpty(vm.Suppliers);
         }
 
         [Fact]

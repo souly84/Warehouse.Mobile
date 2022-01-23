@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Prism.Navigation;
+using Prism.Services;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.Tests;
@@ -15,6 +18,100 @@ namespace Warehouse.Mobile.UnitTests
         private App _app = WarehouseMobile
             .Application()
             .GoToPutAway();
+
+        public static IEnumerable<object[]> PutAwayViewModelData =>
+          new List<object[]>
+          {
+                new object[] { null, null, null, null },
+                new object[] { new MockScanner(), null, null, null },
+                new object[] { null, new MockPageDialogService(), null, null },
+                new object[] { null, null, new MockWarehouseCompany(), null },
+                new object[] { null, null, null, new MockNavigationService() }
+          };
+
+        [Theory, MemberData(nameof(PutAwayViewModelData))]
+        public void ArgumentNullException(
+            IScanner scanner,
+            IPageDialogService dialog,
+            ICompany company,
+            INavigationService navigationService)
+        {
+            Assert.Throws<ArgumentNullException>(
+                () => new PutAwayViewModel(
+                    scanner,
+                    dialog,
+                    company,
+                    navigationService
+                )
+            );
+        }
+
+        [Fact]
+        public void DestinationBarcodeScanning()
+        {
+            Assert.Equal(
+                "1111",
+                WarehouseMobile.Application(
+                    new MockWarehouseGood("1", 5, "1111")
+                ).GoToPutAway()
+                 .Scan(new ScanningResult("1111", "code128", DateTime.Now.TimeOfDay))
+                 .CurrentViewModel<PutAwayViewModel>()
+                 .DestinationBarcode
+             );
+        }
+
+        [Fact]
+        public void DestinationBarcodeScanning_StatusMessage()
+        {
+            Assert.Equal(
+                "Item successfully assigned",
+                WarehouseMobile.Application(
+                    new MockWarehouse(
+                         new ListOfEntities<IWarehouseGood>(
+                            new MockWarehouseGood("1", 5, "1111"),
+                            new MockWarehouseGood("2", 5, "2222")
+                         ),
+                         new ListOfEntities<IStorage>(
+                            new MockStorage(
+                                "Storage111",
+                                new MockWarehouseGood("2", 5, "2222")
+                            )
+                         )
+                    )
+                   
+                ).GoToPutAway()
+                .Scan("2222")
+                .Scan(new ScanningResult("Storage111", "code128", DateTime.Now.TimeOfDay))
+                .CurrentViewModel<PutAwayViewModel>()
+                .StatusMessage
+             );
+        }
+
+        [Fact]
+        public void DestinationBarcodeScanning_NavigationToQuantityPopup()
+        {
+            var app = WarehouseMobile.Application(
+                new MockWarehouse(
+                     new ListOfEntities<IWarehouseGood>(
+                        new MockWarehouseGood("1", 5, "1111"),
+                        new MockWarehouseGood("2", 5, "2222")
+                     ),
+                     new ListOfEntities<IStorage>(
+                        new MockStorage(
+                            "Storage111",
+                            new MockWarehouseGood("2", 5, "2222")
+                        )
+                     )
+                )
+
+            ).GoToPutAway();
+            app.Scan("2222"); // Scan good
+            app.CurrentViewModel<PutAwayViewModel>().CheckInQuantity = 2;
+            app.Scan(new ScanningResult("Storage111", "code128", DateTime.Now.TimeOfDay));
+            Assert.IsType<QuantityToMovePopupViewModel>(
+                app.CurrentViewModel<object>()
+            );
+        }
 
         [Fact]
         public void ReserveLocations()
@@ -58,6 +155,44 @@ namespace Warehouse.Mobile.UnitTests
             Assert.Equal(
                 ScannerState.Opened,
                 _app.Scanner.State
+            );
+        }
+
+        [Fact]
+        public void AlertMessage_WhenNoPutAwayStorageForGood()
+        {
+            var dialog = new MockPageDialogService();
+            WarehouseMobile
+                .Application(
+                    new MockPlatformInitializer(
+                        new MockWarehouseCompany(
+                            new MockWarehouse(
+                                 new ListOfEntities<IWarehouseGood>(
+                                    new WarehouseGoodWithoutPutawayStorage(
+                                        new MockWarehouseGood("1", 1, "1111")
+                                    )
+                                 ),
+                                 new ListOfEntities<IStorage>(
+                                     new MockStorage(
+                                         new WarehouseGoodWithoutPutawayStorage(
+                                            new MockWarehouseGood("1", 1, "1111")
+                                         )
+                                    )
+                                 )
+                            )
+                        ),
+                        pageDialogService: dialog
+                    )
+                ).GoToPutAway()
+                 .Scan("1111");
+            Assert.Contains(
+                new DialogPage
+                {
+                    Title = "Error",
+                    Message = "This item is not present in the check in area",
+                    CancelButton = "Ok"
+                },
+                dialog.ShownDialogs
             );
         }
 
