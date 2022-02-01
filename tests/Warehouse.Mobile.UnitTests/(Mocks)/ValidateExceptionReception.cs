@@ -18,6 +18,17 @@ namespace Warehouse.Mobile.UnitTests.Mocks
               new MockReceptionGood("1", 1, "1111")
         );
 
+        public override bool Equals(object obj)
+        {
+            return ReferenceEquals(this, obj)
+                || obj is DateTime;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(_exception, Goods);
+        }
+
         public Task ValidateAsync(IList<IGoodConfirmation> goodsToValidate)
         {
             throw _exception;

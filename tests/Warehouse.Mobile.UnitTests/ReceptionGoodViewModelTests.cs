@@ -14,21 +14,23 @@ namespace Warehouse.Mobile.UnitTests
         private App _app = WarehouseMobile
             .Application(
                 new MockWarehouseCompany(
-                    new NamedMockSupplier(
+                    new MockSupplier(
                         "Electrolux",
-                        new EbSoftReceptionGood(
-                            1,
-                            JObject.Parse(@"{
-                                ""id"": ""38"",
-                                ""oa"": ""OA848815"",
-                                ""article"": ""MIELE G7100SCICS"",
-                                ""qt"": ""2"",
-                                ""ean"": [ ""4002516061731"" ],
-                                ""qtin"": 0,
-                                ""error_code"": null,
-                                ""commentaire"": null,
-                                ""itemType"": ""electro""
-                            }")
+                        new MockReception(
+                            new EbSoftReceptionGood(
+                                1,
+                                JObject.Parse(@"{
+                                    ""id"": ""38"",
+                                    ""oa"": ""OA848815"",
+                                    ""article"": ""MIELE G7100SCICS"",
+                                    ""qt"": ""2"",
+                                    ""ean"": [ ""4002516061731"" ],
+                                    ""qtin"": 0,
+                                    ""error_code"": null,
+                                    ""commentaire"": null,
+                                    ""itemType"": ""electro""
+                                }")
+                            )
                         )
                     )
                 )

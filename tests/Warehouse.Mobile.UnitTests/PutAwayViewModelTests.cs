@@ -6,6 +6,7 @@ using Prism.Services;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.Tests;
+using Warehouse.Mobile.UnitTests.Extensions;
 using Warehouse.Mobile.UnitTests.Mocks;
 using Xunit;
 using static Warehouse.Mobile.Tests.MockPageDialogService;
@@ -26,7 +27,9 @@ namespace Warehouse.Mobile.UnitTests
                 new object[] { new MockScanner(), null, null, null },
                 new object[] { null, new MockPageDialogService(), null, null },
                 new object[] { null, null, new MockWarehouseCompany(), null },
-                new object[] { null, null, null, new MockNavigationService() }
+                new object[] { null, null, null, new MockNavigationService() },
+                new object[] { new MockScanner(), new MockPageDialogService(), null, null },
+                new object[] { new MockScanner(), new MockPageDialogService(), new MockWarehouseCompany(), null }
           };
 
         [Theory, MemberData(nameof(PutAwayViewModelData))]
@@ -278,17 +281,70 @@ namespace Warehouse.Mobile.UnitTests
         }
 
         [Fact]
-        public void PutAwayStorage()
+        public void PutAwayStorage_Location()
         {
-            Assert.NotNull(
+            Assert.Equal(
+                "MockStorage1",
                 WarehouseMobile.Application(
                     new MockWarehouseCompany(
-                        new MockWarehouseGood("1", 1, "123456")
+                        new MockWarehouse(
+                             new ListOfEntities<IWarehouseGood>(
+                                new MockWarehouseGood("1", 1, "1111").With(
+                                    new MockStorages(
+                                        new ListOfEntities<IStorage>(new MockStorage("MockStorage1")),
+                                        new ListOfEntities<IStorage>(new MockStorage("MockStorage2")),
+                                        new ListOfEntities<IStorage>(new MockStorage("MockStorage3"))
+                                    )
+                                )
+                             ),
+                             new ListOfEntities<IStorage>(
+                                new MockStorage(
+                                     "MockStorage1",
+                                     new MockWarehouseGood("1", 1, "1111")
+                                )
+                             )
+                        )
                     )
                 ).GoToPutAway()
-                 .Scan("123456")
+                 .Scan("1111")
                  .CurrentViewModel<PutAwayViewModel>()
                  .PutAwayStorage
+                 .Location
+            );
+        }
+
+        [Fact]
+        public async Task PutAwayStorage_GoodsQuantity()
+        {
+            var good = new MockWarehouseGood("1", 4, "1111");
+            var goodWithStorages = good.With(
+                new MockStorages(
+                    new ListOfEntities<IStorage>(new MockStorage("MockStorage1", good)),
+                    new ListOfEntities<IStorage>(new MockStorage("MockStorage2", good)),
+                    new ListOfEntities<IStorage>(new MockStorage("MockStorage3", good))
+                )
+            );
+            Assert.Equal(
+                4,
+                await WarehouseMobile.Application(
+                    new MockWarehouseCompany(
+                        new MockWarehouse(
+                             new ListOfEntities<IWarehouseGood>(
+                                goodWithStorages
+                             ),
+                             new ListOfEntities<IStorage>(
+                                new MockStorage(
+                                     "MockStorage1",
+                                     new MockWarehouseGood("1", 1, "1111")
+                                )
+                             )
+                        )
+                    )
+                ).GoToPutAway()
+                 .Scan("1111")
+                 .CurrentViewModel<PutAwayViewModel>()
+                 .PutAwayStorage
+                 .Quantity.ValueAsync()
             );
         }
 

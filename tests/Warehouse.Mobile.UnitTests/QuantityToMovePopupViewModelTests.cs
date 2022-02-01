@@ -9,8 +9,10 @@ namespace Warehouse.Mobile.UnitTests
             .Application()
             .QuantityToMovePopup();
 
-        public QuantityToMovePopupViewModelTests()
+        [Fact]
+        public void QuantityToMovePopupViewModelOnTheTopOfTheStack()
         {
+            Assert.IsType<QuantityToMovePopupViewModel>(_app.CurrentViewModel<object>());
         }
     }
 }
