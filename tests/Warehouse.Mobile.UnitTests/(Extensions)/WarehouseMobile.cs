@@ -24,7 +24,7 @@ namespace Warehouse.Mobile.UnitTests
         public static App Application(IReception reception)
         {
             return Application(
-                 new NamedMockSupplier(
+                 new MockSupplier(
                      "Electrolux",
                      reception
                  )

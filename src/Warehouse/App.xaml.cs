@@ -10,8 +10,6 @@ using Warehouse.Core.Plugins;
 using Warehouse.Mobile.ViewModels;
 using Warehouse.Mobile.Views;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
-
 
 namespace Warehouse.Mobile
 {

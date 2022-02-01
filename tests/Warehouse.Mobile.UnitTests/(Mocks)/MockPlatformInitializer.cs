@@ -18,7 +18,7 @@ namespace Warehouse.Mobile.UnitTests
             IPageDialogService pageDialogService)
             : this(
                   company: new MockWarehouseCompany(
-                      new NamedMockSupplier(
+                      new MockSupplier(
                           "Electrolux",
                           reception
                       )
