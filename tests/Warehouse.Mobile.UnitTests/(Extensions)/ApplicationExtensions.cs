@@ -5,6 +5,7 @@ using Prism.Common;
 using Prism.Navigation;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.ViewModels;
+using Xamarin.Forms;
 
 namespace Warehouse.Mobile.UnitTests
 {
@@ -23,6 +24,13 @@ namespace Warehouse.Mobile.UnitTests
 
         public static T CurrentViewModel<T>(IPageAware pageAware)
         {
+            // This is a trick. The problem here is PopupPageNavigationService which clears the IPageAware
+            // on navigation back. To Solve the issue we call PageUtilities.GetCurrentPage
+            // but it hsould not be like that, all the thing should work automatically
+            if (pageAware.Page == null)
+            {
+                pageAware.Page = PageUtilities.GetCurrentPage(Application.Current.MainPage);
+            }
             return (T)pageAware.Page.BindingContext;
         }
 
@@ -31,9 +39,7 @@ namespace Warehouse.Mobile.UnitTests
         /// </summary>
         public static async Task<T> WaitViewModel<T>(this App app)
         {
-            Func<bool> waitForNavigationService = () => (app.PageNavigationService() as IPageAware).Page != null;
-            await waitForNavigationService.WaitForAsync();
-            Func<bool> waitForViewModel = () => app.CurrentViewModel<object>() is QuantityToMovePopupViewModel;
+            Func<bool> waitForViewModel = () => app.CurrentViewModel<object>() is T;
             await waitForViewModel.WaitForAsync();
             return app.CurrentViewModel<T>();
         }

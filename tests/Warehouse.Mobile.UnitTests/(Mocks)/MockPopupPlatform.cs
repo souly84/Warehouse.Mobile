@@ -24,6 +24,7 @@ namespace Warehouse.Mobile.UnitTests.Mocks
 
         public Task AddAsync(PopupPage page)
         {
+            page.Parent = Application.Current.MainPage;
             ShownPopups.Add(page);
             VisiblePopup.Add(page);
             return Task.CompletedTask;

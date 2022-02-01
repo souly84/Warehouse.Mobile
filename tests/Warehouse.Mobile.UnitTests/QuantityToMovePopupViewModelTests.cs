@@ -48,23 +48,22 @@ namespace Warehouse.Mobile.UnitTests
             );
         }
 
-        [Fact(Skip = "PopupNavigationService does not work")]
+        [Fact]
         public async Task CancelCommand()
         {
             var app = await AppInQuantityToMovePopupStateAsync();
             app.CurrentViewModel<QuantityToMovePopupViewModel>()
                .CancelCommand.Execute();
-            await app.WaitViewModel<PutAwayViewModel>();
-            Assert.IsType<PutAwayViewModel>(_app.CurrentViewModel<object>());
+            Assert.IsType<PutAwayViewModel>(await app.WaitViewModel<PutAwayViewModel>());
         }
 
-        [Fact(Skip = "PopupNavigationService does not work")]
+        [Fact]
         public async Task ValidateCommand()
         {
             var app = await AppInQuantityToMovePopupStateAsync();
             app.CurrentViewModel<QuantityToMovePopupViewModel>()
                .ValidateCommand.Execute();
-            Assert.IsType<PutAwayViewModel>(_app.CurrentViewModel<object>());
+            Assert.IsType<PutAwayViewModel>(await app.WaitViewModel<PutAwayViewModel>());
         }
 
         private async Task<App> AppInQuantityToMovePopupStateAsync()
@@ -73,7 +72,13 @@ namespace Warehouse.Mobile.UnitTests
                 new MockWarehouse(
                      new ListOfEntities<IWarehouseGood>(
                         new MockWarehouseGood("1", 5, "1111"),
-                        new MockWarehouseGood("2", 5, "2222")
+                        new MockWarehouseGood("2", 5, "2222").With(
+                            new MockStorages(
+                                new ListOfEntities<IStorage>(new MockStorage("Storage111")),
+                                new ListOfEntities<IStorage>(new MockStorage("MockStorage2")),
+                                new ListOfEntities<IStorage>(new MockStorage("MockStorage3"))
+                            )
+                        )
                      ),
                      new ListOfEntities<IStorage>(
                         new MockStorage(
@@ -82,7 +87,6 @@ namespace Warehouse.Mobile.UnitTests
                         )
                      )
                 )
-
             ).GoToPutAway();
             app.Scan("2222") // Scan good
                .CurrentViewModel<PutAwayViewModel>().CheckInQuantity = 2;
