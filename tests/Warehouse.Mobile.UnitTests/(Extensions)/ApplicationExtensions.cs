@@ -18,7 +18,24 @@ namespace Warehouse.Mobile.UnitTests
 
         public static T CurrentViewModel<T>(this App app)
         {
-            return (T)(app.PageNavigationService() as IPageAware).Page.BindingContext;
+            return CurrentViewModel<T>(app.PageNavigationService());
+        }
+
+        public static T CurrentViewModel<T>(IPageAware pageAware)
+        {
+            return (T)pageAware.Page.BindingContext;
+        }
+
+        /// <summary>
+        /// Sometimes some operations happen in async mode that's why the code should wait for view model.
+        /// </summary>
+        public static async Task<T> WaitViewModel<T>(this App app)
+        {
+            Func<bool> waitForNavigationService = () => (app.PageNavigationService() as IPageAware).Page != null;
+            await waitForNavigationService.WaitForAsync();
+            Func<bool> waitForViewModel = () => app.CurrentViewModel<object>() is QuantityToMovePopupViewModel;
+            await waitForViewModel.WaitForAsync();
+            return app.CurrentViewModel<T>();
         }
 
         public static string GetNavigationUriPath(this App app)

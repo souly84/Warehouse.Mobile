@@ -107,13 +107,15 @@ namespace Warehouse.Mobile
                 case "code128":
                 {
                     DestinationBarcode = barcode.BarcodeData;
+                    _ = PutAwayStorage ?? throw new InvalidOperationException($"{nameof(PutAwayStorage)} is not initialized");
+                    _ = WarehouseGood ?? throw new InvalidOperationException($"{nameof(WarehouseGood)} is not initialized");
                     if (CheckInQuantity > 1)
                     {
                         await _navigationService.NavigateAsync(
                             AppConstants.QuantityToMovePopupViewId,
                             new NavigationParameters
                             {
-                                { "Origin", PutAwayStorage },
+                                { "Origin", PutAwayStorage.ToStorage() },
                                 { "Destination", barcode.BarcodeData },
                                 { "Good", WarehouseGood }
                             }
@@ -121,8 +123,6 @@ namespace Warehouse.Mobile
                     }
                     else
                     {
-                        _ = WarehouseGood ?? throw new ArgumentNullException(nameof(WarehouseGood));
-                        _ = PutAwayStorage ?? throw new ArgumentNullException(nameof(PutAwayStorage));
                         await WarehouseGood
                             .Movement
                             .From(PutAwayStorage.ToStorage())

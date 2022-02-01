@@ -18,9 +18,9 @@ namespace Warehouse.Mobile.UnitTests.Mocks
 
         public event EventHandler OnInitialized;
 
-        public List<PopupPage> ShownPopups { get; private set; }
+        public List<PopupPage> ShownPopups { get; private set; } = new List<PopupPage>();
 
-        public List<PopupPage> VisiblePopup { get; private set; }
+        public List<PopupPage> VisiblePopup { get; private set; } = new List<PopupPage>();
 
         public Task AddAsync(PopupPage page)
         {
