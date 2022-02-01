@@ -58,31 +58,29 @@
             <!--Product Is Recognized-->
             <StackLayout IsVisible="{Binding IsRecognizedProduct}">
                 <StackLayout Orientation="Horizontal" Padding="35" >
-                 <Grid>
-                     <Grid.ColumnDefinitions>
-                         <ColumnDefinition/>
-                         <ColumnDefinition Width="Auto"/>
-                     </Grid.ColumnDefinitions>
-                      <controls:MaterialSearchBar
-                          HorizontalOptions="FillAndExpand"
-                          BackgroundColor="White"
-                          CornerRadius="5"
-                          TextColor="{DynamicResource TextsColor}"
-                          CancelButtonColor="White"
-                          Text="{Binding DestinationBarcode}"
-                          Placeholder="Scan location"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                             <ColumnDefinition/>
+                             <ColumnDefinition Width="Auto"/>
+                         </Grid.ColumnDefinitions>
+                          <controls:MaterialSearchBar
+                              HorizontalOptions="FillAndExpand"
+                              BackgroundColor="White"
+                              CornerRadius="5"
+                              TextColor="{DynamicResource TextsColor}"
+                              CancelButtonColor="White"
+                              Text="{Binding DestinationBarcode}"
+                              Placeholder="Scan location"/>
 
-                <Label
-                    Grid.Column="1"
-                    HorizontalOptions="EndAndExpand"
-                    TextColor="{DynamicResource TextsColor}"
-                    Style="{DynamicResource ReceptionGoodCategoryIcon}"
-                    FontFamily="warehouseIcons"
-                    Text="{x:Static fonts:IcoMoon.Barcode}"/> 
-                 </Grid>
-               
-            </StackLayout>
-
+                        <Label
+                            Grid.Column="1"
+                            HorizontalOptions="EndAndExpand"
+                            TextColor="{DynamicResource TextsColor}"
+                            Style="{DynamicResource ReceptionGoodCategoryIcon}"
+                            FontFamily="warehouseIcons"
+                            Text="{x:Static fonts:IcoMoon.Barcode}"/> 
+                    </Grid>
+                </StackLayout>
             <StackLayout HorizontalOptions="CenterAndExpand">
                 <Label Text="{Binding Quantity}" FontSize="25" />
             </StackLayout>
@@ -101,13 +99,12 @@
                                 <Frame CornerRadius="10" >
                                     <StackLayout Orientation="Horizontal">
                                         <Label
-                                        FontFamily="materialicons"
-                                        FontSize="25"
-                                        Text="{x:Static fonts:MaterialIcons.MapMarker}"
+                                            FontFamily="materialicons"
+                                            FontSize="25"
+                                            Text="{x:Static fonts:MaterialIcons.MapMarker}"
                                             VerticalTextAlignment="Center"/> 
-                                    <Label Text="{Binding Location}"  VerticalTextAlignment="Center" FontSize="18"/>
+                                        <Label Text="{Binding Location}"  VerticalTextAlignment="Center" FontSize="18"/>
                                     </StackLayout>
-                                    
                                 </Frame>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
