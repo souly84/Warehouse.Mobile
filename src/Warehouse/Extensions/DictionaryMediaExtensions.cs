@@ -1,4 +1,5 @@
-﻿using MediaPrint;
+﻿using System.Linq;
+using MediaPrint;
 
 namespace Warehouse.Mobile.Extensions
 {
@@ -6,12 +7,10 @@ namespace Warehouse.Mobile.Extensions
     {
         public static T ValueOrDefault<T>(this DictionaryMedia dictionary, params string[] keys)
         {
-            foreach (var key in keys)
+            var targetKey = keys.FirstOrDefault(key => dictionary.Contains(key));
+            if (targetKey != null)
             {
-                if (dictionary.Contains(key))
-                {
-                    return dictionary.Value<T>(key);
-                }
+                return dictionary.Value<T>(targetKey);
             }
             return default;
         }

@@ -34,7 +34,7 @@ namespace Warehouse.Mobile.ViewModels
         {
             try
             {
-                _ = _reception ?? throw new ArgumentNullException(nameof(_reception));
+                _ = _reception ?? throw new InvalidOperationException($"Reception object is not initialized");
                 await _reception.Confirmation().CommitAsync();
             }
             catch (Exception ex)
@@ -59,7 +59,7 @@ namespace Warehouse.Mobile.ViewModels
         {
             if (barcode.Symbology.ToLower() == "ean13")
             {
-                _ = _reception ?? throw new ArgumentNullException(nameof(_reception));
+                _ = _reception ?? throw new InvalidOperationException($"Reception object is not initialized");
                 var good = await _reception.ByBarcodeAsync(barcode.BarcodeData);
                 var goodViewModel = ReceptionGoods.FirstOrDefault(x => x.Equals(good));
                 if (goodViewModel != null)

@@ -42,8 +42,8 @@ namespace Warehouse.Mobile
 
         public DelegateCommand ValidateCommand => validateCommand ?? (validateCommand = new DelegateCommand(async () =>
         {
-            _ = _goodToMove ?? throw new ArgumentNullException(nameof(_goodToMove));
-            _ = OriginLocation ?? throw new ArgumentNullException(nameof(OriginLocation));
+            _ = _goodToMove ?? throw new InvalidOperationException($"Good object is not initialized for movement");
+            _ = OriginLocation ?? throw new InvalidOperationException($"Origin location value is not initialized for movement");
             await _goodToMove
                 .Movement
                 .From(OriginLocation)
