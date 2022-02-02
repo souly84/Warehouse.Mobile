@@ -58,19 +58,19 @@
                             Binding="{Binding Severity}"
                             TargetType="StackLayout"
                             Value="Info">
-                            <Setter Property="BackgroundColor" Value="#9BCC66" />
+                            <Setter Property="BackgroundColor" Value="{DynamicResource SuccessColor}" />
                         </DataTrigger>
                         <DataTrigger
                             Binding="{Binding Severity}"
                             TargetType="StackLayout"
                             Value="Warning">
-                            <Setter Property="BackgroundColor" Value="#FFC122" />
+                            <Setter Property="BackgroundColor" Value="{DynamicResource WarningColor}" />
                         </DataTrigger>
                         <DataTrigger
                             Binding="{Binding Severity}"
                             TargetType="StackLayout"
                             Value="Error">
-                            <Setter Property="BackgroundColor" Value="#E34C5D" />
+                            <Setter Property="BackgroundColor" Value="{DynamicResource ErrorColor}" />
                         </DataTrigger>
                     </StackLayout.Triggers>
                 </StackLayout>

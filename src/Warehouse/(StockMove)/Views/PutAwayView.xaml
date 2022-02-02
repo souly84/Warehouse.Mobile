@@ -82,7 +82,16 @@
                     </Grid>
                 </StackLayout>
             <StackLayout HorizontalOptions="CenterAndExpand">
-                <Label Text="{Binding Quantity}" FontSize="25" />
+                <Label
+                    FontSize="25"
+                    TextColor="Green">
+                    <Label.FormattedText>
+                        <FormattedString>
+                            <Span Text="{Binding CheckInQuantity}" />
+                            <Span Text=" item(s) to store" />
+                        </FormattedString>
+                    </Label.FormattedText>
+                </Label>
             </StackLayout>
 
 

@@ -4,6 +4,7 @@ using Warehouse.Mobile.ViewModels;
 using Xamarin.Forms;
 using System.Linq;
 using System.Collections.Specialized;
+using System.Threading.Tasks;
 
 namespace Warehouse.Mobile.Views
 {
@@ -45,6 +46,7 @@ namespace Warehouse.Mobile.Views
             if (vm != null)
             {
                 vm.PropertyChanged += Vm_PropertyChanged;
+                vm.AnimateCounter += AnimateCounter;
             }
         }
 
@@ -65,6 +67,13 @@ namespace Warehouse.Mobile.Views
             {
                 ReceptionDetailsCollectionView.ScrollTo(0);
             }
+        }
+
+        async Task<bool> AnimateCounter()
+        {
+            await CountLabel.ScaleTo(1.5, 300, Easing.BounceOut);
+            await CountLabel.ScaleTo(1, 300, Easing.BounceOut);
+            return true;
         }
     }
 }

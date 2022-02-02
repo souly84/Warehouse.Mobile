@@ -147,15 +147,27 @@ namespace Warehouse.Mobile
                     var checkIn = await WarehouseGood.Storages.PutAway.ToViewModelListAsync();
                     if (!checkIn.Any())
                     {
-                        await _dialog.DisplayAlertAsync(
-                            "Error",
-                            "This item is not present in the check in area",
-                            "Ok"
-                        );
-                        return;
+                        ResetFields();
+                        ScannedBarcode = barcode.BarcodeData;
+                        WarehouseGood = await _company
+                            .Warehouse
+                            .Goods.For(barcode.BarcodeData)
+                            .FirstAsync();
+
+                        if (!checkIn.Any())
+                        {
+                            await _dialog.DisplayAlertAsync(
+                                "Error",
+                                "This item is not present in the check in area", "Ok"
+                            );
+                            return;
+                        }
+                        
+                        break;
                     }
                     IsRecognizedProduct = true;
                     PutAwayStorage = checkIn.First();
+                    CheckInQuantity = await PutAwayStorage.ToStorage().QuantityForAsync(WarehouseGood);
                     RaceLocations = await WarehouseGood.Storages.Race.ToViewModelListAsync();
                     ReserveLocations = await WarehouseGood.Storages.Reserve.ToViewModelListAsync();
                     break;

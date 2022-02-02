@@ -2,6 +2,7 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using MediaPrint;
 using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
@@ -14,14 +15,22 @@ namespace Warehouse.Mobile.ViewModels
     public class ReceptionDetailsViewModel : ScannerViewModel, IInitializeAsync
     {
         private readonly IPageDialogService _dialog;
-        private ReceptionWithExtraConfirmedGoods? _reception;
-        private ObservableCollection<ReceptionGoodViewModel>? _receptionGoods;
-        private DelegateCommand? validateReceptionCommand;
+        private readonly INavigationService _navigationService;
+        private ReceptionWithExtraConfirmedGoods _reception;
+        private ObservableCollection<ReceptionGoodViewModel> _receptionGoods;
+        private string _itemCount;
+        private string _originalCount;
+        private string _supplierName;
+        private DelegateCommand validateReceptionCommand;
 
-        public ReceptionDetailsViewModel(IScanner scanner, IPageDialogService dialog)
+        public ReceptionDetailsViewModel(
+            IScanner scanner,
+            IPageDialogService dialog,
+            INavigationService navigationService)
             : base(scanner, dialog)
         {
             _dialog = dialog;
+            _navigationService = navigationService;
         }
 
         public ObservableCollection<ReceptionGoodViewModel> ReceptionGoods
@@ -30,6 +39,17 @@ namespace Warehouse.Mobile.ViewModels
             set => SetProperty(ref _receptionGoods, value);
         }
 
+        public string ItemCount
+        {
+            get => _itemCount;
+            set => SetProperty(ref _itemCount, value);
+        }
+
+        public string SupplierName
+        {
+            get => _supplierName;
+            set => SetProperty(ref _supplierName, value);
+        }
         public DelegateCommand ValidateReceptionCommand => validateReceptionCommand ?? (validateReceptionCommand = new DelegateCommand(async () =>
         {
             try
@@ -39,9 +59,15 @@ namespace Warehouse.Mobile.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialog.DisplayAlertAsync("Syncro error", ex.Message, "Ok");
+                await ShowMessage(PopupSeverity.Error, "Error!", "Synchronization failed.");
+                return;
             }
+
+            await ShowMessage(PopupSeverity.Info, "Success!", "Your reception has been synchronized successfully.");
+            //await _navigationService.GoBackAsync();
         }));
+
+        public Func<Task<bool>> AnimateCounter { get; set; }
 
         public async Task InitializeAsync(INavigationParameters parameters)
         {
@@ -53,6 +79,9 @@ namespace Warehouse.Mobile.ViewModels
                 )
             );
             ReceptionGoods = await _reception.NeedConfirmation().ToViewModelListAsync();
+            _originalCount = ReceptionGoods.Count.ToString();
+            SupplierName = ((IPrintable)parameters.Value<ISupplier>("Supplier")).ToDictionary().ValueOrDefault<string>("Name");
+            RefreshCount();
         }
 
         protected override async Task OnScanAsync(IScanningResult barcode)
@@ -68,16 +97,43 @@ namespace Warehouse.Mobile.ViewModels
                     if (await good.ConfirmedAsync())
                     {
                         ReceptionGoods.Remove(goodViewModel);
+                        RefreshCount();
+                        await AnimateCounter();
                     }
                 }
                 else
                 {
-                    await _dialog.DisplayAlertAsync("Warning", "The item has already been scanned!", "Ok");
+                    if (good.IsUnknown)
+                    {
+                        await ShowMessage(PopupSeverity.Error, "Error!", "This item is not part of this delivery!");
+                    }
+                    else
+                    {
+                        await ShowMessage(PopupSeverity.Warning, "Warning!", "This item has already been scanned");
+                    }
                     goodViewModel = new ReceptionGoodViewModel(good);
                     goodViewModel.IncreaseQuantityCommand.Execute();
                     ReceptionGoods.Insert(0, goodViewModel);
                 }
             }
+        }
+
+        private void RefreshCount()
+        {
+            ItemCount = $"{ReceptionGoods.Count(x => !x.IsExtraConfirmedReceptionGood && !x.IsUnkownGood) }/{_originalCount}";
+        }
+
+        private async Task ShowMessage(PopupSeverity severity, string title, string message)
+        {
+            await _navigationService
+                .NavigateAsync(AppConstants.CustomPopupMessageViewId,
+                new NavigationParameters
+                {
+                    { "Severity", severity},
+                    { "Title", title},
+                    { "Message", message},
+                    { "ActionText", "GOT IT!"}
+                });
         }
     }
 }

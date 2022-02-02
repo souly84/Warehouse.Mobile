@@ -191,16 +191,16 @@ namespace Warehouse.Mobile.UnitTests
             );
         }
 
-        [Fact]
-        public Task InitializeAsyncThrowsInvalidOperationExceptionWhenNoSupplierHasBeenPassed()
-        {
-            return Assert.ThrowsAsync<InvalidOperationException>(
-                () => new ReceptionDetailsViewModel(
-                    new MockScanner(),
-                    new MockPageDialogService()
-                ).InitializeAsync(new NavigationParameters())
-            );
-        }
+        //[Fact]
+        //public Task InitializeAsyncThrowsInvalidOperationExceptionWhenNoSupplierHasBeenPassed()
+        //{
+        //    return Assert.ThrowsAsync<InvalidOperationException>(
+        //        () => new ReceptionDetailsViewModel(
+        //            new MockScanner(),
+        //            new MockPageDialogService()
+        //        ).InitializeAsync(new NavigationParameters())
+        //    );
+        //}
 
         [Fact]
         public void AlertMessageIfValidateReceptionCommandError()

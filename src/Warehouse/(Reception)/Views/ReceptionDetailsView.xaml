@@ -5,10 +5,55 @@
     xmlns:viewModels="clr-namespace:Warehouse.Mobile.ViewModels"
     xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
     xmlns:neo="clr-namespace:Xamarin.Forms.NeoControls;assembly=Xamarin.Forms.NeoControls"
+    xmlns:converters="clr-namespace:Warehouse.Mobile.Converter"
     Title="Receptions"
     NavigationPage.HasBackButton="True"
     x:DataType="viewModels:ReceptionDetailsViewModel"
     x:Class="Warehouse.Mobile.Views.ReceptionDetailsView">
+    <ContentPage.Resources>
+         <ResourceDictionary>
+            <converters:ReceptionGoodToConfirmedConverter x:Key="receptionGoodToConfirmedConverter" />
+         </ResourceDictionary>
+    </ContentPage.Resources>
+    <NavigationPage.TitleView>
+        <StackLayout Padding="2" >
+            <Grid >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Column="1">
+                        <Label
+                            Margin="15,7,0,0"
+                            FontFamily="materialicons"
+                            Text="{x:Static fonts:MaterialIcons.Truck}"
+                            TextColor="{DynamicResource TextsColor}"
+                            FontSize="45"/>
+                    <Grid VerticalOptions="StartAndExpand"
+                            HorizontalOptions="StartAndExpand"
+                            WidthRequest="35"
+                            HeightRequest="35">
+                        <Frame BackgroundColor="Red"
+                                CornerRadius="50">
+                        </Frame>
+                        <Label Text="{Binding ItemCount}"
+                               x:Name="CountLabel"
+                                FontSize="8"
+                                HorizontalOptions="Center"
+                                VerticalOptions="CenterAndExpand"
+                                FontAttributes="Bold"
+                                TextColor="White"/>
+                    </Grid>
+                </Grid>
+                <Label
+                    Text="{Binding SupplierName}"
+                    VerticalOptions="Center"
+                    FontSize="18"
+                    TextColor="{DynamicResource TextsColor}"/>
+
+            </Grid>
+        </StackLayout>
+    </NavigationPage.TitleView>
      <ContentView VerticalOptions="Center" Padding="5">
         <StackLayout VerticalOptions="FillAndExpand">
                 <CollectionView
@@ -35,8 +80,31 @@
                                         Grid.Column="0"
                                         Grid.RowSpan="2"
                                         Style="{DynamicResource ReceptionGoodCategoryIcon}"
+                                        FontAttributes="Bold"
                                         FontFamily="materialicons"
-                                        Text="{x:Static fonts:MaterialIcons.WashingMachine}"/> 
+                                        Text="{x:Static fonts:MaterialIcons.WashingMachine}"/>
+
+                                    <Label Text="{Binding ErrorMessage}"
+                                           Grid.ColumnSpan="3"
+                                           Grid.Row="0"
+                                           TextColor="White"
+                                           IsVisible="False"
+                                           Style="{DynamicResource ReceptionGoodDescription}">
+                                        <Label.Triggers>
+                                             <DataTrigger
+                                                 Binding="{Binding IsUnkownGood}"
+                                                 TargetType="Label"
+                                                 Value="True">
+                                                 <Setter Property="IsVisible" Value="True" />
+                                             </DataTrigger>
+                                            <DataTrigger
+                                                 Binding="{Binding IsExtraConfirmedReceptionGood}"
+                                                 TargetType="Label"
+                                                 Value="True">
+                                                 <Setter Property="IsVisible" Value="True" />
+                                             </DataTrigger>
+                                        </Label.Triggers>
+                                    </Label>
 
                                     <Label Text="{Binding Name}"
                                            Grid.ColumnSpan="2"
@@ -52,24 +120,32 @@
                                         <Label
                                             Grid.Column="2"
                                             Grid.RowSpan="2"
-                                            Style="{DynamicResource ReceptionGoodQuantty}">
-                                             <Label.FormattedText>
-                                                <FormattedString>
-                                                    <Span Text="{Binding ConfirmedQuantity}"/>
-                                                    <Span Text="/" />
-                                                    <Span Text="{Binding Quantity}" />
-                                                </FormattedString>
-                                            </Label.FormattedText>
-                                        </Label>
+                                            Style="{DynamicResource ReceptionGoodQuantty}"
+                                            Text="{Binding RemainingQuantity}"/>
 
                                      <Label
                                         Grid.Column="2"
                                         Grid.RowSpan="2"
                                         HorizontalOptions="End"
-                                        TextColor="Green"
+                                        TextColor="{DynamicResource SuccessColor}"
                                         Style="{DynamicResource ReceptionGoodCategoryIcon}"
                                         FontFamily="warehouseIcons"
-                                        Text="{x:Static fonts:IcoMoon.Barcode}"/> 
+                                        Text="{x:Static fonts:IcoMoon.Barcode}">
+                                         <Label.Triggers>
+                                              <DataTrigger
+                                                Binding="{Binding IsUnkownGood}"
+                                                TargetType="Label"
+                                                Value="True">
+                                                <Setter Property="IsVisible" Value="False" />
+                                            </DataTrigger>
+                                             <DataTrigger
+                                                Binding="{Binding IsExtraConfirmedReceptionGood}"
+                                                TargetType="Label"
+                                                Value="True">
+                                                <Setter Property="IsVisible" Value="False" />
+                                            </DataTrigger>
+                                         </Label.Triggers>
+                                     </Label>
 
                                     <BoxView
                                         Grid.Row="1"
@@ -84,13 +160,13 @@
                                         Binding="{Binding IsUnkownGood}"
                                         TargetType="Frame"
                                         Value="True">
-                                        <Setter Property="BackgroundColor" Value="Red" />
+                                        <Setter Property="BackgroundColor" Value="{DynamicResource ErrorColor}" />
                                     </DataTrigger>
                                      <DataTrigger
                                         Binding="{Binding IsExtraConfirmedReceptionGood}"
                                         TargetType="Frame"
                                         Value="True">
-                                        <Setter Property="BackgroundColor" Value="Orange" />
+                                        <Setter Property="BackgroundColor" Value="{DynamicResource WarningColor}" />
                                     </DataTrigger>
                                 </Frame.Triggers>
                             </Frame>

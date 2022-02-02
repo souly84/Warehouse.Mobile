@@ -70,16 +70,11 @@ namespace Warehouse.Mobile.UnitTests
                 "Item successfully assigned",
                 WarehouseMobile.Application(
                     new MockWarehouse(
-                         new ListOfEntities<IWarehouseGood>(
-                            new MockWarehouseGood("1", 5, "1111"),
-                            new MockWarehouseGood("2", 5, "2222")
-                         ),
-                         new ListOfEntities<IStorage>(
-                            new MockStorage(
+                         new MockStorage(
                                 "Storage111",
+                                new MockWarehouseGood("1", 5, "1111"),
                                 new MockWarehouseGood("2", 5, "2222")
-                            )
-                         )
+                        )
                     )
                    
                 ).GoToPutAway()
@@ -95,18 +90,12 @@ namespace Warehouse.Mobile.UnitTests
         {
             var app = WarehouseMobile.Application(
                 new MockWarehouse(
-                     new ListOfEntities<IWarehouseGood>(
-                        new MockWarehouseGood("1", 5, "1111"),
-                        new MockWarehouseGood("2", 5, "2222")
-                     ),
-                     new ListOfEntities<IStorage>(
-                        new MockStorage(
-                            "Storage111",
-                            new MockWarehouseGood("2", 5, "2222")
+                         new MockStorage(
+                                "Storage111",
+                                new MockWarehouseGood("1", 5, "1111"),
+                                new MockWarehouseGood("2", 5, "2222")
                         )
-                     )
                 )
-
             ).GoToPutAway();
             app.Scan("2222"); // Scan good
             app.CurrentViewModel<PutAwayViewModel>().CheckInQuantity = 2;
@@ -170,18 +159,11 @@ namespace Warehouse.Mobile.UnitTests
                     new MockPlatformInitializer(
                         new MockWarehouseCompany(
                             new MockWarehouse(
-                                 new ListOfEntities<IWarehouseGood>(
-                                    new WarehouseGoodWithoutPutawayStorage(
-                                        new MockWarehouseGood("1", 1, "1111")
-                                    )
-                                 ),
-                                 new ListOfEntities<IStorage>(
-                                     new MockStorage(
+                                 new MockStorage(
                                          new WarehouseGoodWithoutPutawayStorage(
                                             new MockWarehouseGood("1", 1, "1111")
                                          )
-                                    )
-                                 )
+                                )
                             )
                         ),
                         pageDialogService: dialog
@@ -288,21 +270,10 @@ namespace Warehouse.Mobile.UnitTests
                 WarehouseMobile.Application(
                     new MockWarehouseCompany(
                         new MockWarehouse(
-                             new ListOfEntities<IWarehouseGood>(
-                                new MockWarehouseGood("1", 1, "1111").With(
-                                    new MockStorages(
-                                        new ListOfEntities<IStorage>(new MockStorage("MockStorage1")),
-                                        new ListOfEntities<IStorage>(new MockStorage("MockStorage2")),
-                                        new ListOfEntities<IStorage>(new MockStorage("MockStorage3"))
-                                    )
-                                )
-                             ),
-                             new ListOfEntities<IStorage>(
-                                new MockStorage(
+                             new MockStorage(
                                      "MockStorage1",
                                      new MockWarehouseGood("1", 1, "1111")
-                                )
-                             )
+                            )
                         )
                     )
                 ).GoToPutAway()
@@ -316,28 +287,15 @@ namespace Warehouse.Mobile.UnitTests
         [Fact]
         public async Task PutAwayStorage_GoodsQuantity()
         {
-            var good = new MockWarehouseGood("1", 4, "1111");
-            var goodWithStorages = good.With(
-                new MockStorages(
-                    new ListOfEntities<IStorage>(new MockStorage("MockStorage1", good)),
-                    new ListOfEntities<IStorage>(new MockStorage("MockStorage2", good)),
-                    new ListOfEntities<IStorage>(new MockStorage("MockStorage3", good))
-                )
-            );
             Assert.Equal(
                 4,
                 await WarehouseMobile.Application(
                     new MockWarehouseCompany(
                         new MockWarehouse(
-                             new ListOfEntities<IWarehouseGood>(
-                                goodWithStorages
-                             ),
-                             new ListOfEntities<IStorage>(
-                                new MockStorage(
-                                     "MockStorage1",
-                                     new MockWarehouseGood("1", 1, "1111")
-                                )
-                             )
+                            new MockStorage(
+                                "MockStorage1",
+                                new MockWarehouseGood("1", 4, "1111")
+                            )
                         )
                     )
                 ).GoToPutAway()

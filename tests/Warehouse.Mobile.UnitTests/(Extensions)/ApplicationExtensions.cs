@@ -40,7 +40,7 @@ namespace Warehouse.Mobile.UnitTests
         public static async Task<T> WaitViewModel<T>(this App app)
         {
             Func<bool> waitForViewModel = () => app.CurrentViewModel<object>() is T;
-            await waitForViewModel.WaitForAsync();
+            await waitForViewModel.WaitForAsync(2000);
             return app.CurrentViewModel<T>();
         }
 
