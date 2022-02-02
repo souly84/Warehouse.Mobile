@@ -14,14 +14,13 @@ namespace Warehouse.Mobile.ViewModels
 {
     public class ReceptionDetailsViewModel : ScannerViewModel, IInitializeAsync
     {
-        private readonly IPageDialogService _dialog;
         private readonly INavigationService _navigationService;
-        private ReceptionWithExtraConfirmedGoods _reception;
-        private ObservableCollection<ReceptionGoodViewModel> _receptionGoods;
+        private ReceptionWithExtraConfirmedGoods? _reception;
+        private ObservableCollection<ReceptionGoodViewModel>? _receptionGoods;
         private string _itemCount;
         private string _originalCount;
         private string _supplierName;
-        private DelegateCommand validateReceptionCommand;
+        private DelegateCommand? validateReceptionCommand;
 
         public ReceptionDetailsViewModel(
             IScanner scanner,
@@ -29,7 +28,6 @@ namespace Warehouse.Mobile.ViewModels
             INavigationService navigationService)
             : base(scanner, dialog)
         {
-            _dialog = dialog;
             _navigationService = navigationService;
         }
 
@@ -50,6 +48,7 @@ namespace Warehouse.Mobile.ViewModels
             get => _supplierName;
             set => SetProperty(ref _supplierName, value);
         }
+
         public DelegateCommand ValidateReceptionCommand => validateReceptionCommand ?? (validateReceptionCommand = new DelegateCommand(async () =>
         {
             try
@@ -103,6 +102,9 @@ namespace Warehouse.Mobile.ViewModels
                 }
                 else
                 {
+                    goodViewModel = new ReceptionGoodViewModel(good);
+                    goodViewModel.IncreaseQuantityCommand.Execute();
+                    ReceptionGoods.Insert(0, goodViewModel);
                     if (good.IsUnknown)
                     {
                         await ShowMessage(PopupSeverity.Error, "Error!", "This item is not part of this delivery!");
@@ -111,9 +113,6 @@ namespace Warehouse.Mobile.ViewModels
                     {
                         await ShowMessage(PopupSeverity.Warning, "Warning!", "This item has already been scanned");
                     }
-                    goodViewModel = new ReceptionGoodViewModel(good);
-                    goodViewModel.IncreaseQuantityCommand.Execute();
-                    ReceptionGoods.Insert(0, goodViewModel);
                 }
             }
         }
