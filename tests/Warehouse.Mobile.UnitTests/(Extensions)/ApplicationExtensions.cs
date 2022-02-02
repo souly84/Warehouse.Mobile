@@ -17,6 +17,16 @@ namespace Warehouse.Mobile.UnitTests
             return navigationService as PageNavigationService;
         }
 
+        public static App ClosePopup(this App app)
+        {
+            while (app.CurrentViewModel<object>() is CustomPopupMessageViewModel customPopup)
+            {
+                customPopup.ActionCommand.Execute();
+            }
+            
+            return app;
+        }
+
         public static T CurrentViewModel<T>(this App app)
         {
             return CurrentViewModel<T>(app.PageNavigationService());
