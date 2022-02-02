@@ -1,7 +1,5 @@
 ﻿using Android.App;
-using Android.Content;
 using Android.OS;
-using Warehouse.Mobile.IntegrationTests.AndroidInstrumentations;
 using Xunit.Runners.UI;
 using Xunit.Sdk;
 

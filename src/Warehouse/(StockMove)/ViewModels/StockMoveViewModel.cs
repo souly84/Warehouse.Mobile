@@ -1,5 +1,4 @@
-﻿using System;
-namespace Warehouse.Mobile.ViewModels
+﻿namespace Warehouse.Mobile.ViewModels
 {
     public class StockMoveViewModel
     {

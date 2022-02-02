@@ -12,6 +12,7 @@
      <ContentView VerticalOptions="Center" Padding="5">
         <StackLayout VerticalOptions="FillAndExpand">
                 <CollectionView
+                    x:Name="ReceptionDetailsCollectionView"
                     VerticalOptions="FillAndExpand"
                     ItemsSource="{Binding ReceptionGoods}">
                     <CollectionView.ItemTemplate>
@@ -80,10 +81,16 @@
                                 </Grid>
                                 <Frame.Triggers>
                                      <DataTrigger
-                                        Binding="{Binding IsMockedReceptionGood}"
+                                        Binding="{Binding IsUnkownGood}"
                                         TargetType="Frame"
                                         Value="True">
                                         <Setter Property="BackgroundColor" Value="Red" />
+                                    </DataTrigger>
+                                     <DataTrigger
+                                        Binding="{Binding IsExtraConfirmedReceptionGood}"
+                                        TargetType="Frame"
+                                        Value="True">
+                                        <Setter Property="BackgroundColor" Value="Orange" />
                                     </DataTrigger>
                                 </Frame.Triggers>
                             </Frame>

@@ -1,4 +1,9 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Prism.Navigation;
+using Warehouse.Core;
+using Warehouse.Mobile.UnitTests.Mocks;
 using Warehouse.Mobile.ViewModels;
 using Xunit;
 
@@ -11,6 +16,22 @@ namespace Warehouse.Mobile.UnitTests
             .Application()
             .GoToSuppliers();
 
+        public static IEnumerable<object[]> SelectSupplierViewModelData =>
+          new List<object[]>
+          {
+                new object[] { null, null },
+                new object[] { new MockWarehouseCompany(), null },
+                new object[] { null, new MockNavigationService() }
+          };
+
+        [Theory, MemberData(nameof(SelectSupplierViewModelData))]
+        public void ArgumentNullException(ICompany company, INavigationService navigationService)
+        {
+            Assert.Throws<ArgumentNullException>(
+                () => new SelectSupplierViewModel(company, navigationService)
+            );
+        }
+
         [Fact]
         public void Suppliers()
         {
@@ -18,11 +39,21 @@ namespace Warehouse.Mobile.UnitTests
         }
 
         [Fact]
-        public void CurrenrDate()
+        public void ChangeSelectedDateCommand()
         {
-            Assert.NotEqual(
-                System.DateTime.MinValue,
-                _app.CurrentViewModel<SelectSupplierViewModel>().CurrentDate
+            var vm = _app.CurrentViewModel<SelectSupplierViewModel>();
+            vm.CurrentDate = DateTime.Now.AddDays(1);
+            vm.ChangeSelectedDateCommand.Execute();
+            Assert.NotEmpty(vm.Suppliers);
+        }
+
+        [Fact]
+        public void SelectedDate_TodayByDefault()
+        {
+            Assert.Equal(
+                System.DateTime.Now.Date,
+                _app.CurrentViewModel<SelectSupplierViewModel>()
+                    .SelectedDate.Date
             );
         }
 

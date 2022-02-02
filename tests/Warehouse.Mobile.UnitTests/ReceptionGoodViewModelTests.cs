@@ -1,6 +1,8 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using EbSoft.Warehouse.SDK;
 using Newtonsoft.Json.Linq;
+using Warehouse.Core;
 using Warehouse.Mobile.ViewModels;
 using Xunit;
 
@@ -12,25 +14,47 @@ namespace Warehouse.Mobile.UnitTests
         private App _app = WarehouseMobile
             .Application(
                 new MockWarehouseCompany(
-                    new NamedMockSupplier(
+                    new MockSupplier(
                         "Electrolux",
-                        new EbSoftReceptionGood(
-                            1,
-                            JObject.Parse(@"{
-                                ""id"": ""38"",
-                                ""oa"": ""OA848815"",
-                                ""article"": ""MIELE G7100SCICS"",
-                                ""qt"": ""2"",
-                                ""ean"": ""4002516061731"",
-                                ""qtin"": null,
-                                ""error_code"": null,
-                                ""commentaire"": null,
-                                ""itemType"": ""electro""
-                            }")
+                        new MockReception(
+                            new EbSoftReceptionGood(
+                                1,
+                                JObject.Parse(@"{
+                                    ""id"": ""38"",
+                                    ""oa"": ""OA848815"",
+                                    ""article"": ""MIELE G7100SCICS"",
+                                    ""qt"": ""2"",
+                                    ""ean"": [ ""4002516061731"" ],
+                                    ""qtin"": 0,
+                                    ""error_code"": null,
+                                    ""commentaire"": null,
+                                    ""itemType"": ""electro""
+                                }")
+                            )
                         )
                     )
                 )
             ).GoToReceptionDetails();
+
+        [Fact]
+        public void ThrowArgumentNullReferenceException()
+        {
+            Assert.Throws<ArgumentNullException>(
+                () => new ReceptionGoodViewModel(null)
+            );
+        }
+
+        [Fact]
+        public void ExtraConfirmedGood()
+        {
+            Assert.True(
+                new ReceptionGoodViewModel(
+                    new ExtraConfirmedReceptionGood(
+                        new MockReceptionGood("1", 1)
+                    )
+                ).IsExtraConfirmedReceptionGood
+            );
+        }
 
         [Fact]
         public void ReceptionGoodName()
@@ -75,7 +99,7 @@ namespace Warehouse.Mobile.UnitTests
                 _app
                     .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
-                    .First().IsMockedReceptionGood
+                    .First().IsUnkownGood
             );
         }
 

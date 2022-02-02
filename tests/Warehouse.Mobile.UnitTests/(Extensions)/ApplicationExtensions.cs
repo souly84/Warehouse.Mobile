@@ -5,6 +5,7 @@ using Prism.Common;
 using Prism.Navigation;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.ViewModels;
+using Xamarin.Forms;
 
 namespace Warehouse.Mobile.UnitTests
 {
@@ -18,7 +19,29 @@ namespace Warehouse.Mobile.UnitTests
 
         public static T CurrentViewModel<T>(this App app)
         {
-            return (T)(app.PageNavigationService() as IPageAware).Page.BindingContext;
+            return CurrentViewModel<T>(app.PageNavigationService());
+        }
+
+        public static T CurrentViewModel<T>(IPageAware pageAware)
+        {
+            // This is a trick. The problem here is PopupPageNavigationService which clears the IPageAware
+            // on navigation back. To Solve the issue we call PageUtilities.GetCurrentPage
+            // but it hsould not be like that, all the thing should work automatically
+            if (pageAware.Page == null)
+            {
+                pageAware.Page = PageUtilities.GetCurrentPage(Application.Current.MainPage);
+            }
+            return (T)pageAware.Page.BindingContext;
+        }
+
+        /// <summary>
+        /// Sometimes some operations happen in async mode that's why the code should wait for view model.
+        /// </summary>
+        public static async Task<T> WaitViewModel<T>(this App app)
+        {
+            Func<bool> waitForViewModel = () => app.CurrentViewModel<object>() is T;
+            await waitForViewModel.WaitForAsync();
+            return app.CurrentViewModel<T>();
         }
 
         public static string GetNavigationUriPath(this App app)
@@ -33,7 +56,7 @@ namespace Warehouse.Mobile.UnitTests
                 app.Scan(
                     new ScanningResult(
                         barcode,
-                        "CODE128",
+                        "EAN13",
                         DateTime.Now.TimeOfDay
                     )
                 );
@@ -62,6 +85,15 @@ namespace Warehouse.Mobile.UnitTests
             app.CurrentViewModel<MenuSelectionViewModel>()
                .GoToPutAwayCommand
                .Execute(null);
+            return app;
+        }
+
+        public static App QuantityToMovePopup(this App app)
+        {
+            app.GoToPutAway()
+               .CurrentViewModel<PutAwayViewModel>()
+               .GoToPopupCommand
+               .Execute();
             return app;
         }
 

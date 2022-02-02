@@ -7,6 +7,7 @@ using Resource = Xamarin.Forms.Platform.Android.Resource;
 using Microsoft.AppCenter;
 using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
+using Prism.Plugin.Popups;
 using Warehouse.Droid.Permissions;
 
 namespace Warehouse.Mobile.Droid
@@ -18,9 +19,9 @@ namespace Warehouse.Mobile.Droid
         Name = "warehouse.mobile.android.mainactivity")]
     public class MainActivity : FormsAppCompatActivity
     {
-        private App _app;
+        public App App { get; private set; }
 
-        public INavigationService Navigation => _app.Navigation;
+        public INavigationService Navigation => App.Navigation;
 
         protected override void OnCreate(Bundle savedInstanceState)
         {
@@ -28,10 +29,11 @@ namespace Warehouse.Mobile.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
+            global::Rg.Plugins.Popup.Popup.Init(this);
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
             Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
-            _app = new App(new AndroidInitializer(this));
-            LoadApplication(_app);
+            App = new App(new AndroidInitializer(this));
+            LoadApplication(App);
 
             AppCenter.Start("dbafbbc1-b7fc-4dec-b29e-36015da6bc4e",
                    typeof(Analytics), typeof(Crashes));
@@ -42,19 +44,24 @@ namespace Warehouse.Mobile.Droid
         protected override async void OnResume()
         {
             base.OnResume();
-            await _app.Scanner.OpenAsync();
+            await App.Scanner.OpenAsync();
         }
 
         protected override void OnPause()
         {
             base.OnPause();
-            _app.Scanner.CloseAsync().ConfigureAwait(false);
+            App.Scanner.CloseAsync().ConfigureAwait(false);
         }
 
         protected override void OnDestroy()
         {
             base.OnDestroy();
-            _app.Scanner.CloseAsync().ConfigureAwait(false);
+            App.Scanner.CloseAsync().ConfigureAwait(false);
+        }
+
+        public override void OnBackPressed()
+        {
+            PopupPlugin.OnBackPressed();
         }
     }
 }

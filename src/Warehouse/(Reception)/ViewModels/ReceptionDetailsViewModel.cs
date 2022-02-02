@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Prism.Commands;
@@ -7,15 +7,16 @@ using Prism.Navigation;
 using Prism.Services;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
+using Warehouse.Mobile.Extensions;
 
 namespace Warehouse.Mobile.ViewModels
 {
     public class ReceptionDetailsViewModel : ScannerViewModel, IInitializeAsync
     {
         private readonly IPageDialogService _dialog;
-        private ReceptionWithUnkownGoods _reception;
-        private IList<ReceptionGoodViewModel> _receptionGoods;
-        private DelegateCommand validateReceptionCommand;
+        private ReceptionWithExtraConfirmedGoods? _reception;
+        private ObservableCollection<ReceptionGoodViewModel>? _receptionGoods;
+        private DelegateCommand? validateReceptionCommand;
 
         public ReceptionDetailsViewModel(IScanner scanner, IPageDialogService dialog)
             : base(scanner, dialog)
@@ -23,9 +24,9 @@ namespace Warehouse.Mobile.ViewModels
             _dialog = dialog;
         }
 
-        public IList<ReceptionGoodViewModel> ReceptionGoods
+        public ObservableCollection<ReceptionGoodViewModel> ReceptionGoods
         {
-            get => _receptionGoods;
+            get => _receptionGoods ?? new ObservableCollection<ReceptionGoodViewModel>();
             set => SetProperty(ref _receptionGoods, value);
         }
 
@@ -33,6 +34,7 @@ namespace Warehouse.Mobile.ViewModels
         {
             try
             {
+                _ = _reception ?? throw new InvalidOperationException($"Reception object is not initialized");
                 await _reception.Confirmation().CommitAsync();
             }
             catch (Exception ex)
@@ -43,30 +45,38 @@ namespace Warehouse.Mobile.ViewModels
 
         public async Task InitializeAsync(INavigationParameters parameters)
         {
-            if (!parameters.ContainsKey("Supplier"))
-            {
-                throw new InvalidOperationException("No supplier selected");
-            }
-            var sup = parameters.GetValue<ISupplier>("Supplier");
-            _reception = new ReceptionWithUnkownGoods(await sup.Receptions.FirstAsync());
+            _reception = new ReceptionWithExtraConfirmedGoods(
+                new ReceptionWithUnkownGoods(
+                    await parameters
+                        .Value<ISupplier>("Supplier")
+                        .Receptions.FirstAsync()
+                )
+            );
             ReceptionGoods = await _reception.NeedConfirmation().ToViewModelListAsync();
         }
 
         protected override async Task OnScanAsync(IScanningResult barcode)
         {
-            var good = await _reception.ByBarcodeAsync(barcode.BarcodeData);
-            var goodVm = ReceptionGoods.FirstOrDefault(x => x.Equals(good));
-            if (goodVm != null)
+            if (barcode.Symbology.ToLower() == "ean13")
             {
-                goodVm.IncreaseQuantityCommand.Execute();
-                if (await good.ConfirmedAsync())
+                _ = _reception ?? throw new InvalidOperationException($"Reception object is not initialized");
+                var good = await _reception.ByBarcodeAsync(barcode.BarcodeData);
+                var goodViewModel = ReceptionGoods.FirstOrDefault(x => x.Equals(good));
+                if (goodViewModel != null)
                 {
-                    ReceptionGoods.Remove(goodVm);
+                    goodViewModel.IncreaseQuantityCommand.Execute();
+                    if (await good.ConfirmedAsync())
+                    {
+                        ReceptionGoods.Remove(goodViewModel);
+                    }
                 }
-            }
-            else
-            {
-                ReceptionGoods.Insert(0, new ReceptionGoodViewModel(good));
+                else
+                {
+                    await _dialog.DisplayAlertAsync("Warning", "The item has already been scanned!", "Ok");
+                    goodViewModel = new ReceptionGoodViewModel(good);
+                    goodViewModel.IncreaseQuantityCommand.Execute();
+                    ReceptionGoods.Insert(0, goodViewModel);
+                }
             }
         }
     }

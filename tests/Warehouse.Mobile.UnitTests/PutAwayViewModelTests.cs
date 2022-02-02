@@ -1,8 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
+using Prism.Navigation;
+using Prism.Services;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.Tests;
+using Warehouse.Mobile.UnitTests.Extensions;
 using Warehouse.Mobile.UnitTests.Mocks;
 using Xunit;
 using static Warehouse.Mobile.Tests.MockPageDialogService;
@@ -16,16 +20,126 @@ namespace Warehouse.Mobile.UnitTests
             .Application()
             .GoToPutAway();
 
+        public static IEnumerable<object[]> PutAwayViewModelData =>
+          new List<object[]>
+          {
+                new object[] { null, null, null, null },
+                new object[] { new MockScanner(), null, null, null },
+                new object[] { null, new MockPageDialogService(), null, null },
+                new object[] { null, null, new MockWarehouseCompany(), null },
+                new object[] { null, null, null, new MockNavigationService() },
+                new object[] { new MockScanner(), new MockPageDialogService(), null, null },
+                new object[] { new MockScanner(), new MockPageDialogService(), new MockWarehouseCompany(), null }
+          };
+
+        [Theory, MemberData(nameof(PutAwayViewModelData))]
+        public void ArgumentNullException(
+            IScanner scanner,
+            IPageDialogService dialog,
+            ICompany company,
+            INavigationService navigationService)
+        {
+            Assert.Throws<ArgumentNullException>(
+                () => new PutAwayViewModel(
+                    scanner,
+                    dialog,
+                    company,
+                    navigationService
+                )
+            );
+        }
+
+        [Fact]
+        public void DestinationBarcodeScanning()
+        {
+            Assert.Equal(
+                "1111",
+                WarehouseMobile.Application(
+                    new MockWarehouseGood("1", 5, "1111")
+                ).GoToPutAway()
+                 .Scan(new ScanningResult("1111", "code128", DateTime.Now.TimeOfDay))
+                 .CurrentViewModel<PutAwayViewModel>()
+                 .DestinationBarcode
+             );
+        }
+
+        [Fact]
+        public void DestinationBarcodeScanning_StatusMessage()
+        {
+            Assert.Equal(
+                "Item successfully assigned",
+                WarehouseMobile.Application(
+                    new MockWarehouse(
+                         new ListOfEntities<IWarehouseGood>(
+                            new MockWarehouseGood("1", 5, "1111"),
+                            new MockWarehouseGood("2", 5, "2222")
+                         ),
+                         new ListOfEntities<IStorage>(
+                            new MockStorage(
+                                "Storage111",
+                                new MockWarehouseGood("2", 5, "2222")
+                            )
+                         )
+                    )
+                   
+                ).GoToPutAway()
+                .Scan("2222")
+                .Scan(new ScanningResult("Storage111", "code128", DateTime.Now.TimeOfDay))
+                .CurrentViewModel<PutAwayViewModel>()
+                .StatusMessage
+             );
+        }
+
+        [Fact]
+        public void DestinationBarcodeScanning_NavigationToQuantityPopup()
+        {
+            var app = WarehouseMobile.Application(
+                new MockWarehouse(
+                     new ListOfEntities<IWarehouseGood>(
+                        new MockWarehouseGood("1", 5, "1111"),
+                        new MockWarehouseGood("2", 5, "2222")
+                     ),
+                     new ListOfEntities<IStorage>(
+                        new MockStorage(
+                            "Storage111",
+                            new MockWarehouseGood("2", 5, "2222")
+                        )
+                     )
+                )
+
+            ).GoToPutAway();
+            app.Scan("2222"); // Scan good
+            app.CurrentViewModel<PutAwayViewModel>().CheckInQuantity = 2;
+            app.Scan(new ScanningResult("Storage111", "code128", DateTime.Now.TimeOfDay));
+            Assert.IsType<QuantityToMovePopupViewModel>(
+                app.CurrentViewModel<object>()
+            );
+        }
+
         [Fact]
         public void ReserveLocations()
         {
-            Assert.NotEmpty(_app.CurrentViewModel<PutAwayViewModel>().ReserveLocations);
+            Assert.NotEmpty(
+                WarehouseMobile.Application(
+                    new MockWarehouseGood("1", 5, "1111")
+                ).GoToPutAway()
+                 .Scan("1111")
+                 .CurrentViewModel<PutAwayViewModel>()
+                 .ReserveLocations
+             );
         }
 
         [Fact]
         public void RaceLocations()
         {
-            Assert.NotEmpty(_app.CurrentViewModel<PutAwayViewModel>().RaceLocations);
+            Assert.NotEmpty(
+                WarehouseMobile.Application(
+                   new MockWarehouseGood("1", 5, "1111")
+                ).GoToPutAway()
+                .Scan("1111")
+                .CurrentViewModel<PutAwayViewModel>()
+                .RaceLocations
+            );
         }
 
         [Fact]
@@ -44,6 +158,44 @@ namespace Warehouse.Mobile.UnitTests
             Assert.Equal(
                 ScannerState.Opened,
                 _app.Scanner.State
+            );
+        }
+
+        [Fact]
+        public void AlertMessage_WhenNoPutAwayStorageForGood()
+        {
+            var dialog = new MockPageDialogService();
+            WarehouseMobile
+                .Application(
+                    new MockPlatformInitializer(
+                        new MockWarehouseCompany(
+                            new MockWarehouse(
+                                 new ListOfEntities<IWarehouseGood>(
+                                    new WarehouseGoodWithoutPutawayStorage(
+                                        new MockWarehouseGood("1", 1, "1111")
+                                    )
+                                 ),
+                                 new ListOfEntities<IStorage>(
+                                     new MockStorage(
+                                         new WarehouseGoodWithoutPutawayStorage(
+                                            new MockWarehouseGood("1", 1, "1111")
+                                         )
+                                    )
+                                 )
+                            )
+                        ),
+                        pageDialogService: dialog
+                    )
+                ).GoToPutAway()
+                 .Scan("1111");
+            Assert.Contains(
+                new DialogPage
+                {
+                    Title = "Error",
+                    Message = "This item is not present in the check in area",
+                    CancelButton = "Ok"
+                },
+                dialog.ShownDialogs
             );
         }
 
@@ -129,17 +281,70 @@ namespace Warehouse.Mobile.UnitTests
         }
 
         [Fact]
-        public void CheckinStorage()
+        public void PutAwayStorage_Location()
         {
-            Assert.NotNull(
+            Assert.Equal(
+                "MockStorage1",
                 WarehouseMobile.Application(
                     new MockWarehouseCompany(
-                        new MockWarehouseGood("1", 1, "123456")
+                        new MockWarehouse(
+                             new ListOfEntities<IWarehouseGood>(
+                                new MockWarehouseGood("1", 1, "1111").With(
+                                    new MockStorages(
+                                        new ListOfEntities<IStorage>(new MockStorage("MockStorage1")),
+                                        new ListOfEntities<IStorage>(new MockStorage("MockStorage2")),
+                                        new ListOfEntities<IStorage>(new MockStorage("MockStorage3"))
+                                    )
+                                )
+                             ),
+                             new ListOfEntities<IStorage>(
+                                new MockStorage(
+                                     "MockStorage1",
+                                     new MockWarehouseGood("1", 1, "1111")
+                                )
+                             )
+                        )
                     )
                 ).GoToPutAway()
-                 .Scan("123456")
+                 .Scan("1111")
                  .CurrentViewModel<PutAwayViewModel>()
-                 .CheckInStorage
+                 .PutAwayStorage
+                 .Location
+            );
+        }
+
+        [Fact]
+        public async Task PutAwayStorage_GoodsQuantity()
+        {
+            var good = new MockWarehouseGood("1", 4, "1111");
+            var goodWithStorages = good.With(
+                new MockStorages(
+                    new ListOfEntities<IStorage>(new MockStorage("MockStorage1", good)),
+                    new ListOfEntities<IStorage>(new MockStorage("MockStorage2", good)),
+                    new ListOfEntities<IStorage>(new MockStorage("MockStorage3", good))
+                )
+            );
+            Assert.Equal(
+                4,
+                await WarehouseMobile.Application(
+                    new MockWarehouseCompany(
+                        new MockWarehouse(
+                             new ListOfEntities<IWarehouseGood>(
+                                goodWithStorages
+                             ),
+                             new ListOfEntities<IStorage>(
+                                new MockStorage(
+                                     "MockStorage1",
+                                     new MockWarehouseGood("1", 1, "1111")
+                                )
+                             )
+                        )
+                    )
+                ).GoToPutAway()
+                 .Scan("1111")
+                 .CurrentViewModel<PutAwayViewModel>()
+                 .PutAwayStorage
+                 .Quantity.ValueAsync()
             );
         }
 

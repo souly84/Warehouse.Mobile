@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<resources>
+
+  <color name="ListViewSelected">#DEDEE2</color>
+  <color name="ListViewHighlighted">#DEDEE2</color>
+  
+  <style name="MainTheme" parent="MainTheme.Base">
+  </style>
+  <style name="Preference_TextAppearanceMaterialBody2">
+    <item name="android:textSize">14sp</item>
+    <item name="android:fontFamily">sans-serif</item>
+    <item name="android:textColor">?android:attr/textColorPrimary</item>
+    <item name="android:textStyle">normal</item>
+  </style>
+  <!-- Base theme applied no matter what API -->
+  <style name="MainTheme.Base" parent="Theme.AppCompat.Light.DarkActionBar">
+    <!--If you are using revision 22.1 please use just windowNoTitle. Without android:-->
+    <item name="windowNoTitle">true</item>
+    <!--We will be using the toolbar so no need to show ActionBar-->
+    <item name="windowActionBar">false</item>
+    <!-- Set theme colors from http://www.google.com/design/spec/style/color.html#color-color-palette -->
+    <!-- colorPrimary is used for the default action bar background -->
+    <item name="colorPrimary">#E2E5ED</item>
+    <!-- colorPrimaryDark is used for the status bar -->
+    <item name="colorPrimaryDark">#343F44</item>
+    <!-- colorAccent is used as the default value for colorControlActivated
+         which is used to tint widgets -->
+    <item name="colorAccent">#370617</item>
+    <!-- You can also set colorControlNormal, colorControlActivated
+         colorControlHighlight and colorSwitchThumbNormal. -->
+    <item name="windowActionModeOverlay">true</item>
+
+    <item name="android:datePickerDialogTheme">@style/AppCompatDialogStyle</item>
+
+    
+    
+    <item name="android:colorPressedHighlight">@color/ListViewSelected</item>
+    <item name="android:colorLongPressedHighlight">@color/ListViewHighlighted</item>
+    <item name="android:colorFocusedHighlight">@color/ListViewSelected</item>
+    <item name="android:colorActivatedHighlight">@color/ListViewSelected</item>
+    <item name="android:activatedBackgroundIndicator">@color/ListViewSelected</item>
+    
+  </style>
+
+  <style name="AppCompatDialogStyle" parent="Theme.AppCompat.Light.Dialog">
+    <item name="colorAccent">#E50000</item>
+  </style>
+
+  <style name="MainTheme.Splash" parent ="MainTheme.Base">
+    <!--<item name="android:windowBackground">@drawable/splash_screen</item>-->
+    <item name="android:windowNoTitle">true</item>
+    <item name="android:windowActionBar">false</item>
+    <item name="android:windowFullscreen">true</item>
+    <item name="windowActionModeOverlay">true</item>
+  </style>
+  
+</resources>

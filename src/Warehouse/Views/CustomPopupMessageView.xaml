@@ -1,0 +1,123 @@
+﻿<?xml version="1.0" encoding="UTF-8" ?>
+<pages:PopupPage
+    xmlns="http://xamarin.com/schemas/2014/forms"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Warehouse.Mobile.Views.CustomPopupMessageView"
+    xmlns:pages="clr-namespace:Rg.Plugins.Popup.Pages;assembly=Rg.Plugins.Popup"
+    xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
+    Padding="20">
+    <StackLayout Padding="10" VerticalOptions="CenterAndExpand">
+        <Frame
+            Padding="0"
+            CornerRadius="10"
+            BackgroundColor="{DynamicResource MainColor}" >
+            <StackLayout >
+                <StackLayout Padding="20">
+                    <StackLayout HorizontalOptions="Center" Spacing="0" >
+                        <Frame CornerRadius="50" BackgroundColor="Transparent">
+                            <Label
+                                FontFamily="materialicons"
+                                FontSize="100"
+                                TextColor="White"
+                                VerticalTextAlignment="Center">
+                                <Label.Triggers>
+                                    <DataTrigger
+                                        Binding="{Binding Severity}"
+                                        TargetType="Label"
+                                        Value="Info">
+                                        <Setter Property="Text" Value="{x:Static fonts:MaterialIcons.ShieldCheckOutline}" />
+                                    </DataTrigger>
+                                    <DataTrigger
+                                        Binding="{Binding Severity}"
+                                        TargetType="Label"
+                                        Value="Warning">
+                                        <Setter Property="Text" Value="{x:Static fonts:MaterialIcons.AlertCircleOutline}" />
+                                    </DataTrigger>
+                                    <DataTrigger
+                                        Binding="{Binding Severity}"
+                                        TargetType="Label"
+                                        Value="Error">
+                                        <Setter Property="Text" Value="{x:Static fonts:MaterialIcons.CloseCircleOutline}" />
+                                    </DataTrigger>
+                                </Label.Triggers>
+                            </Label>
+                        </Frame>
+                        <StackLayout Orientation="Horizontal" HorizontalOptions="CenterAndExpand">
+                             <Label
+                                 Text="{Binding Title}"
+                                 FontAttributes="Bold"
+                                 TextColor="White"
+                                 FontSize="20"
+                                 VerticalOptions="Center"
+                                 HorizontalOptions="Center"
+                                 HorizontalTextAlignment="Center"/>
+                         </StackLayout>
+                    </StackLayout>
+                    <StackLayout.Triggers>
+                        <DataTrigger
+                            Binding="{Binding Severity}"
+                            TargetType="StackLayout"
+                            Value="Info">
+                            <Setter Property="BackgroundColor" Value="#9BCC66" />
+                        </DataTrigger>
+                        <DataTrigger
+                            Binding="{Binding Severity}"
+                            TargetType="StackLayout"
+                            Value="Warning">
+                            <Setter Property="BackgroundColor" Value="#FFC122" />
+                        </DataTrigger>
+                        <DataTrigger
+                            Binding="{Binding Severity}"
+                            TargetType="StackLayout"
+                            Value="Error">
+                            <Setter Property="BackgroundColor" Value="#E34C5D" />
+                        </DataTrigger>
+                    </StackLayout.Triggers>
+                </StackLayout>
+
+                <StackLayout Padding="20">
+                    <Label FontSize="14" Text="{Binding Message}" />
+                </StackLayout>
+                <StackLayout HorizontalOptions="CenterAndExpand" Padding="30">
+                    <NeoButton
+                        HorizontalOptions="CenterAndExpand"
+                        HeightRequest="70"
+                        WidthRequest="200"
+                        CornerRadius="30"
+                        Command="{Binding ActionCommand}"
+                        LightShadowColor="Transparent">
+                        <StackLayout>
+                            <Label Text="{Binding ActionText}"
+                                   HorizontalOptions="Center"
+                                   VerticalOptions="CenterAndExpand"
+                                   TextColor="White"
+                                   FontSize="16"
+                                   FontAttributes="Bold"/>
+                        </StackLayout>
+                        <NeoButton.Triggers>
+                        <DataTrigger
+                            Binding="{Binding Severity}"
+                            TargetType="NeoButton"
+                            Value="Info">
+                            <Setter Property="BackgroundColor" Value="#89C444" />
+                        </DataTrigger>
+                        <DataTrigger
+                            Binding="{Binding Severity}"
+                            TargetType="NeoButton"
+                            Value="Warning">
+                            <Setter Property="BackgroundColor" Value="#FFC122" />
+                        </DataTrigger>
+                        <DataTrigger
+                            Binding="{Binding Severity}"
+                            TargetType="NeoButton"
+                            Value="Error">
+                            <Setter Property="BackgroundColor" Value="#E34C5D" />
+                        </DataTrigger>
+                    </NeoButton.Triggers>
+                    </NeoButton>
+                </StackLayout>
+            </StackLayout>
+        </Frame>
+      
+    </StackLayout>
+</pages:PopupPage>

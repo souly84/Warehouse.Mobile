@@ -36,9 +36,9 @@ namespace Warehouse.Mobile
             : this(
                   warehouse,
                   new ListOfEntities<ISupplier>(
-                    new NamedMockSupplier("Electrolux"),
-                    new NamedMockSupplier("Bosh"),
-                    new NamedMockSupplier("Samsung")
+                    new MockSupplier("Electrolux"),
+                    new MockSupplier("Bosh"),
+                    new MockSupplier("Samsung")
                   )
               )
         {

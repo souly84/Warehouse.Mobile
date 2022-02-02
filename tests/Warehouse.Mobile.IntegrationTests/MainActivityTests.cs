@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Android.App;
-using Android.Content;
+using Warehouse.Core.Plugins;
 using Warehouse.Mobile.IntegrationTests.AndroidInstrumentations;
+using Warehouse.Mobile.ViewModels;
+using Warehouse.Scanner.SDK;
 using Xunit;
 
 namespace Warehouse.Mobile.IntegrationTests
@@ -10,27 +11,56 @@ namespace Warehouse.Mobile.IntegrationTests
     {
         private TestInstrumentation instrument = TestInstrumentation.CurrentInstrumentation;
 
-        [Fact(Skip = "Doesnt work at the moment")]
-        public async Task MainActivityCreation()
-        {
-            Assert.NotNull(await ActivityAsync());
-        }
-
-        private async Task<Activity> ActivityAsync()
+        [Fact]
+        public async Task ScannerOpened()
         {
             if (instrument != null)
             {
-                Instrumentation.ActivityMonitor monitor = instrument.AddMonitor("warehouse.mobile.android.mainactivity", null, false);
+                using (var activity = new InstrumentationActivity<Droid.MainActivity>(instrument))
+                {
+                    var mainActivity = await activity.ActivityAsync();
+                    Assert.NotNull(
+                        mainActivity.App.Scanner
+                    );
 
-                Intent intent = new Intent();
-                intent.AddFlags(ActivityFlags.NewTask);
-                intent.SetClassName(instrument.TargetContext, "warehouse.mobile.android.mainactivity");
-
-                await Task.Run(() => instrument.StartActivitySync(intent));
-
-                return instrument.WaitForMonitor(monitor);
+                    await mainActivity.App.Scanner
+                        .WaitIfTransitionAsync(ScannerState.Closed)
+                        .WithTimeout(30000);
+                    Assert.Equal(
+                        ScannerState.Opened,
+                        mainActivity.App.Scanner.State
+                    );
+                }
             }
-            return null;
+        }
+
+        [Fact]
+        public async Task NavigationCreated()
+        {
+            if (instrument != null)
+            {
+                using (var activity = new InstrumentationActivity<Droid.MainActivity>(instrument))
+                {
+                    Assert.NotNull(
+                       (await activity.ActivityAsync()).Navigation
+                    );
+                }
+            }
+        }
+
+        [Fact]
+        public async Task MenuSelectionAsDefaultPage()
+        {
+            if (instrument != null)
+            {
+                using (var activity = new InstrumentationActivity<Droid.MainActivity>(instrument))
+                {
+                    var mainActivity = await activity.ActivityAsync();
+                    Assert.IsType<MenuSelectionViewModel>(
+                        mainActivity.App.CurrentViewModel<object>()
+                    );
+                }
+            }
         }
     }
 }

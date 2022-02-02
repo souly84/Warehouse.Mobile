@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netstandard2.1</TargetFramework>
+    <Nullable>enable</Nullable>
     <Platforms>AnyCPU;x86;x64</Platforms>
   </PropertyGroup>
 
@@ -22,26 +23,26 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2291" PrivateAssets="all" />
+    <PackageReference Include="Xamarin.Forms" Version="5.0.0.2337" PrivateAssets="all" />
     <PackageReference Include="Xamarin.Forms.DebugRainbows" Version="365.0.0" PrivateAssets="all" />
-    <PackageReference Include="Xamarin.Forms.Visual.Material" Version="5.0.0.2291" PrivateAssets="all" />
-    <PackageReference Include="Com.Airbnb.Xamarin.Forms.Lottie" Version="4.0.11" PrivateAssets="all" />
+    <PackageReference Include="Xamarin.Forms.Visual.Material" Version="5.0.0.2337" PrivateAssets="all" />
+    <PackageReference Include="Com.Airbnb.Xamarin.Forms.Lottie" Version="4.1.0" PrivateAssets="all" />
     <PackageReference Include="Xamarin.Forms.PancakeView" Version="2.3.0.759" PrivateAssets="all" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" PrivateAssets="all" />
     <PackageReference Include="Prism.Core" Version="8.1.97" PrivateAssets="all" />
     <PackageReference Include="Prism.Forms" Version="8.1.97" PrivateAssets="all" />
     <PackageReference Include="Prism.Unity.Forms" Version="8.1.97" PrivateAssets="all" />
-    <PackageReference Include="Warehouse.Core" Version="1.0.0.259" />
+    <PackageReference Include="Warehouse.Core" Version="1.0.0.371" />
     <PackageReference Include="Xamarin.Forms.NeoControls" Version="1.1.1-pre" />
     <PackageReference Include="WebRequest.Elegant" Version="1.1.0.2" />
-    <PackageReference Include="EbSoft.Warehouse.SDK" Version="1.0.0.273" />
+    <PackageReference Include="EbSoft.Warehouse.SDK" Version="1.0.0.375" />
+    <PackageReference Include="Prism.Plugin.Popups" Version="8.0.76" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Translation\Translations.Designer.cs">
       <DependentUpon>Translations.resx</DependentUpon>
     </Compile>
   </ItemGroup>
-  
   <ItemGroup>
     <EmbeddedResource Include="Resources\materialdesignicons-webfont.ttf" />
     <EmbeddedResource Include="Resources\icomoon.ttf" />

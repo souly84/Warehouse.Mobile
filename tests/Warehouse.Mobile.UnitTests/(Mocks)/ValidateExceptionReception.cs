@@ -14,9 +14,20 @@ namespace Warehouse.Mobile.UnitTests.Mocks
             _exception = exception;
         }
 
-        public IEntities<IReceptionGood> Goods => new ListOfEntities<IReceptionGood>(
-            new MockReceptionGood("1", 1, "1111")
+        public IReceptionGoods Goods => new MockReceptionGoods(
+              new MockReceptionGood("1", 1, "1111")
         );
+
+        public override bool Equals(object obj)
+        {
+            return ReferenceEquals(this, obj)
+                || obj is DateTime;
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(_exception, Goods);
+        }
 
         public Task ValidateAsync(IList<IGoodConfirmation> goodsToValidate)
         {

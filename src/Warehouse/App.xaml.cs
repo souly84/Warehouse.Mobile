@@ -2,6 +2,7 @@
 using Prism;
 using Prism.Ioc;
 using Prism.Navigation;
+using Prism.Plugin.Popups;
 using Prism.Unity;
 using System.Threading.Tasks;
 using Warehouse.Core;
@@ -9,9 +10,7 @@ using Warehouse.Core.Plugins;
 using Warehouse.Mobile.ViewModels;
 using Warehouse.Mobile.Views;
 using Xamarin.Forms;
-using Xamarin.Forms.Xaml;
 
-[assembly: XamlCompilation(XamlCompilationOptions.Compile)]
 namespace Warehouse.Mobile
 {
     public partial class App : PrismApplication
@@ -34,16 +33,22 @@ namespace Warehouse.Mobile
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             //Navigations
+            containerRegistry.RegisterPopupNavigationService();
             containerRegistry.RegisterForNavigation<NavigationPage>();
+
+            //Services
             containerRegistry.RegisterForNavigation<LoginView, LoginViewModel>();
             containerRegistry.RegisterForNavigation<SelectSupplierView, SelectSupplierViewModel>();
             containerRegistry.RegisterForNavigation<MenuSelectionView>();
             containerRegistry.RegisterForNavigation<ReceptionDetailsView>();
             containerRegistry.RegisterForNavigation<PutAwayView>();
+            containerRegistry.RegisterForNavigation<StockMoveView>();
+            // this registration was missed, is it done by purpose?
+            containerRegistry.RegisterForNavigation<QuantityToMovePopupView, QuantityToMovePopupViewModel>();
             if (!containerRegistry.IsRegistered<ICompany>())
             {
                containerRegistry.RegisterInstance<ICompany>(
-                   new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php")
+                   new EbSoftCompany("http://wdc-logcnt.eurocenter.be/webservice/api.php")
                );
             }
         }

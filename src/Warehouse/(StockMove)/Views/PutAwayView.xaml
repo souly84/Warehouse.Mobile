@@ -39,7 +39,7 @@
                          BackgroundColor="White"
                          CornerRadius="5"
                          Text="{Binding ScannedBarcode}"
-                         TextColor="White"
+                         TextColor="{DynamicResource TextsColor}"
                          CancelButtonColor="Red"
                          Placeholder="Scan product"/>
 
@@ -49,7 +49,8 @@
                         TextColor="{DynamicResource TextsColor}"
                         Style="{DynamicResource ReceptionGoodCategoryIcon}"
                         FontFamily="warehouseIcons"
-                        Text="{x:Static fonts:IcoMoon.Barcode}"/>
+                        Text="{x:Static fonts:IcoMoon.Barcode}">
+                    </Label> 
                 </Grid>
             </StackLayout>
 
@@ -59,91 +60,96 @@
                 <StackLayout Orientation="Horizontal" Padding="35" >
                     <Grid>
                         <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition Width="Auto"/>
-                        </Grid.ColumnDefinitions>
-                        <controls:MaterialSearchBar
-                            HorizontalOptions="FillAndExpand"
-                            BackgroundColor="White"
-                            CornerRadius="5"
-                            TextColor="White"
-                            CancelButtonColor="White"
-                            Placeholder="Scan location"/>
+                             <ColumnDefinition/>
+                             <ColumnDefinition Width="Auto"/>
+                         </Grid.ColumnDefinitions>
+                          <controls:MaterialSearchBar
+                              HorizontalOptions="FillAndExpand"
+                              BackgroundColor="White"
+                              CornerRadius="5"
+                              TextColor="{DynamicResource TextsColor}"
+                              CancelButtonColor="White"
+                              Text="{Binding DestinationBarcode}"
+                              Placeholder="Scan location"/>
+
                         <Label
                             Grid.Column="1"
                             HorizontalOptions="EndAndExpand"
                             TextColor="{DynamicResource TextsColor}"
                             Style="{DynamicResource ReceptionGoodCategoryIcon}"
                             FontFamily="warehouseIcons"
-                            Text="{x:Static fonts:IcoMoon.Barcode}"/>
+                            Text="{x:Static fonts:IcoMoon.Barcode}"/> 
                     </Grid>
-
                 </StackLayout>
-
-                <StackLayout HorizontalOptions="CenterAndExpand">
-                    <!--<Label Text="{Binding Quantity}" FontSize="25" />-->
-                </StackLayout>
-
-
-                <StackLayout HeightRequest="150">
-                    <Label Text="Existing Race Locations" />
-                    <Frame
-                        BackgroundColor="White"
-                        CornerRadius="10">
-                        <CollectionView
-                         ItemsSource="{Binding RaceLocations}"
-                         ItemsLayout="HorizontalList" >
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="viewModels:LocationViewModel">
-                                    <Frame CornerRadius="10" >
-                                        <StackLayout Orientation="Horizontal">
-                                            <Label
-                                                FontFamily="materialicons"
-                                                FontSize="25"
-                                                Text="{x:Static fonts:MaterialIcons.MapMarker}"
-                                                VerticalTextAlignment="Center"/>
-                                            <Label Text="{Binding Location}"  VerticalTextAlignment="Center" FontSize="18"/>
-                                        </StackLayout>
-
-                                    </Frame>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
+            <StackLayout HorizontalOptions="CenterAndExpand">
+                <Label Text="{Binding Quantity}" FontSize="25" />
+            </StackLayout>
 
 
-                    </Frame>
-                </StackLayout>
-
-                <StackLayout HeightRequest="150">
-                    <Label Text="Existing Reserve Locations" />
-                    <Frame
+            <StackLayout HeightRequest="150">
+                <Label Text="Existing Race Locations" />
+                <Frame
                     BackgroundColor="White"
                     CornerRadius="10">
-                        <CollectionView
+                    <CollectionView
+                         ItemsSource="{Binding RaceLocations}"
+                        ItemsLayout="HorizontalList" >
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="viewModels:LocationViewModel">
+                                <Frame CornerRadius="10" >
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label
+                                            FontFamily="materialicons"
+                                            FontSize="25"
+                                            Text="{x:Static fonts:MaterialIcons.MapMarker}"
+                                            VerticalTextAlignment="Center"/> 
+                                        <Label Text="{Binding Location}"  VerticalTextAlignment="Center" FontSize="18"/>
+                                    </StackLayout>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+
+                        
+                </Frame>
+            </StackLayout>
+
+            <StackLayout HeightRequest="150">
+                <Label Text="Existing Reserve Locations" />
+                <Frame
+                    BackgroundColor="White"
+                    CornerRadius="10">
+                    <CollectionView
                          ItemsSource="{Binding ReserveLocations}"
                         ItemsLayout="HorizontalList" >
-                            <CollectionView.ItemTemplate>
-                                <DataTemplate x:DataType="viewModels:LocationViewModel">
-                                    <Frame CornerRadius="10" >
-                                        <StackLayout Orientation="Horizontal">
-                                            <Label
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate x:DataType="viewModels:LocationViewModel">
+                                <Frame CornerRadius="10" >
+                                    <StackLayout Orientation="Horizontal">
+                                        <Label
                                         FontFamily="materialicons"
                                         FontSize="25"
                                         Text="{x:Static fonts:MaterialIcons.MapMarker}"
-                                            VerticalTextAlignment="Center"/>
-                                            <Label Text="{Binding Location}"  VerticalTextAlignment="Center" FontSize="18"/>
-                                        </StackLayout>
-
-                                    </Frame>
-                                </DataTemplate>
-                            </CollectionView.ItemTemplate>
-                        </CollectionView>
-
-
-                    </Frame>
-                </StackLayout>
+                                            VerticalTextAlignment="Center"/> 
+                                    <Label Text="{Binding Location}"  VerticalTextAlignment="Center" FontSize="18"/>
+                                    </StackLayout>
+                                    
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </Frame>
             </StackLayout>
-
+            </StackLayout>
+            <StackLayout
+                VerticalOptions="EndAndExpand"
+                HorizontalOptions="Center">
+                <Label
+                    Text="{Binding StatusMessage}"
+                    FontSize="14"
+                    TextColor="Green"/>
+            </StackLayout>
+             
         </StackLayout>
     </ContentView>
 </ContentPage>
