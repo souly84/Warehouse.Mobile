@@ -6,6 +6,7 @@ using Prism.Navigation;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.Tests;
+using Warehouse.Mobile.UnitTests.Extensions;
 using Warehouse.Mobile.UnitTests.Mocks;
 using Warehouse.Mobile.ViewModels;
 using Xunit;
@@ -142,6 +143,7 @@ namespace Warehouse.Mobile.UnitTests
                     new MockReceptionGood("3", 4, "3333")
                 ).GoToReceptionDetails()
                  .Scan("UknownBarcode", "2222")
+                 .ClosePopup()
                  .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
                     .Count
@@ -158,7 +160,10 @@ namespace Warehouse.Mobile.UnitTests
             );
             WarehouseMobile.Application(reception)
                 .GoToReceptionDetails()
-                .Scan("UknownBarcode", "1111", "1111", "2222")
+                .Scan("UknownBarcode").ClosePopup()
+                .Scan("1111")
+                .Scan("1111").ClosePopup()
+                .Scan("2222")
                 .CurrentViewModel<ReceptionDetailsViewModel>()
                 .ValidateReceptionCommand.Execute();
             Assert.Equal(
@@ -191,19 +196,20 @@ namespace Warehouse.Mobile.UnitTests
             );
         }
 
-        //[Fact]
-        //public Task InitializeAsyncThrowsInvalidOperationExceptionWhenNoSupplierHasBeenPassed()
-        //{
-        //    return Assert.ThrowsAsync<InvalidOperationException>(
-        //        () => new ReceptionDetailsViewModel(
-        //            new MockScanner(),
-        //            new MockPageDialogService()
-        //        ).InitializeAsync(new NavigationParameters())
-        //    );
-        //}
+        [Fact]
+        public Task InitializeAsyncThrowsInvalidOperationExceptionWhenNoSupplierHasBeenPassed()
+        {
+            return Assert.ThrowsAsync<InvalidOperationException>(
+                () => new ReceptionDetailsViewModel(
+                    new MockScanner(),
+                    new MockPageDialogService(),
+                    new MockNavigationService()
+                ).InitializeAsync(new NavigationParameters())
+            );
+        }
 
         [Fact]
-        public void AlertMessageIfValidateReceptionCommandError()
+        public void PopupMessageIfValidateReceptionCommandError()
         {
             var dialog = new MockPageDialogService();
             WarehouseMobile.Application(
@@ -219,11 +225,11 @@ namespace Warehouse.Mobile.UnitTests
             Assert.Contains(
                 new DialogPage
                 {
-                    Title = "Syncro error",
-                    Message = "Test error message",
-                    CancelButton = "Ok"
+                    Title = "Error!",
+                    Message = "Synchronization failed.",
+                    CancelButton = "GOT IT!"
                 },
-                dialog.ShownDialogs
+                WarehouseMobile.Popup().ShownPopups.ToDialogPages()
             );
         }
 
@@ -260,7 +266,9 @@ namespace Warehouse.Mobile.UnitTests
                     new MockReceptionGood("2", 1, "2222"),
                     new MockReceptionGood("4", 4, "3333")
                 ).GoToReceptionDetails()
-                 .Scan("2222", "2222", "2222")
+                 .Scan("2222")
+                 .Scan("2222").ClosePopup()
+                 .Scan("2222").ClosePopup()
                  .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
                     .Sum(good => good.ConfirmedQuantity)

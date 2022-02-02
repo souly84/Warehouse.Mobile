@@ -58,7 +58,16 @@ namespace Warehouse.Mobile.UnitTests
         }
 
         [Fact]
-        public async Task ValidateCommand()
+        public async Task ValidateCommand_NavigatesBackToPutAwayViewModel()
+        {
+            var app = await AppInQuantityToMovePopupStateAsync();
+            app.CurrentViewModel<QuantityToMovePopupViewModel>()
+               .ValidateCommand.Execute();
+            Assert.IsType<PutAwayViewModel>(await app.WaitViewModel<PutAwayViewModel>());
+        }
+
+        [Fact(Skip = "Need to implement proper assert")]
+        public async Task ValidateCommand_SendMovementRequestToTheServer()
         {
             var app = await AppInQuantityToMovePopupStateAsync();
             app.CurrentViewModel<QuantityToMovePopupViewModel>()
