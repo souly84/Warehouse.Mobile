@@ -10,11 +10,6 @@
     NavigationPage.HasBackButton="True"
     x:DataType="viewModels:ReceptionDetailsViewModel"
     x:Class="Warehouse.Mobile.Views.ReceptionDetailsView">
-    <ContentPage.Resources>
-         <ResourceDictionary>
-            <converters:ReceptionGoodToConfirmedConverter x:Key="receptionGoodToConfirmedConverter" />
-         </ResourceDictionary>
-    </ContentPage.Resources>
     <NavigationPage.TitleView>
         <StackLayout Padding="2" >
             <Grid >
