@@ -226,7 +226,7 @@ namespace Warehouse.Mobile.UnitTests
                 new DialogPage
                 {
                     Title = "Error!",
-                    Message = "Synchronization failed.",
+                    Message = "Synchronization failed. Test error message",
                     CancelButton = "GOT IT!"
                 },
                 WarehouseMobile.Popup().ShownPopups.ToDialogPages()
