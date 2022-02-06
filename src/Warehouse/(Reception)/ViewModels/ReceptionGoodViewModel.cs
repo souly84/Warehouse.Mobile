@@ -10,6 +10,9 @@ namespace Warehouse.Mobile.ViewModels
     {
         private readonly IReceptionGood _receptionGood;
         private DictionaryMedia? _goodData;
+        private string? _errorMessage;
+        private DelegateCommand? increaseQuantityCommand;
+        private DelegateCommand? decreaseQuantityCommand;
 
         public ReceptionGoodViewModel(IReceptionGood receptionGood)
         {
@@ -44,8 +47,7 @@ namespace Warehouse.Mobile.ViewModels
 
         public string Oa => GoodData.ValueOrDefault<string>("oa");
 
-        private string _errorMessage;
-        public string ErrorMessage
+        public string? ErrorMessage
         {
             get => _errorMessage;
             set => SetProperty(ref _errorMessage, value);
@@ -62,8 +64,7 @@ namespace Warehouse.Mobile.ViewModels
                 return $"{ConfirmedQuantity}/{Quantity}";
             }
         }
-
-        private DelegateCommand increaseQuantityCommand;
+        
         public DelegateCommand IncreaseQuantityCommand => increaseQuantityCommand ?? (increaseQuantityCommand = new DelegateCommand(() =>
         {
             _receptionGood.Confirmation.Increase(1);
@@ -72,7 +73,6 @@ namespace Warehouse.Mobile.ViewModels
 
         }));
 
-        private DelegateCommand? decreaseQuantityCommand;
         public DelegateCommand DecreaseQuantityCommand => decreaseQuantityCommand ?? (decreaseQuantityCommand = new DelegateCommand(() =>
         {
             _receptionGood.Confirmation.Decrease(1);

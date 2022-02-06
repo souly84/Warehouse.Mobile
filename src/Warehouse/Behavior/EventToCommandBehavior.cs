@@ -9,7 +9,7 @@ namespace Warehouse.Mobile.Behavior
 {
     public class EventToCommandBehavior : BindableBehavior<View>
     {
-        public static BindableProperty EventNameProperty =
+        public static readonly BindableProperty EventNameProperty =
             BindableProperty.CreateAttached(
                 nameof(EventName),
                 typeof(string),
@@ -17,24 +17,24 @@ namespace Warehouse.Mobile.Behavior
                 null,
                 BindingMode.OneWay);
 
-        public static BindableProperty CommandProperty =
+        public static readonly BindableProperty CommandProperty =
             BindableProperty.CreateAttached(nameof(Command), typeof(ICommand), typeof(EventToCommandBehavior), null,
                 BindingMode.OneWay);
 
-        public static BindableProperty CommandParameterProperty =
+        public static readonly BindableProperty CommandParameterProperty =
             BindableProperty.CreateAttached(nameof(CommandParameter), typeof(object), typeof(EventToCommandBehavior), null,
                 BindingMode.OneWay);
 
-        public static BindableProperty EventArgsConverterProperty =
+        public static readonly BindableProperty EventArgsConverterProperty =
             BindableProperty.CreateAttached(nameof(EventArgsConverter), typeof(IValueConverter), typeof(EventToCommandBehavior), null,
                 BindingMode.OneWay);
 
-        public static BindableProperty EventArgsConverterParameterProperty =
+        public static readonly BindableProperty EventArgsConverterParameterProperty =
             BindableProperty.CreateAttached(nameof(EventArgsConverterParameter), typeof(object), typeof(EventToCommandBehavior), null,
                 BindingMode.OneWay);
 
-        protected Delegate _handler;
-        private EventInfo _eventInfo;
+        protected Delegate? _handler;
+        private EventInfo? _eventInfo;
 
         public string EventName
         {
@@ -70,7 +70,7 @@ namespace Warehouse.Mobile.Behavior
         {
             base.OnAttachedTo(bindable);
 
-            var events = AssociatedObject.GetType().GetRuntimeEvents().ToArray();
+            var events = AssociatedObject?.GetType().GetRuntimeEvents().ToArray();
             if (events.Any())
             {
                 _eventInfo = events.FirstOrDefault(e => e.Name == EventName);
@@ -85,7 +85,7 @@ namespace Warehouse.Mobile.Behavior
 
         protected override void OnDetachingFrom(View bindable)
         {
-            if (_handler != null)
+            if (_handler != null && _eventInfo != null)
             {
                 _eventInfo.RemoveEventHandler(AssociatedObject, _handler);
             }
@@ -93,7 +93,7 @@ namespace Warehouse.Mobile.Behavior
             base.OnDetachingFrom(bindable);
         }
 
-        private void AddEventHandler(EventInfo eventInfo, object item, Action<object, EventArgs> action)
+        private void AddEventHandler(EventInfo eventInfo, object? item, Action<object, EventArgs> action)
         {
             var eventParameters = eventInfo.EventHandlerType
                 .GetRuntimeMethods().First(m => m.Name == "Invoke")

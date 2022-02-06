@@ -6,7 +6,7 @@ namespace Warehouse.Mobile.Behavior
     public class BindableBehavior<T> : Behavior<T>
         where T : BindableObject
     {
-        public T AssociatedObject { get; private set; }
+        public T? AssociatedObject { get; private set; }
 
         protected override void OnAttachedTo(T bindable)
         {
@@ -35,7 +35,7 @@ namespace Warehouse.Mobile.Behavior
         protected override void OnBindingContextChanged()
         {
             base.OnBindingContextChanged();
-            BindingContext = AssociatedObject.BindingContext;
+            BindingContext = AssociatedObject?.BindingContext;
         }
     }
 }

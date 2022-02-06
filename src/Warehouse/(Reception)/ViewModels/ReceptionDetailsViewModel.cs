@@ -17,9 +17,9 @@ namespace Warehouse.Mobile.ViewModels
         private readonly INavigationService _navigationService;
         private ReceptionWithExtraConfirmedGoods? _reception;
         private ObservableCollection<ReceptionGoodViewModel>? _receptionGoods;
-        private string _itemCount;
-        private string _originalCount;
-        private string _supplierName;
+        private string? _itemCount;
+        private string? _originalCount;
+        private string? _supplierName;
         private DelegateCommand? validateReceptionCommand;
 
         public ReceptionDetailsViewModel(
@@ -37,13 +37,13 @@ namespace Warehouse.Mobile.ViewModels
             set => SetProperty(ref _receptionGoods, value);
         }
 
-        public string ItemCount
+        public string? ItemCount
         {
             get => _itemCount;
             set => SetProperty(ref _itemCount, value);
         }
 
-        public string SupplierName
+        public string? SupplierName
         {
             get => _supplierName;
             set => SetProperty(ref _supplierName, value);
@@ -55,18 +55,16 @@ namespace Warehouse.Mobile.ViewModels
             {
                 _ = _reception ?? throw new InvalidOperationException($"Reception object is not initialized");
                 await _reception.Confirmation().CommitAsync();
+                await ShowMessage(PopupSeverity.Info, "Success!", "Your reception has been synchronized successfully.");
             }
             catch (Exception ex)
             {
-                await ShowMessage(PopupSeverity.Error, "Error!", "Synchronization failed.");
-                return;
+                await ShowMessage(PopupSeverity.Error, "Error!", "Synchronization failed." + ex.Message);
             }
-
-            await ShowMessage(PopupSeverity.Info, "Success!", "Your reception has been synchronized successfully.");
             //await _navigationService.GoBackAsync();
         }));
 
-        public Func<Task<bool>> AnimateCounter { get; set; }
+        public Func<Task<bool>>? AnimateCounter { get; set; }
 
         public async Task InitializeAsync(INavigationParameters parameters)
         {
@@ -97,7 +95,10 @@ namespace Warehouse.Mobile.ViewModels
                     {
                         ReceptionGoods.Remove(goodViewModel);
                         RefreshCount();
-                        await AnimateCounter();
+                        if (AnimateCounter != null)
+                        {
+                            await AnimateCounter();
+                        }
                     }
                 }
                 else
