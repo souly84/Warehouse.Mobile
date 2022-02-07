@@ -12,7 +12,7 @@
         <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
-    <PackageReference Include="coverlet.msbuild" Version="3.1.1">
+    <PackageReference Include="coverlet.msbuild" Version="3.1.2">
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -20,6 +20,7 @@
     <PackageReference Include="Prism.Unity.Forms" Version="8.1.97" />
     <PackageReference Include="Xamarin.Forms.Mocks" Version="4.7.0.1" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="SimpleStorage" Version="1.4.36" />
   </ItemGroup>
 
   <ItemGroup>
@@ -30,5 +31,6 @@
     <None Remove="Newtonsoft.Json" />
     <None Remove="Prism.Plugin.Popups" />
     <None Remove="Warehouse.Core" />
+    <None Remove="SimpleStorage" />
   </ItemGroup>
 </Project>
