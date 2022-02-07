@@ -9,6 +9,7 @@ using Microsoft.AppCenter.Analytics;
 using Microsoft.AppCenter.Crashes;
 using Prism.Plugin.Popups;
 using Warehouse.Droid.Permissions;
+using PerpetualEngine.Storage;
 
 namespace Warehouse.Mobile.Droid
 {
@@ -29,6 +30,7 @@ namespace Warehouse.Mobile.Droid
             ToolbarResource = Resource.Layout.Toolbar;
 
             base.OnCreate(savedInstanceState);
+            SimpleStorage.SetContext(ApplicationContext);
             global::Rg.Plugins.Popup.Popup.Init(this);
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
             Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
