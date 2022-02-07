@@ -205,7 +205,7 @@ namespace Warehouse.Mobile.UnitTests
                     new MockScanner(),
                     new MockPageDialogService(),
                     new MockNavigationService(),
-                    new KeyValueStorage("InitializeAsyncTest")
+                    new KeyValueStorage()
                 ).InitializeAsync(new NavigationParameters())
             );
         }
@@ -213,13 +213,11 @@ namespace Warehouse.Mobile.UnitTests
         [Fact]
         public void PopupMessageIfValidateReceptionCommandError()
         {
-            var dialog = new MockPageDialogService();
             WarehouseMobile.Application(
                 new MockPlatformInitializer(
                    new ValidateExceptionReception(
                        new InvalidOperationException("Test error message")
-                   ),
-                   dialog
+                   )
                 )
             ).GoToReceptionDetails()
              .CurrentViewModel<ReceptionDetailsViewModel>()

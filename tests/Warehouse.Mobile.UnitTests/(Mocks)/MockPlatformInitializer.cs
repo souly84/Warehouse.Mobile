@@ -15,6 +15,15 @@ namespace Warehouse.Mobile.UnitTests
         private readonly IPageDialogService _pageDialogService;
 
         public MockPlatformInitializer(
+            IReception reception)
+            : this(
+                  reception,
+                  pageDialogService: null
+              )
+        {
+        }
+
+        public MockPlatformInitializer(
             IReception reception,
             IPageDialogService pageDialogService)
             : this(
@@ -44,7 +53,7 @@ namespace Warehouse.Mobile.UnitTests
             containerRegistry.RegisterInstance<IScanner>(_scanner);
             containerRegistry.RegisterInstance<ICompany>(_company);
             containerRegistry.RegisterInstance<IPageDialogService>(_pageDialogService);
-            containerRegistry.RegisterInstance<IKeyValueStorage>(new KeyValueStorage("Mobile_UnitTests"));
+            containerRegistry.RegisterInstance<IKeyValueStorage>(new KeyValueStorage());
             
         }
     }

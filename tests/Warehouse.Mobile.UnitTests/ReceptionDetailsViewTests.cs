@@ -18,7 +18,7 @@ namespace Warehouse.Mobile.UnitTests
                 new MockScanner(),
                 new MockPageDialogService(),
                 new MockNavigationService(),
-                new KeyValueStorage("UnitTest")
+                new KeyValueStorage()
             );
             vm1.ReceptionGoods = new System.Collections.ObjectModel.ObservableCollection<ReceptionGoodViewModel>();
             page.BindingContext = vm1;
@@ -27,7 +27,7 @@ namespace Warehouse.Mobile.UnitTests
                 new MockScanner(),
                 new MockPageDialogService(),
                 new MockNavigationService(),
-                new KeyValueStorage("UnitTest")
+                new KeyValueStorage()
             );
 
             page.BindingContext = null;

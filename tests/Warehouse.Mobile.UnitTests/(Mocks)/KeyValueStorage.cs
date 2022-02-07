@@ -1,54 +1,63 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using Newtonsoft.Json.Linq;
-using PerpetualEngine.Storage;
 using Warehouse.Core.Plugins;
 
 namespace Warehouse.Mobile.UnitTests.Mocks
 {
     public class KeyValueStorage : IKeyValueStorage
     {
-        private SimpleStorage _simpleStorage;
+        private Dictionary<string, string> _simpleStorage = new Dictionary<string, string>();
 
-        public KeyValueStorage(string storageKey)
+        public KeyValueStorage()
         {
-            _simpleStorage = SimpleStorage.EditGroup(storageKey);
         }
 
-        public IList<string> Keys => DesktopSimpleStorage.StoredKeys;
+        public IList<string> Keys => _simpleStorage.Keys.ToList();
 
         public bool Contains(string key)
         {
-            return _simpleStorage.HasKey(key);
+            return _simpleStorage.ContainsKey(key);
         }
 
         public T Get<T>(string key)
         {
             if (typeof(T) == typeof(JObject))
             {
-                var json = _simpleStorage.Get(key);
+                string json = null;
+                if (_simpleStorage.ContainsKey(key))
+                {
+                    json = _simpleStorage[key];
+                }
+               
                 if (string.IsNullOrEmpty(json))
                 {
                     return (T)(object)new JObject();
                 }
                 return (T)(object)JObject.Parse(json);
             }
-            return _simpleStorage.Get<T>(key);
+            if (_simpleStorage.ContainsKey(key))
+            {
+                return (T)Convert.ChangeType(_simpleStorage[key], typeof(T));
+            }
+            return default;
         }
 
         public void Remove(string key)
         {
-            _simpleStorage.Delete(key);
+            _simpleStorage.Remove(key);
         }
 
         public void Set<T>(string key, T @object)
         {
             if (typeof(T) == typeof(JObject))
             {
-                _simpleStorage.Put(key, @object.ToString());
+                _simpleStorage[key] = @object.ToString();
             }
             else
             {
-                _simpleStorage.Put(key, @object);
+                _simpleStorage[key] = Convert.ToString(@object);
             }
         }
     }
