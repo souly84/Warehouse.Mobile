@@ -71,8 +71,13 @@ namespace Warehouse.Mobile.Views
 
         async Task<bool> AnimateCounter()
         {
-            await CountLabel.ScaleTo(1.5, 300, Easing.BounceOut);
-            await CountLabel.ScaleTo(1, 300, Easing.BounceOut);
+            // CountLabel can be null in unit tests
+            if (CountLabel != null)
+            {
+                await CountLabel.ScaleTo(1.5, 300, Easing.BounceOut);
+                await CountLabel.ScaleTo(1, 300, Easing.BounceOut);
+            }
+           
             return true;
         }
     }

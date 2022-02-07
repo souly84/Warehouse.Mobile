@@ -15,7 +15,8 @@ namespace Warehouse.Mobile.ViewModels
     public class ReceptionDetailsViewModel : ScannerViewModel, IInitializeAsync
     {
         private readonly INavigationService _navigationService;
-        private ReceptionWithExtraConfirmedGoods? _reception;
+        private readonly IKeyValueStorage _keyValueStorage;
+        private IReception? _reception;
         private ObservableCollection<ReceptionGoodViewModel>? _receptionGoods;
         private string? _itemCount;
         private string? _originalCount;
@@ -25,10 +26,12 @@ namespace Warehouse.Mobile.ViewModels
         public ReceptionDetailsViewModel(
             IScanner scanner,
             IPageDialogService dialog,
-            INavigationService navigationService)
+            INavigationService navigationService,
+            IKeyValueStorage keyValueStorage)
             : base(scanner, dialog)
         {
             _navigationService = navigationService;
+            _keyValueStorage = keyValueStorage;
         }
 
         public ObservableCollection<ReceptionGoodViewModel> ReceptionGoods
@@ -68,14 +71,18 @@ namespace Warehouse.Mobile.ViewModels
 
         public async Task InitializeAsync(INavigationParameters parameters)
         {
-            _reception = new ReceptionWithExtraConfirmedGoods(
-                new ReceptionWithUnkownGoods(
-                    await parameters
-                        .Value<ISupplier>("Supplier")
-                        .Receptions.FirstAsync()
-                )
+            var supplierReception = await parameters
+                .Value<ISupplier>("Supplier")
+                .Receptions.FirstAsync();
+            _reception = new StatefulReception(
+                supplierReception
+                    .WithExtraConfirmed()
+                    .WithoutInitiallyConfirmed(),
+                _keyValueStorage
             );
-            ReceptionGoods = await _reception.NeedConfirmation().ToViewModelListAsync();
+            ReceptionGoods = await _reception
+                .NotConfirmedOnly()
+                .ToViewModelListAsync();
             _originalCount = ReceptionGoods.Count.ToString();
             SupplierName = ((IPrintable)parameters.Value<ISupplier>("Supplier")).ToDictionary().ValueOrDefault<string>("Name");
             RefreshCount();
@@ -86,7 +93,7 @@ namespace Warehouse.Mobile.ViewModels
             if (barcode.Symbology.ToLower() == "ean13")
             {
                 _ = _reception ?? throw new InvalidOperationException($"Reception object is not initialized");
-                var good = await _reception.ByBarcodeAsync(barcode.BarcodeData);
+                var good = (await _reception.ByBarcodeAsync(barcode.BarcodeData, true)).First();
                 var goodViewModel = ReceptionGoods.FirstOrDefault(x => x.Equals(good));
                 if (goodViewModel != null)
                 {

@@ -4,6 +4,7 @@ using Prism.Services;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.Tests;
+using Warehouse.Mobile.UnitTests.Mocks;
 
 namespace Warehouse.Mobile.UnitTests
 {
@@ -12,6 +13,15 @@ namespace Warehouse.Mobile.UnitTests
         private readonly ICompany _company;
         private readonly IScanner _scanner;
         private readonly IPageDialogService _pageDialogService;
+
+        public MockPlatformInitializer(
+            IReception reception)
+            : this(
+                  reception,
+                  pageDialogService: null
+              )
+        {
+        }
 
         public MockPlatformInitializer(
             IReception reception,
@@ -43,6 +53,8 @@ namespace Warehouse.Mobile.UnitTests
             containerRegistry.RegisterInstance<IScanner>(_scanner);
             containerRegistry.RegisterInstance<ICompany>(_company);
             containerRegistry.RegisterInstance<IPageDialogService>(_pageDialogService);
+            containerRegistry.RegisterInstance<IKeyValueStorage>(new KeyValueStorage());
+            
         }
     }
 }

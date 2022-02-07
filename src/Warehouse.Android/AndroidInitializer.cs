@@ -1,7 +1,7 @@
-﻿using EbSoft.Warehouse.SDK;
-using Prism;
+﻿using Prism;
 using Prism.Ioc;
 using Warehouse.Core.Plugins;
+using Warehouse.Droid.Services;
 using Warehouse.Scanner.SDK;
 using Warehouse.Scanner.SDK.Droid;
 
@@ -19,6 +19,7 @@ namespace Warehouse.Mobile.Droid
         public void RegisterTypes(IContainerRegistry container)
         {
             container.RegisterInstance<IScanner>(new BarcodeScanner().Logged());
+            container.RegisterInstance<IKeyValueStorage>(new SimpleKeyValueStorage("Warehouse_Mobile_Droid"));
             //Services
 
             //var tracing = (AppCenterTracing)new AppCenterTracing("ac3d4ba2-411b-4ce3-91bb-7ab861e37796").Identify(

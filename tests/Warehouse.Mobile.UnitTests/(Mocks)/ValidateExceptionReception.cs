@@ -18,6 +18,13 @@ namespace Warehouse.Mobile.UnitTests.Mocks
               new MockReceptionGood("1", 1, "1111")
         );
 
+        public string Id => throw _exception;
+
+        public Task<IList<IReceptionGood>> ByBarcodeAsync(string barcodeData, bool ignoreConfirmed = false)
+        {
+            throw _exception;
+        }
+
         public override bool Equals(object obj)
         {
             return ReferenceEquals(this, obj)
