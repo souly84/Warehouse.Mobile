@@ -17,6 +17,16 @@ namespace Warehouse.Mobile.UnitTests
             return navigationService as PageNavigationService;
         }
 
+        public static App ClosePopup(this App app)
+        {
+            while (app.CurrentViewModel<object>() is CustomPopupMessageViewModel customPopup)
+            {
+                customPopup.ActionCommand.Execute();
+            }
+            
+            return app;
+        }
+
         public static T CurrentViewModel<T>(this App app)
         {
             return CurrentViewModel<T>(app.PageNavigationService());
@@ -40,7 +50,7 @@ namespace Warehouse.Mobile.UnitTests
         public static async Task<T> WaitViewModel<T>(this App app)
         {
             Func<bool> waitForViewModel = () => app.CurrentViewModel<object>() is T;
-            await waitForViewModel.WaitForAsync();
+            await waitForViewModel.WaitForAsync(2000);
             return app.CurrentViewModel<T>();
         }
 

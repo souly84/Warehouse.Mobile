@@ -1,7 +1,9 @@
 ﻿using Prism;
 using Prism.Ioc;
 using Prism.Services;
+using Rg.Plugins.Popup.Contracts;
 using Warehouse.Core;
+using Warehouse.Mobile.UnitTests.Mocks;
 
 namespace Warehouse.Mobile.UnitTests
 {
@@ -45,6 +47,11 @@ namespace Warehouse.Mobile.UnitTests
             );
         }
 
+        public static App Application(params IStorage[] storages)
+        {
+            return Application(new MockWarehouse(storages));
+        }
+
         public static App Application(IWarehouse warehouse)
         {
             return Application(
@@ -66,13 +73,21 @@ namespace Warehouse.Mobile.UnitTests
 
         public static App Application(IPlatformInitializer platformInitializer)
         {
+           
             ContainerLocator.ResetContainer();
             Xamarin.Forms.Mocks.MockForms.Init();
             NavigationServiceExtensions.ResetPageNavigationRegistry();
             var app = new App(platformInitializer);
             Xamarin.Forms.Application.Current = null;
             Xamarin.Forms.Application.Current = app;
+            Popup().ShownPopups.Clear();
+            Popup().VisiblePopup.Clear();
             return app;
+        }
+
+        internal static MockPopupPlatform Popup()
+        {
+            return Xamarin.Forms.DependencyService.Resolve<IPopupPlatform>() as MockPopupPlatform;
         }
     }
 }

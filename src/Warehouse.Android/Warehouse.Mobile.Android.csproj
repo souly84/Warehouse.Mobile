@@ -101,13 +101,13 @@
       <Version>8.0.76</Version>
       </PackageReference>
     <PackageReference Include="Warehouse.Core">
-      <Version>1.0.0.371</Version>
+      <Version>1.0.0.391</Version>
     </PackageReference>
     <PackageReference Include="Honeywell.BarcodeReader">
       <Version>1.32.7.10</Version>
     </PackageReference>
     <PackageReference Include="EbSoft.Warehouse.SDK">
-      <Version>1.0.0.375</Version>
+      <Version>1.0.0.394</Version>
     </PackageReference>
   </ItemGroup>
   <ItemGroup>

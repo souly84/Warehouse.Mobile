@@ -10,10 +10,15 @@ namespace Warehouse.Mobile.ViewModels
     {
         private readonly IReceptionGood _receptionGood;
         private DictionaryMedia? _goodData;
+        private string? _errorMessage;
+        private DelegateCommand? increaseQuantityCommand;
+        private DelegateCommand? decreaseQuantityCommand;
 
         public ReceptionGoodViewModel(IReceptionGood receptionGood)
         {
             _receptionGood = receptionGood ?? throw new ArgumentNullException(nameof(receptionGood));
+            ErrorMessage = IsUnkownGood ? $"Not expected {_receptionGood.ToDictionary().ValueOrDefault<string>("Barcode")}" : "Received more than expected";
+            Console.WriteLine(_receptionGood.ToDictionary().ValueOrDefault<string>("Ean"));
         }
 
         public bool IsUnkownGood => _receptionGood.IsUnknown;
@@ -42,18 +47,37 @@ namespace Warehouse.Mobile.ViewModels
 
         public string Oa => GoodData.ValueOrDefault<string>("oa");
 
-        private DelegateCommand? increaseQuantityCommand;
+        public string? ErrorMessage
+        {
+            get => _errorMessage;
+            set => SetProperty(ref _errorMessage, value);
+        }
+
+        public string RemainingQuantity
+        {
+            get 
+            {
+                if (_receptionGood.IsUnknown)
+                {
+                    return ConfirmedQuantity.ToString();
+                }
+                return $"{ConfirmedQuantity}/{Quantity}";
+            }
+        }
+        
         public DelegateCommand IncreaseQuantityCommand => increaseQuantityCommand ?? (increaseQuantityCommand = new DelegateCommand(() =>
         {
             _receptionGood.Confirmation.Increase(1);
             RaisePropertyChanged(nameof(ConfirmedQuantity));
+            RaisePropertyChanged(nameof(RemainingQuantity));
+
         }));
 
-        private DelegateCommand? decreaseQuantityCommand;
         public DelegateCommand DecreaseQuantityCommand => decreaseQuantityCommand ?? (decreaseQuantityCommand = new DelegateCommand(() =>
         {
             _receptionGood.Confirmation.Decrease(1);
             RaisePropertyChanged(nameof(ConfirmedQuantity));
+            RaisePropertyChanged(nameof(RemainingQuantity));
         }));
 
         public override bool Equals(object obj)

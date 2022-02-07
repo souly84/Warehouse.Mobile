@@ -10,8 +10,9 @@ namespace Warehouse.Mobile
         public MockWarehouseCompany()
             : this(
                   new MockWarehouse(
-                    new ListOfEntities<IWarehouseGood>(),
-                    new ListOfEntities<IStorage>()
+                    new MockStorage(
+                          "ST01"
+                    )
                   )
               )
         {
@@ -20,15 +21,17 @@ namespace Warehouse.Mobile
         public MockWarehouseCompany(params IWarehouseGood[] goods)
             : this(
                   new MockWarehouse(
-                      new ListOfEntities<IWarehouseGood>(goods),
-                      new ListOfEntities<IStorage>(
-                          new MockStorage(
-                              "ST01",
-                              goods
-                          )
-                      )
+                      new MockStorage(
+                          "ST01",
+                          goods
+                    )
                   )
               )
+        {
+        }
+
+        public MockWarehouseCompany(params IStorage[] storages)
+            : this(new MockWarehouse(storages))
         {
         }
 
@@ -54,8 +57,9 @@ namespace Warehouse.Mobile
         public MockWarehouseCompany(IEntities<ISupplier> suppliers)
             : this(
                   new MockWarehouse(
-                    new ListOfEntities<IWarehouseGood>(),
-                    new ListOfEntities<IStorage>()
+                    new MockStorage(
+                          "ST01"
+                    )
                   ),
                   suppliers
               )

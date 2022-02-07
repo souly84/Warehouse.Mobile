@@ -17,6 +17,9 @@
     <Color x:Key="BackgroundColorViewEnd">#ECF0F7</Color>
     <Color x:Key="TextsColor">#544F5F</Color>
     <Color x:Key="MainColor">#E2E5ED</Color>
+    <Color x:Key="SuccessColor">#9BCC66</Color>
+    <Color x:Key="WarningColor">#FFC122</Color>
+    <Color x:Key="ErrorColor">#E34C5D</Color>
 
     <Style x:Key="SupplierNameLabel" TargetType="Label" ApplyToDerivedTypes="True">
         <Setter Property="TextColor" Value="{DynamicResource TextsColor}" />

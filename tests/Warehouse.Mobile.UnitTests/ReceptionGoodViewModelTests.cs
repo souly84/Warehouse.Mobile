@@ -30,6 +30,10 @@ namespace Warehouse.Mobile.UnitTests
                                     ""commentaire"": null,
                                     ""itemType"": ""electro""
                                 }")
+                            ),
+                            new EbSoftReceptionGood(
+                                1,
+                                "SomeUnexpectedBarcode"
                             )
                         )
                     )
@@ -89,6 +93,31 @@ namespace Warehouse.Mobile.UnitTests
                     .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
                     .First().Quantity
+            );
+        }
+
+        [Fact]
+        public void ReceptionGoodRemainingQuantity()
+        {
+            Assert.Equal(
+                "0/2",
+                _app
+                    .CurrentViewModel<ReceptionDetailsViewModel>()
+                    .ReceptionGoods
+                    .First().RemainingQuantity
+            );
+        }
+
+        [Fact]
+        public void UnknownReceptionGoodRemainingQuantity()
+        {
+            Assert.Equal(
+                "0",
+                _app
+                    .CurrentViewModel<ReceptionDetailsViewModel>()
+                    .ReceptionGoods
+                    .ElementAt(1)
+                    .RemainingQuantity
             );
         }
 

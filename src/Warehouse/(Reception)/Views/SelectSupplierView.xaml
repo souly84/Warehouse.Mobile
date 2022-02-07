@@ -7,7 +7,9 @@
     Title="Select supplier"
     xmlns:neo="clr-namespace:Xamarin.Forms.NeoControls;assembly=Xamarin.Forms.NeoControls"
     xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
+    xmlns:behaviors="clr-namespace:Warehouse.Mobile.Behavior"
     x:Name="ThisPage"
+
     x:DataType="viewModels:SelectSupplierViewModel"
     >
     <ContentView VerticalOptions="Center" Padding="5">
@@ -37,7 +39,13 @@
                           <controls:DateItem Date="{Binding CurrentDate}"/>-->
 
 
-                <DatePicker MinimumDate="{Binding CurrentDate}" HorizontalOptions="CenterAndExpand"/>
+                <DatePicker
+                    Date="{Binding SelectedDate, Mode=TwoWay}"
+                    HorizontalOptions="CenterAndExpand">
+                    <DatePicker.Behaviors>
+                        <behaviors:EventToCommandBehavior Command="{Binding ChangeSelectedDateCommand}" EventName="DateSelected" />
+                    </DatePicker.Behaviors>
+                </DatePicker>
 
 
 

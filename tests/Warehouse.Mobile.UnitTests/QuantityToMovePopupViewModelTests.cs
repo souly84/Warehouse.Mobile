@@ -58,7 +58,16 @@ namespace Warehouse.Mobile.UnitTests
         }
 
         [Fact]
-        public async Task ValidateCommand()
+        public async Task ValidateCommand_NavigatesBackToPutAwayViewModel()
+        {
+            var app = await AppInQuantityToMovePopupStateAsync();
+            app.CurrentViewModel<QuantityToMovePopupViewModel>()
+               .ValidateCommand.Execute();
+            Assert.IsType<PutAwayViewModel>(await app.WaitViewModel<PutAwayViewModel>());
+        }
+
+        [Fact(Skip = "Need to implement proper assert")]
+        public async Task ValidateCommand_SendMovementRequestToTheServer()
         {
             var app = await AppInQuantityToMovePopupStateAsync();
             app.CurrentViewModel<QuantityToMovePopupViewModel>()
@@ -70,22 +79,11 @@ namespace Warehouse.Mobile.UnitTests
         {
             var app = WarehouseMobile.Application(
                 new MockWarehouse(
-                     new ListOfEntities<IWarehouseGood>(
-                        new MockWarehouseGood("1", 5, "1111"),
-                        new MockWarehouseGood("2", 5, "2222").With(
-                            new MockStorages(
-                                new ListOfEntities<IStorage>(new MockStorage("Storage111")),
-                                new ListOfEntities<IStorage>(new MockStorage("MockStorage2")),
-                                new ListOfEntities<IStorage>(new MockStorage("MockStorage3"))
-                            )
-                        )
-                     ),
-                     new ListOfEntities<IStorage>(
-                        new MockStorage(
+                     new MockStorage(
                             "Storage111",
+                            new MockWarehouseGood("1", 5, "1111"),
                             new MockWarehouseGood("2", 5, "2222")
-                        )
-                     )
+                    )
                 )
             ).GoToPutAway();
             app.Scan("2222") // Scan good

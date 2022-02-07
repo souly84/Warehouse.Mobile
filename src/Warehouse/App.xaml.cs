@@ -45,10 +45,13 @@ namespace Warehouse.Mobile
             containerRegistry.RegisterForNavigation<StockMoveView>();
             // this registration was missed, is it done by purpose?
             containerRegistry.RegisterForNavigation<QuantityToMovePopupView, QuantityToMovePopupViewModel>();
+            containerRegistry.RegisterForNavigation<CustomPopupMessageView>();
             if (!containerRegistry.IsRegistered<ICompany>())
             {
                containerRegistry.RegisterInstance<ICompany>(
-                   new EbSoftCompany("http://wdc-logcnt.eurocenter.be/webservice/api.php")
+                   new EbSoftCompany("http://wdc-logcnt.eurocenter.be/webservice/apiscanning.php")
+                   //new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php")
+
                );
             }
         }

@@ -2,25 +2,33 @@
 <ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
     x:Class="Warehouse.Mobile.Views.LoginView"
     Title="Login"
     Visual="Material">
-    <ContentView VerticalOptions="Center">
-        <StackLayout>
-            <Label
-                            FontFamily="{StaticResource MaterialFontFamily}"
-                            FontSize="30"
-                            VerticalOptions="Center"
-                            VerticalTextAlignment="Center"
-                            HorizontalTextAlignment="Start"
-                            HorizontalOptions="Start"
-                            Text="{Binding Icons.TruckCheck}"
-                            TextColor="#4f94d4">
-                        </Label>
-
+    <NavigationPage.TitleView>
+        <StackLayout Padding="2" >
             
         </StackLayout>
+    </NavigationPage.TitleView>
+    <ContentView VerticalOptions="CenterAndExpand">
         
+        <StackLayout HorizontalOptions="Center">
+             <Label
+                FontFamily="materialicons"
+                Text="{x:Static fonts:MaterialIcons.BarcodeScan}"
+                TextColor="{DynamicResource TextsColor}"
+                FontSize="90"/>
+        </StackLayout>
 
+        <ContentView.Background>
+            <LinearGradientBrush StartPoint="0,1"
+                                 EndPoint="0,0">
+                <GradientStop Color="{StaticResource BackgroundColorViewStart}"
+                              Offset="0.1"/>
+                <GradientStop Color="{StaticResource BackgroundColorViewEnd}"
+                              Offset="1.0"/>
+            </LinearGradientBrush>
+        </ContentView.Background>
     </ContentView>
 </ContentPage>
