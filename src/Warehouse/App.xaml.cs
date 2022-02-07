@@ -49,8 +49,8 @@ namespace Warehouse.Mobile
             if (!containerRegistry.IsRegistered<ICompany>())
             {
                containerRegistry.RegisterInstance<ICompany>(
-                   new EbSoftCompany("http://wdc-logcnt.eurocenter.be/webservice/apiscanning.php")
-                   //new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php")
+                   //new EbSoftCompany("http://wdc-logcnt.eurocenter.be/webservice/apiscanning.php")
+                   new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php")
 
                );
             }

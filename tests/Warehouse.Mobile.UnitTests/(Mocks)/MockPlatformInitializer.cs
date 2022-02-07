@@ -3,6 +3,7 @@ using Prism.Ioc;
 using Prism.Services;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
+using Warehouse.Mobile.Helper;
 using Warehouse.Mobile.Tests;
 
 namespace Warehouse.Mobile.UnitTests
@@ -43,6 +44,7 @@ namespace Warehouse.Mobile.UnitTests
             containerRegistry.RegisterInstance<IScanner>(_scanner);
             containerRegistry.RegisterInstance<ICompany>(_company);
             containerRegistry.RegisterInstance<IPageDialogService>(_pageDialogService);
+            containerRegistry.RegisterInstance<IDeviceHelper>(new MockDeviceHelper());
         }
     }
 }

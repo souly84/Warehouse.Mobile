@@ -3,6 +3,7 @@ using System.Windows.Input;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
+using Warehouse.Mobile.Helper;
 
 namespace Warehouse.Mobile.ViewModels
 {
@@ -12,9 +13,17 @@ namespace Warehouse.Mobile.ViewModels
         private ICommand? goToAvailableSuppliersCommand;
         private ICommand? goToPutAwayCommand;
 
-        public MenuSelectionViewModel(INavigationService navigationService)
+        private string buildVersion;
+        public string BuildVersion
+        {
+            get { return buildVersion; }
+            set { SetProperty(ref buildVersion, value); }
+        }
+
+        public MenuSelectionViewModel(INavigationService navigationService, IDeviceHelper helper)
         {
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
+            BuildVersion = helper.GetBuildVersion();
         }
 
         public ICommand GoToAvailableSuppliersCommand => goToAvailableSuppliersCommand ?? (goToAvailableSuppliersCommand = new DelegateCommand(() =>

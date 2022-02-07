@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Prism.Navigation;
+using Prism.Services;
 using Warehouse.Core;
 using Warehouse.Mobile.UnitTests.Mocks;
 using Warehouse.Mobile.ViewModels;
@@ -19,16 +20,16 @@ namespace Warehouse.Mobile.UnitTests
         public static IEnumerable<object[]> SelectSupplierViewModelData =>
           new List<object[]>
           {
-                new object[] { null, null },
-                new object[] { new MockWarehouseCompany(), null },
-                new object[] { null, new MockNavigationService() }
+                new object[] { null, null, null },
+                new object[] { new MockWarehouseCompany(), null, null },
+                new object[] { null, new MockNavigationService(), null }
           };
 
         [Theory, MemberData(nameof(SelectSupplierViewModelData))]
-        public void ArgumentNullException(ICompany company, INavigationService navigationService)
+        public void ArgumentNullException(ICompany company, INavigationService navigationService, IPageDialogService dialog)
         {
             Assert.Throws<ArgumentNullException>(
-                () => new SelectSupplierViewModel(company, navigationService)
+                () => new SelectSupplierViewModel(company, navigationService, dialog)
             );
         }
 

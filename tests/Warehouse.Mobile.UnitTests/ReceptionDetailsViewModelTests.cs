@@ -136,13 +136,13 @@ namespace Warehouse.Mobile.UnitTests
         public void ScannedUnknownGoodBarcodeAppearsInReceptionGoodsCollectionAsUnknownGood()
         {
             Assert.Equal(
-                4,
+                5,
                 WarehouseMobile.Application(
                     new MockReceptionGood("1", 5, "1111"),
                     new MockReceptionGood("2", 2, "2222"),
                     new MockReceptionGood("3", 4, "3333")
                 ).GoToReceptionDetails()
-                 .Scan("UknownBarcode", "2222")
+                 .Scan("UknownBarcode", "2222", "4444")
                  .ClosePopup()
                  .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods

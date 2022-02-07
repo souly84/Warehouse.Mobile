@@ -183,7 +183,7 @@
                         FontSize="Small"
                         HorizontalOptions="EndAndExpand"
                         HorizontalTextAlignment="End"
-                        Text="v1.0"
+                        Text="{Binding BuildVersion}"
                         TextColor="White"
                       VerticalOptions="Center"
                         VerticalTextAlignment="Center" />

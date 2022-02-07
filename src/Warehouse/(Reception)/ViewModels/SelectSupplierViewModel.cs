@@ -5,6 +5,7 @@ using EbSoft.Warehouse.SDK;
 using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
+using Prism.Services;
 using Warehouse.Core;
 
 namespace Warehouse.Mobile.ViewModels
@@ -13,13 +14,16 @@ namespace Warehouse.Mobile.ViewModels
     {
         private readonly ICompany _company;
         private readonly INavigationService _navigationService;
+        private readonly IPageDialogService _dialog;
 
         public SelectSupplierViewModel(
             ICompany company,
-            INavigationService navigationService)
+            INavigationService navigationService,
+            IPageDialogService dialog)
         {
             _company = company ?? throw new ArgumentNullException(nameof(company));
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
+            _dialog = dialog;
         }
 
         private IList<SupplierViewModel>? _suppliers;
@@ -46,7 +50,8 @@ namespace Warehouse.Mobile.ViewModels
         public Task InitializeAsync(INavigationParameters parameters)
         {
             SelectedDate = DateTime.Now;
-            return RefreshAvailableSupplierList();
+            return Task.CompletedTask;
+            //return RefreshAvailableSupplierList();
         }
 
         private DelegateCommand? changeSelectedDateCommand;
@@ -57,10 +62,22 @@ namespace Warehouse.Mobile.ViewModels
 
         private async Task RefreshAvailableSupplierList()
         {
-            Suppliers = await _company
+            try
+            {
+                Suppliers = await _company
                 .Suppliers
                 .For(SelectedDate)
                 .ToViewModelListAsync(_navigationService);
+            }
+            catch (InvalidOperationException ex)
+            {
+                await _dialog.DisplayAlertAsync("Error", "Please check your connection", "Ok");
+            }
+            catch (Exception ex)
+            {
+                await _dialog.DisplayAlertAsync("Error", ex.Message.ToString(), "Ok");
+            }
+
         }
     }
 }
