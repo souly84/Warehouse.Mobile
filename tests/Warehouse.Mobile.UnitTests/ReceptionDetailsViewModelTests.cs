@@ -154,6 +154,7 @@ namespace Warehouse.Mobile.UnitTests
         public async Task ReceptionValidationSendsConfirmedGoodsToServer()
         {
             var reception = new MockReception(
+                "Reception01",
                 new MockReceptionGood("1", 1, "1111"),
                 new MockReceptionGood("2", 2, "2222"),
                 new MockReceptionGood("3", 4, "3333")
@@ -203,7 +204,8 @@ namespace Warehouse.Mobile.UnitTests
                 () => new ReceptionDetailsViewModel(
                     new MockScanner(),
                     new MockPageDialogService(),
-                    new MockNavigationService()
+                    new MockNavigationService(),
+                    new KeyValueStorage("InitializeAsyncTest")
                 ).InitializeAsync(new NavigationParameters())
             );
         }

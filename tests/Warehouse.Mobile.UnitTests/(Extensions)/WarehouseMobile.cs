@@ -18,6 +18,7 @@ namespace Warehouse.Mobile.UnitTests
         {
             return Application(
                  new MockReception(
+                     "Reception01",
                      receprionGoods
                  )
             );

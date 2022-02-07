@@ -17,6 +17,7 @@ namespace Warehouse.Mobile.UnitTests
                     new MockSupplier(
                         "Electrolux",
                         new MockReception(
+                            "Reception01",
                             new EbSoftReceptionGood(
                                 1,
                                 JObject.Parse(@"{
