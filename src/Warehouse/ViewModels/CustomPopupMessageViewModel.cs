@@ -1,4 +1,6 @@
-﻿using Prism.Commands;
+﻿using System;
+using System.Threading.Tasks;
+using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Warehouse.Mobile.Extensions;
@@ -43,16 +45,29 @@ namespace Warehouse.Mobile.ViewModels
             set => SetProperty(ref _actionText, value);
         }
 
+        Action<bool, Exception> CallBack;
+
         public void Initialize(INavigationParameters parameters)
         {
             Severity = parameters.Value<PopupSeverity>("Severity");
             Title = parameters.Value<string>("Title");
             Message = parameters.Value<string>("Message");
             ActionText = parameters.Value<string>("ActionText");
+            CallBack = parameters.Value<Action<bool, Exception>>("CallBack");
         }
 
-        public DelegateCommand ActionCommand => _actionCommand ?? (_actionCommand = new DelegateCommand(() =>
-            _navigationService.GoBackAsync()
-        ));
+        public DelegateCommand ActionCommand => _actionCommand ?? (_actionCommand = new DelegateCommand(async () =>
+        {
+            try
+            {
+                await _navigationService.GoBackAsync();
+                CallBack?.Invoke(true, null);
+            }
+            catch (Exception ex)
+            {
+                CallBack?.Invoke(false, ex);
+            }
+            
+        }));
     }
 }

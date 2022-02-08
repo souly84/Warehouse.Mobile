@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Warehouse.Core;
+using Warehouse.Mobile.Reception.Views;
 
 namespace Warehouse.Mobile.ViewModels
 {
@@ -17,7 +18,9 @@ namespace Warehouse.Mobile.ViewModels
         public static async Task<ObservableCollection<ReceptionGoodViewModel>> ToViewModelListAsync(this IConfirmation confirmation)
         {
             var confirmations = await confirmation.ToListAsync();
-            return new ObservableCollection<ReceptionGoodViewModel>(confirmations.Select(x => new ReceptionGoodViewModel(x.Good)));
+            confirmations.Sort(new ReceptionGoodComparer());
+            return new ObservableCollection<ReceptionGoodViewModel>(confirmations
+            .Select(x => new ReceptionGoodViewModel(x.Good)));
         }
     }
 }
