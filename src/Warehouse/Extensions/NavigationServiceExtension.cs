@@ -23,14 +23,14 @@ namespace Warehouse.Mobile.Extensions
                 completionToken.SetResult(result);
             };
             var result = await _navigationService.NavigateAsync(
-            AppConstants.CustomPopupMessageViewId,
+                AppConstants.CustomPopupMessageViewId,
                 new NavigationParameters
                 {
                     { "Severity", severity},
                     { "Title", title},
                     { "Message", message},
                     { "ActionText", "GOT IT!"},
-                    { "CallBack", (Action<bool, Exception>)callBack }
+                    { "CallBack", callBack }
                 }
             );
             if (result.Exception != null)

@@ -216,24 +216,32 @@ namespace Warehouse.Mobile.UnitTests
         [Fact]
         public void PopupMessageIfValidateReceptionCommandError()
         {
-            WarehouseMobile.Application(
-                new MockPlatformInitializer(
-                   new ValidateExceptionReception(
-                       new InvalidOperationException("Test error message")
+            App app = null;
+            try
+            {
+                app = WarehouseMobile.Application(
+                   new MockPlatformInitializer(
+                      new ValidateExceptionReception(
+                          new InvalidOperationException("Test error message")
+                      )
                    )
-                )
-            ).GoToReceptionDetails()
-             .CurrentViewModel<ReceptionDetailsViewModel>()
-             .ValidateReceptionCommand.Execute();
-            Assert.Contains(
-                new DialogPage
-                {
-                    Title = "Error!",
-                    Message = "Synchronization failed. Test error message",
-                    CancelButton = "GOT IT!"
-                },
-                WarehouseMobile.Popup().ShownPopups.ToDialogPages()
-            );
+                ).GoToReceptionDetails();
+                app.CurrentViewModel<ReceptionDetailsViewModel>()
+                .ValidateReceptionCommand.Execute();
+                    Assert.Contains(
+                        new DialogPage
+                        {
+                            Title = "Error!",
+                            Message = "Synchronization failed. Test error message",
+                            CancelButton = "GOT IT!"
+                        },
+                        WarehouseMobile.Popup().ShownPopups.ToDialogPages()
+                    );
+            }
+            finally
+            {
+                app?.ClosePopup();
+            }
         }
 
         [Fact]
