@@ -1,7 +1,9 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Warehouse.Core;
+using Warehouse.Mobile.Reception.ViewModels;
 using Warehouse.Mobile.Reception.Views;
 
 namespace Warehouse.Mobile.ViewModels
@@ -21,6 +23,31 @@ namespace Warehouse.Mobile.ViewModels
             confirmations.Sort(new ReceptionGoodComparer());
             return new ObservableCollection<ReceptionGoodViewModel>(confirmations
             .Select(x => new ReceptionGoodViewModel(x.Good)));
+        }
+
+        public static async Task<IReceptionGood> ByBarcodeAsync(
+            this ObservableCollection<ReceptionGroup> receptionGroups,
+            string barcodeData,
+            bool ignoreConfirmed = false)
+        {
+            foreach (var receptionGroup in receptionGroups)
+            {
+                var goods = await receptionGroup.ByBarcodeAsync(barcodeData, ignoreConfirmed);
+                if (goods.Any(g => !g.IsUnknown))
+                {
+                    return goods.First();
+                }
+            }
+
+            if (receptionGroups.Any())
+            {
+                var goods = await receptionGroups.First().ByBarcodeAsync(barcodeData);
+                return goods.First();
+            }
+
+            throw new InvalidOperationException(
+                $"Reception groups dont contain any good with barcode {barcodeData}"
+            );
         }
     }
 }

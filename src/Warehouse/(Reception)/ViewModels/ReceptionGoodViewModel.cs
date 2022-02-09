@@ -25,6 +25,8 @@ namespace Warehouse.Mobile.ViewModels
 
         public bool IsExtraConfirmedReceptionGood => _receptionGood.IsExtraConfirmed;
 
+        public bool Regular => !IsExtraConfirmedReceptionGood && !IsUnkownGood;
+
         private DictionaryMedia GoodData
         {
             get

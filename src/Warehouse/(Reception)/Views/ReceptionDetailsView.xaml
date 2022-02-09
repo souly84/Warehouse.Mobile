@@ -5,7 +5,6 @@
     xmlns:viewModels="clr-namespace:Warehouse.Mobile.ViewModels"
     xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
     xmlns:neo="clr-namespace:Xamarin.Forms.NeoControls;assembly=Xamarin.Forms.NeoControls"
-    xmlns:converters="clr-namespace:Warehouse.Mobile.Converter"
     Title="Receptions"
     NavigationPage.HasBackButton="True"
     x:DataType="viewModels:ReceptionDetailsViewModel"
@@ -53,8 +52,17 @@
         <StackLayout VerticalOptions="FillAndExpand">
                 <CollectionView
                     x:Name="ReceptionDetailsCollectionView"
+                    IsGrouped="True"
                     VerticalOptions="FillAndExpand"
                     ItemsSource="{Binding ReceptionGoods}">
+                    <CollectionView.GroupHeaderTemplate>
+                        <DataTemplate>
+                            <Label Text="{Binding Name}"
+                                   BackgroundColor="LightGray"
+                                   FontSize="Large"
+                                   FontAttributes="Bold" />
+                        </DataTemplate>
+                    </CollectionView.GroupHeaderTemplate>
                     <CollectionView.ItemTemplate>
                         <DataTemplate x:DataType="viewModels:ReceptionGoodViewModel">
                             <Frame

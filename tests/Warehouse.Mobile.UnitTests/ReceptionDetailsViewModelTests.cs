@@ -132,7 +132,7 @@ namespace Warehouse.Mobile.UnitTests
                  .Scan("1111", "2222")
                  .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
-                    .Sum(good => good.ConfirmedQuantity)
+                    .Sum(reception => reception.Sum(good => good.ConfirmedQuantity))
             );
         }
 
@@ -150,7 +150,7 @@ namespace Warehouse.Mobile.UnitTests
                  .ClosePopup()
                  .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
-                    .Count
+                    .Sum(reception => reception.Count)
             );
         }
 
@@ -197,7 +197,7 @@ namespace Warehouse.Mobile.UnitTests
                  .Scan("2222", "2222")
                  .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
-                    .Count
+                    .Sum(reception => reception.Count)
             );
         }
 
@@ -259,7 +259,7 @@ namespace Warehouse.Mobile.UnitTests
                  .Scan("2222", "2222")
                  .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
-                    .Count
+                    .Sum(reception => reception.Count)
             );
         }
 
@@ -283,7 +283,7 @@ namespace Warehouse.Mobile.UnitTests
                  .Scan("2222").ClosePopup()
                  .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
-                    .Sum(good => good.ConfirmedQuantity)
+                    .Sum(reception => reception.Sum(good => good.ConfirmedQuantity))
             );
         }
 

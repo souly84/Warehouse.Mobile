@@ -9,6 +9,7 @@ using Prism.Services;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.Extensions;
+using Warehouse.Mobile.Reception.ViewModels;
 
 namespace Warehouse.Mobile.ViewModels
 {
@@ -16,10 +17,9 @@ namespace Warehouse.Mobile.ViewModels
     {
         private readonly INavigationService _navigationService;
         private readonly IKeyValueStorage _keyValueStorage;
-        private IReception? _reception;
-        private ObservableCollection<ReceptionGoodViewModel>? _receptionGoods;
+        private ObservableCollection<ReceptionGroup>? _receptionGoods;
         private string? _itemCount;
-        private string? _originalCount;
+        private int _originalCount;
         private string? _supplierName;
         private DelegateCommand? validateReceptionCommand;
 
@@ -34,9 +34,9 @@ namespace Warehouse.Mobile.ViewModels
             _keyValueStorage = keyValueStorage;
         }
 
-        public ObservableCollection<ReceptionGoodViewModel> ReceptionGoods
+        public ObservableCollection<ReceptionGroup> ReceptionGoods
         {
-            get => _receptionGoods ?? new ObservableCollection<ReceptionGoodViewModel>();
+            get => _receptionGoods ?? new ObservableCollection<ReceptionGroup>();
             set => SetProperty(ref _receptionGoods, value);
         }
 
@@ -56,8 +56,11 @@ namespace Warehouse.Mobile.ViewModels
         {
             try
             {
-                _ = _reception ?? throw new InvalidOperationException($"Reception object is not initialized");
-                await _reception.Confirmation().CommitAsync();
+                foreach (var receptionGroup in ReceptionGoods)
+                {
+                    await receptionGroup.CommitAsync();
+                }
+                
                 await _navigationService.ShowMessageAsync(PopupSeverity.Info, "Success!", "Your reception has been synchronized successfully.");
             }
             catch (Exception ex)
@@ -71,20 +74,10 @@ namespace Warehouse.Mobile.ViewModels
 
         public async Task InitializeAsync(INavigationParameters parameters)
         {
-            var supplierReception = await parameters
-                .Value<ISupplier>("Supplier")
-                .Receptions.FirstAsync();
-
-            _reception = supplierReception
-                .WithExtraConfirmed()
-                .WithoutInitiallyConfirmed()
-                .WithConfirmationProgress(_keyValueStorage);
-
-            ReceptionGoods = await _reception
-                .NotConfirmedOnly()
-                .ToViewModelListAsync();
-            _originalCount = ReceptionGoods.Count.ToString();
-            SupplierName = ((IPrintable)parameters.Value<ISupplier>("Supplier")).ToDictionary().ValueOrDefault<string>("Name");
+            var supplier = parameters.Value<ISupplier>("Supplier");
+            ReceptionGoods = await supplier.ReceptionViewModelsAsync(_keyValueStorage);
+            _originalCount = ReceptionGoods.Sum(r => r.Count);
+            SupplierName = supplier.ToDictionary().ValueOrDefault<string>("Name");
             RefreshCount();
         }
 
@@ -92,30 +85,39 @@ namespace Warehouse.Mobile.ViewModels
         {
             if (barcode.Symbology.ToLower() == "ean13")
             {
-                _ = _reception ?? throw new InvalidOperationException($"Reception object is not initialized");
-                var good = (await _reception.ByBarcodeAsync(barcode.BarcodeData, true)).First();
-                var goodViewModel = ReceptionGoods.FirstOrDefault(x => x.Equals(good));
+                var good = await ReceptionGoods.ByBarcodeAsync(barcode.BarcodeData, true);
+                var confirmed = await TryToConfirmGood(good);
+                if (!confirmed)
+                {
+                    var goodViewModel = new ReceptionGoodViewModel(good);
+                    goodViewModel.IncreaseQuantityCommand.Execute();
+                    ReceptionGoods.First().Insert(0, goodViewModel);
+                    await ShowExtraGoodWarningMessageAsync(good);
+                }
+            }
+        }
+
+        private async Task<bool> TryToConfirmGood(IReceptionGood good)
+        {
+            foreach (var reception in ReceptionGoods)
+            {
+                var goodViewModel = reception.FirstOrDefault(x => x.Equals(good));
                 if (goodViewModel != null)
                 {
                     goodViewModel.IncreaseQuantityCommand.Execute();
                     if (await good.ConfirmedAsync())
                     {
-                        ReceptionGoods.Remove(goodViewModel);
+                        reception.Remove(goodViewModel);
                         RefreshCount();
                         if (AnimateCounter != null)
                         {
                             await AnimateCounter();
                         }
                     }
-                }
-                else
-                {
-                    goodViewModel = new ReceptionGoodViewModel(good);
-                    goodViewModel.IncreaseQuantityCommand.Execute();
-                    ReceptionGoods.Insert(0, goodViewModel);
-                    await ShowExtraGoodWarningMessageAsync(good);
+                    return true;
                 }
             }
+            return false;
         }
 
         private Task ShowExtraGoodWarningMessageAsync(IReceptionGood good)
@@ -140,7 +142,8 @@ namespace Warehouse.Mobile.ViewModels
 
         private void RefreshCount()
         {
-            ItemCount = $"{ReceptionGoods.Count(x => !x.IsExtraConfirmedReceptionGood && !x.IsUnkownGood) }/{_originalCount}";
+            var total = ReceptionGoods.Sum(receptionGroup => receptionGroup.Count(x => x.Regular));
+            ItemCount = $"{total}/{_originalCount}";
         }
     }
 }
