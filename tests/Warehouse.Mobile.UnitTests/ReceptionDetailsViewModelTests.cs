@@ -7,6 +7,7 @@ using Newtonsoft.Json.Linq;
 using Prism.Navigation;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
+using Warehouse.Mobile.Extensions;
 using Warehouse.Mobile.Tests;
 using Warehouse.Mobile.UnitTests.Extensions;
 using Warehouse.Mobile.UnitTests.Mocks;
@@ -287,24 +288,32 @@ namespace Warehouse.Mobile.UnitTests
         }
 
         [Fact]
+        /*
+         * Only 2 "5449000131805", "5410013108009" element should be presented in the list
+         * All other elements were confirmed and should be skipped.
+         * "4005176891021" this element is confirmed based on the state that is stored 
+         * in key value storage.
+         */
         public async Task RestoreReceptionState()
         {
-            var reception = new EbSoftReception(
-                new WebRequest.Elegant.WebRequest("http://example.com", new FkHttpMessageHandler(_data)), 9);
-            var keyValueStorage = new KeyValueStorage();
-            keyValueStorage.Set<JObject>("Repcetion_9", JObject.Parse(@"{
-                  ""5449000131805"": 1,
-                  ""5410013108009"": 1,
-                  ""4005176891021"": 1
-                }"));
-
-            var result = await new StatefulReception(reception
-                .WithExtraConfirmed()
-                .WithoutInitiallyConfirmed(),
-                keyValueStorage)
+            var reception = new EbSoftReception(_data.JsonAsWebRequest(), 9)
+                .Stateful(
+                    @"{
+                         ""5449000131805"": 1,
+                         ""5410013108009"": 1,
+                         ""4005176891021"": 1
+                     }"
+                );
+            var viewModels = await reception
                 .NotConfirmedOnly()
-                .ToViewModelListAsync() ;
+                .ToViewModelListAsync();
+
+            Assert.Equal(
+                2,
+                viewModels.Sum(vm => vm.ConfirmedQuantity)
+            );
         }
+
         private string _data = @"[
             {""id"":""40"",""oa_dossier"":""OA831375"",""article"":""GROHE 3328130E"",""qt"":""1"",""ean"":[""4005176635410""],""qtin"":""1"",""error_code"":null,""commentaire"":null,""itemType"":""electro"",""qtscanned"":""1""},
             {""id"":""41"",""oa_dossier"":""OA831375"",""article"":""GROHE 3328130E"",""qt"":""1"",""ean"":[""4005176635410""],""qtin"":""1"",""error_code"":null,""commentaire"":null,""itemType"":""electro"",""qtscanned"":""1""},

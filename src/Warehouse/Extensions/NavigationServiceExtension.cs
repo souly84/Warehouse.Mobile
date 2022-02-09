@@ -11,10 +11,9 @@ namespace Warehouse.Mobile.Extensions
             PopupSeverity severity,
             string title,
             string message)
-
         {
             var completionToken = new TaskCompletionSource<bool>();
-            Action<bool, Exception> callBack = (result, excpetion) =>
+            Action<bool, Exception?> callBack = (result, excpetion) =>
             {
                 if (excpetion != null)
                 {
