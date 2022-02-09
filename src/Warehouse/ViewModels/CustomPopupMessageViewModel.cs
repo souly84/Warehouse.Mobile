@@ -1,4 +1,5 @@
-﻿using Prism.Commands;
+﻿using System;
+using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Warehouse.Mobile.Extensions;
@@ -9,10 +10,11 @@ namespace Warehouse.Mobile.ViewModels
     {
         private readonly INavigationService _navigationService;
         private DelegateCommand? _actionCommand;
+        private Action<bool, Exception?>? _callBack;
 
         public CustomPopupMessageViewModel(INavigationService navigationService)
         {
-            _navigationService = navigationService;
+            _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
         }
 
         private PopupSeverity _severity;
@@ -49,10 +51,20 @@ namespace Warehouse.Mobile.ViewModels
             Title = parameters.Value<string>("Title");
             Message = parameters.Value<string>("Message");
             ActionText = parameters.Value<string>("ActionText");
+            _callBack = parameters.Value<Action<bool, Exception?>>("CallBack");
         }
 
-        public DelegateCommand ActionCommand => _actionCommand ?? (_actionCommand = new DelegateCommand(() =>
-            _navigationService.GoBackAsync()
-        ));
+        public DelegateCommand ActionCommand => _actionCommand ?? (_actionCommand = new DelegateCommand(async () =>
+        {
+            try
+            {
+                await _navigationService.GoBackAsync();
+                _callBack?.Invoke(true, null);
+            }
+            catch (Exception ex)
+            {
+                _callBack?.Invoke(false, ex);
+            }
+        }));
     }
 }

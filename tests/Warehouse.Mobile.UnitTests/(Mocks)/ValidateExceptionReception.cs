@@ -18,11 +18,11 @@ namespace Warehouse.Mobile.UnitTests.Mocks
               new MockReceptionGood("1", 1, "1111")
         );
 
-        public string Id => throw _exception;
+        public string Id => "1";
 
         public Task<IList<IReceptionGood>> ByBarcodeAsync(string barcodeData, bool ignoreConfirmed = false)
         {
-            throw _exception;
+            return Goods.ByBarcodeAsync(barcodeData, ignoreConfirmed);
         }
 
         public override bool Equals(object obj)
@@ -33,7 +33,7 @@ namespace Warehouse.Mobile.UnitTests.Mocks
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(_exception, Goods);
+            return HashCode.Combine(Goods);
         }
 
         public Task ValidateAsync(IList<IGoodConfirmation> goodsToValidate)

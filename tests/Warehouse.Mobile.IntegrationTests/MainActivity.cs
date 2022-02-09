@@ -1,5 +1,6 @@
 ﻿using Android.App;
 using Android.OS;
+using PerpetualEngine.Storage;
 using Xunit.Runners.UI;
 using Xunit.Sdk;
 
@@ -18,6 +19,8 @@ namespace Warehouse.Mobile.IntegrationTests
 
             // tests can be inside the main assembly
             AddTestAssembly(typeof(MainActivity).Assembly);
+
+            SimpleStorage.SetContext(ApplicationContext);
 
             // Once you called base.OnCreate(), you cannot add more assemblies.
             base.OnCreate(bundle);

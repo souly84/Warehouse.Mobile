@@ -69,7 +69,7 @@ namespace Warehouse.Mobile.UnitTests
                 _app
                     .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
-                    .First().Name
+                    .ElementAt(1).Name
             );
         }
 
@@ -81,7 +81,7 @@ namespace Warehouse.Mobile.UnitTests
                 _app
                     .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
-                    .First().Oa
+                    .ElementAt(1).Oa
             );
         }
 
@@ -93,7 +93,7 @@ namespace Warehouse.Mobile.UnitTests
                 _app
                     .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
-                    .First().Quantity
+                    .ElementAt(1).Quantity
             );
         }
 
@@ -105,7 +105,7 @@ namespace Warehouse.Mobile.UnitTests
                 _app
                     .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
-                    .First().RemainingQuantity
+                    .ElementAt(1).RemainingQuantity
             );
         }
 
@@ -117,15 +117,15 @@ namespace Warehouse.Mobile.UnitTests
                 _app
                     .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
-                    .ElementAt(1)
+                    .First()
                     .RemainingQuantity
             );
         }
 
         [Fact]
-        public void ReceptionGoodIsMockedReceptionGood()
+        public void ReceptionGoodIsUnknownReceptionGood()
         {
-            Assert.False(
+            Assert.True(
                 _app
                     .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods

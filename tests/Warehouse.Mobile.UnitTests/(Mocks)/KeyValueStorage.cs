@@ -8,10 +8,16 @@ namespace Warehouse.Mobile.UnitTests.Mocks
 {
     public class KeyValueStorage : IKeyValueStorage
     {
-        private Dictionary<string, string> _simpleStorage = new Dictionary<string, string>();
+        private Dictionary<string, string> _simpleStorage;
 
         public KeyValueStorage()
+            : this(new Dictionary<string, string>())
         {
+        }
+
+        public KeyValueStorage(Dictionary<string, string> simpleStorage)
+        {
+            _simpleStorage = simpleStorage;
         }
 
         public IList<string> Keys => _simpleStorage.Keys.ToList();

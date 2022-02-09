@@ -2,13 +2,17 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using EbSoft.Warehouse.SDK;
+using Newtonsoft.Json.Linq;
 using Prism.Navigation;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
+using Warehouse.Mobile.Extensions;
 using Warehouse.Mobile.Tests;
 using Warehouse.Mobile.UnitTests.Extensions;
 using Warehouse.Mobile.UnitTests.Mocks;
 using Warehouse.Mobile.ViewModels;
+using WebRequest.Elegant.Fakes;
 using Xunit;
 using static Warehouse.Mobile.Tests.MockPageDialogService;
 
@@ -213,24 +217,32 @@ namespace Warehouse.Mobile.UnitTests
         [Fact]
         public void PopupMessageIfValidateReceptionCommandError()
         {
-            WarehouseMobile.Application(
-                new MockPlatformInitializer(
-                   new ValidateExceptionReception(
-                       new InvalidOperationException("Test error message")
+            App app = null;
+            try
+            {
+                app = WarehouseMobile.Application(
+                   new MockPlatformInitializer(
+                      new ValidateExceptionReception(
+                          new InvalidOperationException("Test error message")
+                      )
                    )
-                )
-            ).GoToReceptionDetails()
-             .CurrentViewModel<ReceptionDetailsViewModel>()
-             .ValidateReceptionCommand.Execute();
-            Assert.Contains(
-                new DialogPage
-                {
-                    Title = "Error!",
-                    Message = "Synchronization failed. Test error message",
-                    CancelButton = "GOT IT!"
-                },
-                WarehouseMobile.Popup().ShownPopups.ToDialogPages()
-            );
+                ).GoToReceptionDetails();
+                app.CurrentViewModel<ReceptionDetailsViewModel>()
+                .ValidateReceptionCommand.Execute();
+                    Assert.Contains(
+                        new DialogPage
+                        {
+                            Title = "Error!",
+                            Message = "Synchronization failed. Test error message",
+                            CancelButton = "GOT IT!"
+                        },
+                        WarehouseMobile.Popup().ShownPopups.ToDialogPages()
+                    );
+            }
+            finally
+            {
+                app?.ClosePopup();
+            }
         }
 
         [Fact]
@@ -273,6 +285,43 @@ namespace Warehouse.Mobile.UnitTests
                     .ReceptionGoods
                     .Sum(good => good.ConfirmedQuantity)
             );
-        }        
+        }
+
+        [Fact]
+        /*
+         * Only 2 "5449000131805", "5410013108009" element should be presented in the list
+         * All other elements were confirmed and should be skipped.
+         * "4005176891021" this element is confirmed based on the state that is stored 
+         * in key value storage.
+         */
+        public async Task RestoreReceptionState()
+        {
+            var reception = new EbSoftReception(_data.JsonAsWebRequest(), 9)
+                .WithConfirmationProgress(
+                    @"{
+                         ""5449000131805"": 1,
+                         ""5410013108009"": 1,
+                         ""4005176891021"": 1
+                     }"
+                );
+            var viewModels = await reception
+                .NotConfirmedOnly()
+                .ToViewModelListAsync();
+
+            Assert.Equal(
+                2,
+                viewModels.Sum(vm => vm.ConfirmedQuantity)
+            );
+        }
+
+        private string _data = @"[
+            {""id"":""40"",""oa_dossier"":""OA831375"",""article"":""GROHE 3328130E"",""qt"":""1"",""ean"":[""4005176635410""],""qtin"":""1"",""error_code"":null,""commentaire"":null,""itemType"":""electro"",""qtscanned"":""1""},
+            {""id"":""41"",""oa_dossier"":""OA831375"",""article"":""GROHE 3328130E"",""qt"":""1"",""ean"":[""4005176635410""],""qtin"":""1"",""error_code"":null,""commentaire"":null,""itemType"":""electro"",""qtscanned"":""1""},
+            {""id"":""42"",""oa_dossier"":""OA831375"",""article"":""GROHE 3328120E"",""qt"":""1"",""ean"":[""4005176868498""],""qtin"":""0"",""error_code"":null,""commentaire"":null,""itemType"":""electro"",""qtscanned"":""1""},
+            {""id"":""43"",""oa_dossier"":""OA859840"",""article"":""GROHE 31566SD0"",""qt"":""1"",""ean"":[""4005176473234""],""qtin"":""0"",""error_code"":null,""commentaire"":null,""itemType"":""electro"",""qtscanned"":""1""},
+            {""id"":""44"",""oa_dossier"":""OA859840"",""article"":""GROHE 31129DC1"",""qt"":""1"",""ean"":[""4005176891021""],""qtin"":""0"",""error_code"":null,""commentaire"":null,""itemType"":""electro"",""qtscanned"":""1""},
+            {""id"":""45"",""oa_dossier"":""OA859840"",""article"":""GROHE 31129DC1"",""qt"":""1"",""ean"":[""4005176891021""],""qtin"":""0"",""error_code"":null,""commentaire"":null,""itemType"":""electro"",""qtscanned"":""1""},
+            {""id"":""46"",""oa_dossier"":""OA859840"",""article"":""GROHE 31129DC1"",""qt"":""1"",""ean"":[""4005176891021""],""qtin"":""0"",""error_code"":null,""commentaire"":null,""itemType"":""electro"",""qtscanned"":""1""},
+            {""id"":""47"",""oa_dossier"":""OA861069"",""article"":""GROHE 31129DC1"",""qt"":""1"",""ean"":[""4005176891021""],""qtin"":""0"",""error_code"":null,""commentaire"":null,""itemType"":""electro"",""qtscanned"":""0""}]";
     }
 }

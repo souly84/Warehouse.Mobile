@@ -58,13 +58,13 @@ namespace Warehouse.Mobile.ViewModels
             {
                 _ = _reception ?? throw new InvalidOperationException($"Reception object is not initialized");
                 await _reception.Confirmation().CommitAsync();
-                await ShowMessage(PopupSeverity.Info, "Success!", "Your reception has been synchronized successfully.");
+                await _navigationService.ShowMessageAsync(PopupSeverity.Info, "Success!", "Your reception has been synchronized successfully.");
             }
             catch (Exception ex)
             {
-                await ShowMessage(PopupSeverity.Error, "Error!", "Synchronization failed. " + ex.Message);
+                await _navigationService.ShowMessageAsync(PopupSeverity.Error, "Error!", "Synchronization failed. " + ex.Message);
             }
-            //await _navigationService.GoBackAsync();
+            await _navigationService.GoBackAsync();
         }));
 
         public Func<Task<bool>>? AnimateCounter { get; set; }
@@ -74,12 +74,12 @@ namespace Warehouse.Mobile.ViewModels
             var supplierReception = await parameters
                 .Value<ISupplier>("Supplier")
                 .Receptions.FirstAsync();
-            _reception = new StatefulReception(
-                supplierReception
-                    .WithExtraConfirmed()
-                    .WithoutInitiallyConfirmed(),
-                _keyValueStorage
-            );
+
+            _reception = supplierReception
+                .WithExtraConfirmed()
+                .WithoutInitiallyConfirmed()
+                .WithConfirmationProgress(_keyValueStorage);
+
             ReceptionGoods = await _reception
                 .NotConfirmedOnly()
                 .ToViewModelListAsync();
@@ -113,34 +113,34 @@ namespace Warehouse.Mobile.ViewModels
                     goodViewModel = new ReceptionGoodViewModel(good);
                     goodViewModel.IncreaseQuantityCommand.Execute();
                     ReceptionGoods.Insert(0, goodViewModel);
-                    if (good.IsUnknown)
-                    {
-                        await ShowMessage(PopupSeverity.Error, "Error!", "This item is not part of this delivery!");
-                    }
-                    else
-                    {
-                        await ShowMessage(PopupSeverity.Warning, "Warning!", "This item has already been scanned");
-                    }
+                    await ShowExtraGoodWarningMessageAsync(good);
                 }
+            }
+        }
+
+        private Task ShowExtraGoodWarningMessageAsync(IReceptionGood good)
+        {
+            if (good.IsUnknown)
+            {
+                return _navigationService.ShowMessageAsync(
+                    PopupSeverity.Error,
+                    "Error!",
+                    "This item is not part of this delivery!"
+                );
+            }
+            else
+            {
+                return _navigationService.ShowMessageAsync(
+                    PopupSeverity.Warning,
+                    "Warning!",
+                    "This item has already been scanned"
+                );
             }
         }
 
         private void RefreshCount()
         {
             ItemCount = $"{ReceptionGoods.Count(x => !x.IsExtraConfirmedReceptionGood && !x.IsUnkownGood) }/{_originalCount}";
-        }
-
-        private async Task ShowMessage(PopupSeverity severity, string title, string message)
-        {
-            await _navigationService
-                .NavigateAsync(AppConstants.CustomPopupMessageViewId,
-                new NavigationParameters
-                {
-                    { "Severity", severity},
-                    { "Title", title},
-                    { "Message", message},
-                    { "ActionText", "GOT IT!"}
-                });
         }
     }
 }
