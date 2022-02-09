@@ -297,7 +297,7 @@ namespace Warehouse.Mobile.UnitTests
         public async Task RestoreReceptionState()
         {
             var reception = new EbSoftReception(_data.JsonAsWebRequest(), 9)
-                .Stateful(
+                .WithConfirmationProgress(
                     @"{
                          ""5449000131805"": 1,
                          ""5410013108009"": 1,

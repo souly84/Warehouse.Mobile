@@ -75,13 +75,11 @@ namespace Warehouse.Mobile.ViewModels
                 .Value<ISupplier>("Supplier")
                 .Receptions.FirstAsync();
 
+            _reception = supplierReception
+                .WithExtraConfirmed()
+                .WithoutInitiallyConfirmed()
+                .WithConfirmationProgress(_keyValueStorage);
 
-            _reception = new StatefulReception(
-                supplierReception
-                    .WithExtraConfirmed()
-                    .WithoutInitiallyConfirmed(),
-                _keyValueStorage
-            );
             ReceptionGoods = await _reception
                 .NotConfirmedOnly()
                 .ToViewModelListAsync();

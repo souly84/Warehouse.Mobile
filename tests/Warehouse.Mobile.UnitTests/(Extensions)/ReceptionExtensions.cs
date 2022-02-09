@@ -7,20 +7,20 @@ namespace Warehouse.Mobile.UnitTests.Extensions
 {
     public static class ReceptionExtensions
     {
-        public static IReception Stateful(this IReception reception, string state)
+        public static IReception WithConfirmationProgress(this IReception reception, string state)
         {
-            return reception.Stateful(new Dictionary<string, string>
+            return reception.WithConfirmationProgress(new Dictionary<string, string>
             {
                 { $"Repcetion_{reception.Id}", state }
             });
         }
 
-        public static IReception Stateful(this IReception reception, Dictionary<string, string> keyValyeStorage)
+        public static IReception WithConfirmationProgress(this IReception reception, Dictionary<string, string> keyValyeStorage)
         {
             return reception
                 .WithExtraConfirmed()
                 .WithoutInitiallyConfirmed()
-                .Stateful(new KeyValueStorage(keyValyeStorage));
+                .WithConfirmationProgress(new KeyValueStorage(keyValyeStorage));
         }
     }
 }
