@@ -113,21 +113,28 @@ namespace Warehouse.Mobile.ViewModels
                     goodViewModel = new ReceptionGoodViewModel(good);
                     goodViewModel.IncreaseQuantityCommand.Execute();
                     ReceptionGoods.Insert(0, goodViewModel);
-                    if (good.IsUnknown)
-                    {
-                        await _navigationService.ShowMessageAsync(
-                            PopupSeverity.Error,
-                            "Error!",
-                            "This item is not part of this delivery!");
-                    }
-                    else
-                    {
-                        await _navigationService.ShowMessageAsync(
-                            PopupSeverity.Warning,
-                            "Warning!",
-                            "This item has already been scanned");
-                    }
+                    await ShowExtraGoodWarningMessageAsync(good);
                 }
+            }
+        }
+
+        private Task ShowExtraGoodWarningMessageAsync(IReceptionGood good)
+        {
+            if (good.IsUnknown)
+            {
+                return _navigationService.ShowMessageAsync(
+                    PopupSeverity.Error,
+                    "Error!",
+                    "This item is not part of this delivery!"
+                );
+            }
+            else
+            {
+                return _navigationService.ShowMessageAsync(
+                    PopupSeverity.Warning,
+                    "Warning!",
+                    "This item has already been scanned"
+                );
             }
         }
 
