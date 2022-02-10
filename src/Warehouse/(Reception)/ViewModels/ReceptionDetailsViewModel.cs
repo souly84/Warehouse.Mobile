@@ -9,6 +9,7 @@ using Prism.Services;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.Extensions;
+using Warehouse.Mobile.Reception.ViewModels;
 
 namespace Warehouse.Mobile.ViewModels
 {
@@ -71,14 +72,11 @@ namespace Warehouse.Mobile.ViewModels
 
         public async Task InitializeAsync(INavigationParameters parameters)
         {
-            var supplierReception = await parameters
-                .Value<ISupplier>("Supplier")
-                .Receptions.FirstAsync();
+            var supplier = parameters
+                .Value<ISupplier>("Supplier");
 
-            _reception = supplierReception
-                .WithExtraConfirmed()
-                .WithoutInitiallyConfirmed()
-                .WithConfirmationProgress(_keyValueStorage);
+
+            _reception = new SupplierMutlipleReception(supplier, _keyValueStorage);
 
             ReceptionGoods = await _reception
                 .NotConfirmedOnly()
