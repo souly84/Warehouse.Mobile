@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Dotnet.Commands;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
-using Warehouse.Mobile.Reception.ViewModels;
 using Warehouse.Mobile.ViewModels;
 
 namespace Warehouse.Mobile.Extensions
@@ -12,6 +11,7 @@ namespace Warehouse.Mobile.Extensions
     {
         public static async Task<ObservableCollection<ReceptionGroup>> ReceptionViewModelsAsync(
             this ISupplier supplier,
+            ICommands commands,
             IKeyValueStorage keyValueStorage)
         {
             var receptions = await supplier.Receptions.ToListAsync();
@@ -27,7 +27,7 @@ namespace Warehouse.Mobile.Extensions
                         statefulReception,
                         await statefulReception
                             .NotConfirmedOnly()
-                            .ToViewModelListAsync()
+                            .ToViewModelListAsync(commands)
                     )
                 );
             }

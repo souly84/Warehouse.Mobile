@@ -1,5 +1,5 @@
 ﻿using System;
-using Prism.Commands;
+using Dotnet.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Warehouse.Core;
@@ -11,10 +11,14 @@ namespace Warehouse.Mobile
     {
         private readonly INavigationService _navigationService;
         private IWarehouseGood? _goodToMove;
+        private readonly CachedCommands _commands;
 
-        public QuantityToMovePopupViewModel(INavigationService navigationService)
+        public QuantityToMovePopupViewModel(
+            ICommands commands,
+            INavigationService navigationService)
         {
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
+            _commands = commands.Cached();
         }
 
         private IStorage? _originLocation;
@@ -31,16 +35,7 @@ namespace Warehouse.Mobile
             set => SetProperty(ref _destinationLocation, value);
         }
 
-        public void Initialize(INavigationParameters parameters)
-        {
-            OriginLocation = parameters.Value<IStorage>("Origin");
-            DestinationLocation = parameters.Value<string>("Destination");
-            _goodToMove = parameters.Value<IWarehouseGood>("Good");
-        }
-
-        private DelegateCommand? validateCommand;
-
-        public DelegateCommand ValidateCommand => validateCommand ?? (validateCommand = new DelegateCommand(async () =>
+        public IAsyncCommand ValidateCommand => _commands.AsyncCommand(async () =>
         {
             _ = _goodToMove ?? throw new InvalidOperationException($"Good object is not initialized for movement");
             _ = OriginLocation ?? throw new InvalidOperationException($"Origin location value is not initialized for movement");
@@ -52,12 +47,17 @@ namespace Warehouse.Mobile
                     5
             );
             await _navigationService.GoBackAsync();
-        }));
+        });
 
-        private DelegateCommand? cancelCommand;
-        public DelegateCommand CancelCommand => cancelCommand ?? (cancelCommand = new DelegateCommand(async () =>
+        public IAsyncCommand CancelCommand => _commands.AsyncCommand(() =>
+            _navigationService.GoBackAsync()
+        );
+
+        public void Initialize(INavigationParameters parameters)
         {
-            await _navigationService.GoBackAsync();
-        }));
+            OriginLocation = parameters.Value<IStorage>("Origin");
+            DestinationLocation = parameters.Value<string>("Destination");
+            _goodToMove = parameters.Value<IWarehouseGood>("Good");
+        }
     }
 }

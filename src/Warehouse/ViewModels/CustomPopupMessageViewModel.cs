@@ -1,5 +1,5 @@
 ﻿using System;
-using Prism.Commands;
+using Dotnet.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Warehouse.Mobile.Extensions;
@@ -9,12 +9,16 @@ namespace Warehouse.Mobile.ViewModels
     public class CustomPopupMessageViewModel : BindableBase, IInitialize
     {
         private readonly INavigationService _navigationService;
-        private DelegateCommand? _actionCommand;
         private Action<bool, Exception?>? _callBack;
+        private readonly CachedCommands _commands;
 
-        public CustomPopupMessageViewModel(INavigationService navigationService)
+        public CustomPopupMessageViewModel(
+            ICommands commands,
+            INavigationService navigationService)
         {
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
+            _ = commands ?? throw new ArgumentNullException(nameof(commands));
+            _commands = commands.Cached();
         }
 
         private PopupSeverity _severity;
@@ -45,16 +49,7 @@ namespace Warehouse.Mobile.ViewModels
             set => SetProperty(ref _actionText, value);
         }
 
-        public void Initialize(INavigationParameters parameters)
-        {
-            Severity = parameters.Value<PopupSeverity>("Severity");
-            Title = parameters.Value<string>("Title");
-            Message = parameters.Value<string>("Message");
-            ActionText = parameters.Value<string>("ActionText");
-            _callBack = parameters.Value<Action<bool, Exception?>>("CallBack");
-        }
-
-        public DelegateCommand ActionCommand => _actionCommand ?? (_actionCommand = new DelegateCommand(async () =>
+        public IAsyncCommand ActionCommand => _commands.AsyncCommand(async () =>
         {
             try
             {
@@ -65,6 +60,15 @@ namespace Warehouse.Mobile.ViewModels
             {
                 _callBack?.Invoke(false, ex);
             }
-        }));
+        });
+
+        public void Initialize(INavigationParameters parameters)
+        {
+            Severity = parameters.Value<PopupSeverity>("Severity");
+            Title = parameters.Value<string>("Title");
+            Message = parameters.Value<string>("Message");
+            ActionText = parameters.Value<string>("ActionText");
+            _callBack = parameters.Value<Action<bool, Exception?>>("CallBack");
+        }
     }
 }

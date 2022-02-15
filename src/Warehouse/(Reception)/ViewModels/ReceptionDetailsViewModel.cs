@@ -2,35 +2,40 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Dotnet.Commands;
 using MediaPrint;
-using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.Extensions;
-using Warehouse.Mobile.Reception.ViewModels;
 
 namespace Warehouse.Mobile.ViewModels
 {
     public class ReceptionDetailsViewModel : ScannerViewModel, IInitializeAsync
     {
+        private readonly IScanner _scanner;
         private readonly INavigationService _navigationService;
+        private readonly CachedCommands _cachedCommands;
+        private readonly ICommands _commands;
         private readonly IKeyValueStorage _keyValueStorage;
         private ObservableCollection<ReceptionGroup>? _receptionGoods;
         private string? _itemCount;
         private int _originalCount;
         private string? _supplierName;
-        private DelegateCommand? validateReceptionCommand;
 
         public ReceptionDetailsViewModel(
             IScanner scanner,
             IPageDialogService dialog,
             INavigationService navigationService,
+            ICommands commands,
             IKeyValueStorage keyValueStorage)
             : base(scanner, dialog)
         {
+            _scanner = scanner;
             _navigationService = navigationService;
+            _commands = commands;
+            _cachedCommands = commands.Cached();
             _keyValueStorage = keyValueStorage;
         }
 
@@ -52,7 +57,7 @@ namespace Warehouse.Mobile.ViewModels
             set => SetProperty(ref _supplierName, value);
         }
 
-        public DelegateCommand ValidateReceptionCommand => validateReceptionCommand ?? (validateReceptionCommand = new DelegateCommand(async () =>
+        public IAsyncCommand ValidateReceptionCommand => _cachedCommands.AsyncCommand(async () =>
         {
             try
             {
@@ -68,14 +73,14 @@ namespace Warehouse.Mobile.ViewModels
                 await _navigationService.ShowMessageAsync(PopupSeverity.Error, "Error!", "Synchronization failed. " + ex.Message);
             }
             await _navigationService.GoBackAsync();
-        }));
+        });
 
         public Func<Task<bool>>? AnimateCounter { get; set; }
 
         public async Task InitializeAsync(INavigationParameters parameters)
         {
             var supplier = parameters.Value<ISupplier>("Supplier");
-            ReceptionGoods = await supplier.ReceptionViewModelsAsync(_keyValueStorage);
+            ReceptionGoods = await supplier.ReceptionViewModelsAsync(_commands, _keyValueStorage);
             _originalCount = ReceptionGoods.Sum(r => r.Count);
             SupplierName = supplier.ToDictionary().ValueOrDefault<string>("Name");
             RefreshCount();
@@ -85,15 +90,20 @@ namespace Warehouse.Mobile.ViewModels
         {
             if (barcode.Symbology.ToLower() == "ean13")
             {
+                _scanner.BeepSuccess();
                 var good = await ReceptionGoods.ByBarcodeAsync(barcode.BarcodeData, true);
                 var confirmed = await TryToConfirmGood(good);
                 if (!confirmed)
                 {
-                    var goodViewModel = new ReceptionGoodViewModel(good);
+                    var goodViewModel = new ReceptionGoodViewModel(good, _commands);
                     goodViewModel.IncreaseQuantityCommand.Execute();
                     ReceptionGoods.First().Insert(0, goodViewModel);
                     await ShowExtraGoodWarningMessageAsync(good);
                 }
+            }
+            else
+            {
+                _scanner.BeepFailure();
             }
         }
 
@@ -122,6 +132,7 @@ namespace Warehouse.Mobile.ViewModels
 
         private Task ShowExtraGoodWarningMessageAsync(IReceptionGood good)
         {
+            _scanner.BeepFailure();
             if (good.IsUnknown)
             {
                 return _navigationService.ShowMessageAsync(

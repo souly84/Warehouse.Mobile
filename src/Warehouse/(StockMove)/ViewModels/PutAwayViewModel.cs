@@ -2,12 +2,13 @@
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
+using Dotnet.Commands;
 using EbSoft.Warehouse.SDK;
-using Prism.Commands;
 using Prism.Navigation;
 using Prism.Services;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
+using Warehouse.Mobile.Extensions;
 using Warehouse.Mobile.ViewModels;
 
 namespace Warehouse.Mobile
@@ -17,18 +18,20 @@ namespace Warehouse.Mobile
         private readonly IPageDialogService _dialog;
         private readonly ICompany _company;
         private readonly INavigationService _navigationService;
-        private DelegateCommand? goToPopupCommand;
+        private readonly CachedCommands _commands;
 
         public PutAwayViewModel(
             IScanner scanner,
             IPageDialogService dialog,
             ICompany company,
+            ICommands commands,
             INavigationService navigationService)
             : base(scanner, dialog)
         {
             _dialog = dialog ?? throw new ArgumentNullException(nameof(dialog));
             _company = company ?? throw new ArgumentNullException(nameof(company));
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
+            _commands = commands.Cached();
         }
 
         private ObservableCollection<LocationViewModel>? _reserveLocations;
@@ -94,11 +97,11 @@ namespace Warehouse.Mobile
             set => SetProperty(ref _putAwayStorage, value);
         }
 
-        public DelegateCommand GoToPopupCommand => goToPopupCommand ?? (goToPopupCommand = new DelegateCommand(() =>
+        public IAsyncCommand GoToPopupCommand => _commands.NavigationCommand(() =>
             _navigationService.NavigateAsync(
                 AppConstants.QuantityToMovePopupViewId
             )
-        ));
+        );
 
         protected override async Task OnScanAsync(IScanningResult barcode)
         {

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading.Tasks;
 using MediaPrint;
 using Prism.Mvvm;
 using Warehouse.Core;

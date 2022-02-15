@@ -53,8 +53,7 @@
     <OutputPath>bin\Mock</OutputPath>
     <WarningLevel>4</WarningLevel>
     <JavaMaximumHeapSize></JavaMaximumHeapSize>
-    <AndroidUseAapt2>false</AndroidUseAapt2>
-    <AndroidManifest></AndroidManifest>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <AndroidSupportedAbis>arm64-v8a;armeabi-v7a;x86</AndroidSupportedAbis>
   </PropertyGroup>
@@ -147,12 +146,9 @@
       <Name>Warehouse.Mobile.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Warehouse\Warehouse.Mobile.csproj">
-      <Project>{D14BE91B-55E2-42BE-957A-570E9608D51D}</Project>
+      <Project>{A279610B-743C-4C8E-9A6F-227C9447EEA1}</Project>
       <Name>Warehouse.Mobile</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\values\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

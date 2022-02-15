@@ -3,9 +3,8 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Warehouse.Core;
-using Warehouse.Mobile.ViewModels;
 
-namespace Warehouse.Mobile.Reception.ViewModels
+namespace Warehouse.Mobile.ViewModels
 {
     public class ReceptionGroup : ObservableCollection<ReceptionGoodViewModel>
     {

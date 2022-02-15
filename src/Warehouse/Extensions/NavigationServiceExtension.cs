@@ -6,6 +6,17 @@ namespace Warehouse.Mobile.Extensions
 {
     public static class NavigationServiceExtension
     {
+        public static Task ShowErrorAsync(
+            this INavigationService _navigationService,
+            Exception exception)
+        {
+            return _navigationService.ShowMessageAsync(
+                PopupSeverity.Error,
+                "Error!",
+                exception.Message
+            );
+        }
+
         public static async Task ShowMessageAsync(
             this INavigationService _navigationService,
             PopupSeverity severity,

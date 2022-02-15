@@ -1,8 +1,9 @@
 ﻿using System;
+using Dotnet.Commands;
 using MediaPrint;
-using Prism.Commands;
 using Prism.Navigation;
 using Warehouse.Core;
+using Warehouse.Mobile.Extensions;
 
 namespace Warehouse.Mobile.ViewModels
 {
@@ -10,19 +11,22 @@ namespace Warehouse.Mobile.ViewModels
     {
         private readonly ISupplier _supplier;
         private readonly INavigationService _navigationService;
-        private DelegateCommand? goToReceptionDetailsCommand;
+        private readonly CachedCommands _commands;
 
         public SupplierViewModel(
             ISupplier supplier,
+            ICommands commands,
             INavigationService navigationService)
         {
             _supplier = supplier ?? throw new ArgumentNullException(nameof(supplier));
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
+            _ = commands ?? throw new ArgumentNullException(nameof(commands));
+            _commands = commands.Cached();
         }
 
         public string Name => _supplier.ToDictionary().ValueOrDefault<string>("Name");
 
-        public DelegateCommand GoToReceptionDetailsCommand => goToReceptionDetailsCommand ?? (goToReceptionDetailsCommand = new DelegateCommand(() =>
+        public IAsyncCommand GoToReceptionDetailsCommand => _commands.NavigationCommand(() =>
             _navigationService.NavigateAsync(
                 AppConstants.ReceptionDetailsViewId,
                 new NavigationParameters
@@ -30,6 +34,6 @@ namespace Warehouse.Mobile.ViewModels
                     { "Supplier", _supplier }
                 }
             )
-        ));
+        );
     }
 }
