@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dotnet.Commands;
 using EbSoft.Warehouse.SDK;
 using Newtonsoft.Json.Linq;
 using Prism.Navigation;
@@ -209,6 +210,7 @@ namespace Warehouse.Mobile.UnitTests
                     new MockScanner(),
                     new MockPageDialogService(),
                     new MockNavigationService(),
+                    new Commands(),
                     new KeyValueStorage()
                 ).InitializeAsync(new NavigationParameters())
             );
@@ -306,7 +308,7 @@ namespace Warehouse.Mobile.UnitTests
                 );
             var viewModels = await reception
                 .NotConfirmedOnly()
-                .ToViewModelListAsync();
+                .ToViewModelListAsync(new Commands());
 
             Assert.Equal(
                 2,

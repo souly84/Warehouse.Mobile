@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
+using Warehouse.Mobile.Extensions;
 using Xunit;
 
 namespace Warehouse.Mobile.UnitTests
@@ -22,7 +23,7 @@ namespace Warehouse.Mobile.UnitTests
         [Fact]
         public void ArgumentNullException_InConstructor()
         {
-            Assert.Throws<ArgumentNullException>(() => new QuantityToMovePopupViewModel(null));
+            Assert.Throws<ArgumentNullException>(() => new QuantityToMovePopupViewModel(null, null));
         }
 
         [Fact]

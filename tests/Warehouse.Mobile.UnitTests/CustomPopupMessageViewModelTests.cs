@@ -15,7 +15,7 @@ namespace Warehouse.Mobile.UnitTests
         public void ArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(
-                () => new CustomPopupMessageViewModel(null)
+                () => new CustomPopupMessageViewModel(null, null)
             );
         }
 

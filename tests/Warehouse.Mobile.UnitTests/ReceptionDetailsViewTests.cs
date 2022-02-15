@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Dotnet.Commands;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.Reception.ViewModels;
@@ -20,6 +21,7 @@ namespace Warehouse.Mobile.UnitTests
                 new MockScanner(),
                 new MockPageDialogService(),
                 new MockNavigationService(),
+                new Commands(),
                 new KeyValueStorage()
             );
             vm1.ReceptionGoods = new System.Collections.ObjectModel.ObservableCollection<ReceptionGroup>();
@@ -29,7 +31,7 @@ namespace Warehouse.Mobile.UnitTests
                     new MockReception("1"),
                     new List<ReceptionGoodViewModel>
                     {
-                        new ReceptionGoodViewModel(new MockReceptionGood("1", 1))
+                        new ReceptionGoodViewModel(new MockReceptionGood("1", 1), new Commands())
                     }
                 )
             );
@@ -37,6 +39,7 @@ namespace Warehouse.Mobile.UnitTests
                 new MockScanner(),
                 new MockPageDialogService(),
                 new MockNavigationService(),
+                new Commands(),
                 new KeyValueStorage()
             );
 

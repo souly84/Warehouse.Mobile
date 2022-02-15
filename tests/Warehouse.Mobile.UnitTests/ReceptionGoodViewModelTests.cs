@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using Dotnet.Commands;
 using EbSoft.Warehouse.SDK;
 using Newtonsoft.Json.Linq;
 using Warehouse.Core;
 using Warehouse.Mobile.ViewModels;
+using Warehouse.Mobile.Extensions;
 using Xunit;
 
 namespace Warehouse.Mobile.UnitTests
@@ -45,7 +47,7 @@ namespace Warehouse.Mobile.UnitTests
         public void ThrowArgumentNullReferenceException()
         {
             Assert.Throws<ArgumentNullException>(
-                () => new ReceptionGoodViewModel(null)
+                () => new ReceptionGoodViewModel(null, new Commands())
             );
         }
 
@@ -56,7 +58,8 @@ namespace Warehouse.Mobile.UnitTests
                 new ReceptionGoodViewModel(
                     new ExtraConfirmedReceptionGood(
                         new MockReceptionGood("1", 1)
-                    )
+                    ),
+                    new Commands()
                 ).IsExtraConfirmedReceptionGood
             );
         }
