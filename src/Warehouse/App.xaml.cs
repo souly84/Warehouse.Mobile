@@ -1,4 +1,5 @@
-﻿using EbSoft.Warehouse.SDK;
+﻿using Dotnet.Commands;
+using EbSoft.Warehouse.SDK;
 using Prism;
 using Prism.Ioc;
 using Prism.Navigation;
@@ -46,13 +47,25 @@ namespace Warehouse.Mobile
             // this registration was missed, is it done by purpose?
             containerRegistry.RegisterForNavigation<QuantityToMovePopupView, QuantityToMovePopupViewModel>();
             containerRegistry.RegisterForNavigation<CustomPopupMessageView>();
+            containerRegistry.RegisterInstance<ICommands>(new Commands().Validated());
             if (!containerRegistry.IsRegistered<ICompany>())
             {
-               containerRegistry.RegisterInstance<ICompany>(
-                   new EbSoftCompany("http://wdc-logcnt.eurocenter.be/webservice/apiscanning.php")
-                   //new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php")
+#if MOCK
+                containerRegistry.RegisterInstance<ICompany>(
+                    new EbSoftCompany(
+                        new WebRequest.Elegant.WebRequest(
+                            "http://wdc-logcnt.eurocenter.be/webservice/apiscanning.php",
+                            Mock.MockDataComponent.HttpClient()
+                        )
+                    )
+                );
+#else
+                containerRegistry.RegisterInstance<ICompany>(
+                    new EbSoftCompany("http://wdc-logcnt.eurocenter.be/webservice/apiscanning.php")
+                    //new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php")
 
-               );
+                );
+#endif
             }
         }
 

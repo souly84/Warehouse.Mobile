@@ -1,5 +1,8 @@
 ﻿using Prism;
 using Prism.Ioc;
+using Prism.Navigation;
+using Prism.Unity;
+using Unity;
 using Warehouse.Core.Plugins;
 using Warehouse.Droid.Services;
 using Warehouse.Scanner.SDK;
@@ -18,7 +21,14 @@ namespace Warehouse.Mobile.Droid
 
         public void RegisterTypes(IContainerRegistry container)
         {
+            var unityContainer = (UnityContainerExtension)container;
             container.RegisterInstance<IScanner>(new BarcodeScanner().Logged());
+            container.RegisterInstance<IOverlay>(
+                new OverlayWithPopupError(
+                    new AndHudOverlay(_activity),
+                    () => unityContainer.Resolve<INavigationService>()
+                )
+            );
             container.RegisterInstance<IKeyValueStorage>(new SimpleKeyValueStorage("Warehouse_Mobile_Droid"));
             //Services
 

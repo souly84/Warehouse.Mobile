@@ -1,0 +1,74 @@
+﻿[
+  {
+    "id": "47",
+    "oa_dossier": "OA831375",
+    "article": "GROHE 3328130E",
+    "qt": "1",
+    "ean": [ "4005176635410" ],
+    "qtin": "1",
+    "error_code": null,
+    "commentaire": null,
+    "itemType": "electro",
+    "qtscanned": "1"
+  },
+  {
+    "id": "47",
+    "oa_dossier": "OA831375",
+    "article": "GROHE 3328130E",
+    "qt": "1",
+    "ean": [ "4005176635410" ],
+    "qtin": "1",
+    "error_code": null,
+    "commentaire": null,
+    "itemType": "electro",
+    "qtscanned": "1"
+  },
+  {
+    "id": "46",
+    "oa_dossier": "OA831375",
+    "article": "GROHE 3328120E",
+    "qt": "1",
+    "ean": [ "4005176868498" ],
+    "qtin": "0",
+    "error_code": null,
+    "commentaire": null,
+    "itemType": "electro",
+    "qtscanned": "1"
+  },
+  {
+    "id": "45",
+    "oa_dossier": "OA859840",
+    "article": "GROHE 31566SD0",
+    "qt": "1",
+    "ean": [ "4005176473234" ],
+    "qtin": "0",
+    "error_code": null,
+    "commentaire": null,
+    "itemType": "electro",
+    "qtscanned": "0"
+  },
+  {
+    "id": "44",
+    "oa_dossier": "OA859840",
+    "article": "GROHE 31129DC1",
+    "qt": "1",
+    "ean": [ "4005176891021" ],
+    "qtin": "0",
+    "error_code": null,
+    "commentaire": null,
+    "itemType": "electro",
+    "qtscanned": "0"
+  },
+  {
+    "id": "43",
+    "oa_dossier": "OA861069",
+    "article": "GROHE 31129DC1",
+    "qt": "1",
+    "ean": [ "4005176891021" ],
+    "qtin": "0",
+    "error_code": null,
+    "commentaire": null,
+    "itemType": "electro",
+    "qtscanned": "0"
+  }
+]

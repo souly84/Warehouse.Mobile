@@ -17,6 +17,7 @@ namespace Warehouse.Mobile.Droid
         Icon = "@mipmap/icon",
         Theme = "@style/MainTheme",
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
+        ScreenOrientation = ScreenOrientation.Portrait,
         Name = "warehouse.mobile.android.mainactivity")]
     public class MainActivity : FormsAppCompatActivity
     {

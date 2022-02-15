@@ -4,12 +4,18 @@
     <TargetFramework>netstandard2.1</TargetFramework>
     <Nullable>enable</Nullable>
     <Platforms>AnyCPU;x86;x64</Platforms>
+    <Configurations>Debug;Mock;Release</Configurations>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebugType>pdbonly</DebugType>
     <DebugSymbols>true</DebugSymbols>
     <DefineConstants>TRACE</DefineConstants>
+  </PropertyGroup>
+   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Mock|AnyCPU'">
+    <DebugType>pdbonly</DebugType>
+    <DebugSymbols>true</DebugSymbols>
+    <DefineConstants>MOCK;NETSTANDARD;NETSTANDARD2_1;</DefineConstants>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x86'">
@@ -37,6 +43,7 @@
     <PackageReference Include="WebRequest.Elegant" Version="1.1.0.2" />
     <PackageReference Include="EbSoft.Warehouse.SDK" Version="1.0.0.442" />
     <PackageReference Include="Prism.Plugin.Popups" Version="8.0.76" />
+    <PackageReference Include="Elegant.Dotnet.Commands" Version="1.0.0.1" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Translation\Translations.Designer.cs">
@@ -53,11 +60,10 @@
       <LastGenOutput>Translations.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
-  
-  <ItemGroup>
-    <None Remove="Behavior\" />
+  <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Mock|AnyCPU'">
+    <ProjectReference Include="..\..\Warehouse.Mobile.Mock\Warehouse.Mobile.Mock.csproj" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Behavior\" />
+    <None Remove="Elegant.Dotnet.Commands" />
   </ItemGroup>
 </Project>

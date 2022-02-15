@@ -47,6 +47,23 @@
     <AndroidEnableProfiledAot>true</AndroidEnableProfiledAot>
     <AndroidEnableSGenConcurrent>true</AndroidEnableSGenConcurrent>
   </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Mock|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>portable</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Mock</OutputPath>
+    <DefineConstants>DEBUG;MOCK;</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <AndroidLinkMode>None</AndroidLinkMode>
+    <AotAssemblies>false</AotAssemblies>
+    <EnableLLVM>false</EnableLLVM>
+    <BundleAssemblies>false</BundleAssemblies>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
+    <AndroidDexTool>d8</AndroidDexTool>
+    <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
+    <AndroidSupportedAbis>armeabi-v7a;arm64-v8a;x86</AndroidSupportedAbis>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="Mono.Android" />
     <Reference Include="System" />
@@ -95,9 +112,9 @@
       <Version>1.1.1-pre</Version>
     </PackageReference>
     <PackageReference Include="Warehouse.Scanner.SDK">
-      <Version>1.0.0.212</Version>
+      <Version>1.0.0.453</Version>
     </PackageReference>
- <PackageReference Include="Prism.Plugin.Popups">
+    <PackageReference Include="Prism.Plugin.Popups">
       <Version>8.0.76</Version>
       </PackageReference>
     <PackageReference Include="Warehouse.Core">
@@ -112,6 +129,12 @@
     <PackageReference Include="SimpleStorage">
       <Version>1.4.36</Version>
     </PackageReference>
+    <PackageReference Include="AndHUD">
+      <Version>1.4.3</Version>
+    </PackageReference>
+  </ItemGroup>
+  <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Mock|AnyCPU'">
+    <PackageReference Include="DataMocker.Mock" Version="1.0.5" />
   </ItemGroup>
   <ItemGroup>
     <SonarQubeSetting Include="sonar.coverage.exclusions">
@@ -125,6 +148,8 @@
     <Compile Include="Permissions\IManifestPermissions.cs" />
     <Compile Include="Permissions\ManifestPermissions.cs" />
     <Compile Include="Services\SimpleKeyValueStorage.cs" />
+    <Compile Include="Services\AndHudOverlay.cs" />
+    <Compile Include="Services\OverlayWithPopupError.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -157,7 +182,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Warehouse\Warehouse.Mobile.csproj">
-      <Project>{D14BE91B-55E2-42BE-957A-570E9608D51D}</Project>
+      <Project>{A279610B-743C-4C8E-9A6F-227C9447EEA1}</Project>
       <Name>Warehouse.Mobile</Name>
     </ProjectReference>
   </ItemGroup>
