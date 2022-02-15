@@ -53,6 +53,7 @@ namespace Warehouse.Mobile.UnitTests
             containerRegistry.RegisterInstance<IScanner>(_scanner);
             containerRegistry.RegisterInstance<ICompany>(_company);
             containerRegistry.RegisterInstance<IPageDialogService>(_pageDialogService);
+            containerRegistry.RegisterInstance<IOverlay>(new MockOverlay());
             containerRegistry.RegisterInstance<IKeyValueStorage>(new KeyValueStorage());
             
         }

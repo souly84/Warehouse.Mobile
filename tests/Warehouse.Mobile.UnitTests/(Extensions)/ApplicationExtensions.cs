@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Prism.Common;
 using Prism.Navigation;
 using Warehouse.Core.Plugins;
+using Warehouse.Mobile.Extensions;
 using Warehouse.Mobile.ViewModels;
 using Xamarin.Forms;
 
