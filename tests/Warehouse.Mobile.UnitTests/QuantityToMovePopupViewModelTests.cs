@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Dotnet.Commands;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.Extensions;

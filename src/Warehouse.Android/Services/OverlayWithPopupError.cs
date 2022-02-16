@@ -25,7 +25,8 @@ namespace Warehouse.Droid.Services
             }
             catch (Exception ex)
             {
-                await _navigationService().ShowErrorAsync(ex);
+                _= _navigationService().ShowErrorAsync(ex);
+                throw;
             }
         }
     }

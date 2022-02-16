@@ -3,6 +3,7 @@ using Warehouse.Mobile.ViewModels;
 using Warehouse.Mobile.Extensions;
 using Xunit;
 using System.Threading.Tasks;
+using Dotnet.Commands;
 
 namespace Warehouse.Mobile.UnitTests
 {

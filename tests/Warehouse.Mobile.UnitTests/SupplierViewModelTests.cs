@@ -15,10 +15,11 @@ namespace Warehouse.Mobile.UnitTests
         public void ArgumentNullException(
             ISupplier supplier,
             ICommands commands,
+            
             INavigationService navigationService)
         {
             Assert.Throws<ArgumentNullException>(
-                () => new SupplierViewModel(supplier, commands, navigationService)
+                () => new SupplierViewModel(supplier, commands, new MockOverlay(), navigationService)
             );
         }
 

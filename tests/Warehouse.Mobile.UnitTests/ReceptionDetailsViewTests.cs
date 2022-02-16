@@ -2,7 +2,6 @@
 using Dotnet.Commands;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
-using Warehouse.Mobile.Reception.ViewModels;
 using Warehouse.Mobile.Tests;
 using Warehouse.Mobile.UnitTests.Mocks;
 using Warehouse.Mobile.ViewModels;

@@ -66,11 +66,13 @@ namespace Warehouse.Mobile.ViewModels
                     await receptionGroup.CommitAsync();
                 }
                 
-                await _navigationService.ShowMessageAsync(PopupSeverity.Info, "Success!", "Your reception has been synchronized successfully.");
+                await _navigationService.ShowMessageAsync(PopupSeverity.Info, "Success!",
+                    "Your reception has been synchronized successfully.");
             }
             catch (Exception ex)
             {
-                await _navigationService.ShowMessageAsync(PopupSeverity.Error, "Error!", "Synchronization failed. " + ex.Message);
+                await _navigationService.ShowMessageAsync(PopupSeverity.Error, "Error!",
+                    "Synchronization failed. " + ex.Message);
             }
             await _navigationService.GoBackAsync();
         });
@@ -104,6 +106,7 @@ namespace Warehouse.Mobile.ViewModels
             else
             {
                 _scanner.BeepFailure();
+                await _navigationService.ShowErrorAsync(new InvalidOperationException("This barcode type is not supported"));
             }
         }
 
