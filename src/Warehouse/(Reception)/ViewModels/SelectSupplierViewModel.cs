@@ -65,7 +65,11 @@ namespace Warehouse.Mobile.ViewModels
                 Suppliers = await _company
                     .Suppliers
                     .For(SelectedDate)
-                    .ToViewModelListAsync(_navigationService, _commands),
+                    .ToViewModelListAsync(
+                        _navigationService,
+                        _overlay,
+                        _commands
+                    ),
                 "Suppliers Loading..."
             );
         }

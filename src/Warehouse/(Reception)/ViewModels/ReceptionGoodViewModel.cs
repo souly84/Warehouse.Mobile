@@ -44,7 +44,7 @@ namespace Warehouse.Mobile.ViewModels
 
         public int Total { get; set; }
 
-        public int ConfirmedQuantity => _receptionGood.Confirmation.ToDictionary().Value<int>("Confirmed");
+        public int ConfirmedQuantity => _receptionGood.Confirmation.ConfirmedQuantity;
 
         public string Name => GoodData.ValueOrDefault<string>("Article");
 

@@ -41,11 +41,11 @@ namespace Warehouse.Mobile.Reception.Views
                 }
                 else
                 {
-                    return y.IsExtraConfirmed ? -1 : 1;
+                    return y.IsExtraConfirmed ? 1 : -1;
                 }
             }
 
-            return 1;
+            return -1;
         }
     }
 }
