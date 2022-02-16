@@ -2,7 +2,6 @@ using System;
 using System.Windows.Input;
 using Dotnet.Commands;
 using MediaPrint;
-using Prism.Commands;
 using Prism.Mvvm;
 using Warehouse.Core;
 

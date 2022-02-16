@@ -12,6 +12,6 @@
     <EmbeddedResource Include="Data\get_webservice_apiscanning.php%2822F8C190%29.json" />
     <EmbeddedResource Include="Data\get_webservice_apiscanning.php%288B5345B7%29.json" />
     <EmbeddedResource Include="Data\get_webservice_apiscanning.php%28E7DA5D3F%29.json" />
-    <EmbeddedResource Include="Data\post_webservice_apiscanning.php%28835F298D%29.json" />
+    <EmbeddedResource Include="Data\post_webservice_apiscanning.php.json" />
   </ItemGroup>
 </Project>
