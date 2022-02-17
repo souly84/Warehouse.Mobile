@@ -118,13 +118,13 @@
       <Version>8.0.76</Version>
       </PackageReference>
     <PackageReference Include="Warehouse.Core">
-      <Version>1.0.0.460</Version>
+      <Version>1.0.0.465</Version>
     </PackageReference>
     <PackageReference Include="Honeywell.BarcodeReader">
       <Version>1.32.7.10</Version>
     </PackageReference>
     <PackageReference Include="EbSoft.Warehouse.SDK">
-      <Version>1.0.0.462</Version>
+      <Version>1.0.0.467</Version>
     </PackageReference>
     <PackageReference Include="SimpleStorage">
       <Version>1.4.36</Version>

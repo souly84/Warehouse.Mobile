@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dotnet.Commands;
 using Warehouse.Core;
-using Warehouse.Mobile.Reception.Views;
 
 namespace Warehouse.Mobile.ViewModels
 {
@@ -26,8 +25,10 @@ namespace Warehouse.Mobile.ViewModels
         {
             var confirmations = await confirmation.ToListAsync();
             confirmations.Sort(new ReceptionGoodComparer());
-            return new ObservableCollection<ReceptionGoodViewModel>(confirmations
-            .Select(x => new ReceptionGoodViewModel(x.Good, commands)));
+            return new ObservableCollection<ReceptionGoodViewModel>(
+                confirmations
+                    .Select(x => new ReceptionGoodViewModel(x.Good, commands))
+            );
         }
 
         public static async Task<IReceptionGood> ByBarcodeAsync(

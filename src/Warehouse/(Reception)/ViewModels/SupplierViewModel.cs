@@ -31,13 +31,12 @@ namespace Warehouse.Mobile.ViewModels
 
         public IAsyncCommand GoToReceptionDetailsCommand => _commands.NavigationCommand(() =>
             _overlay.OverlayAsync<INavigationResult>(
-                () =>
-                    _navigationService.NavigateAsync(
-                    AppConstants.ReceptionDetailsViewId,
-                    new NavigationParameters
-                    {
-                        { "Supplier", _supplier }
-                    }
+                () => _navigationService.NavigateAsync(
+                   AppConstants.ReceptionDetailsViewId,
+                   new NavigationParameters
+                   {
+                       { "Supplier", _supplier }
+                   }
                 ),
                 $"{Name} receptions loading..."
             )

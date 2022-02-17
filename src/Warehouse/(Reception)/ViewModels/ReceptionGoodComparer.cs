@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Warehouse.Core;
 
-namespace Warehouse.Mobile.Reception.Views
+namespace Warehouse.Mobile
 {
     public class ReceptionGoodComparer : IComparer<IGoodConfirmation>
     {
@@ -25,7 +25,6 @@ namespace Warehouse.Mobile.Reception.Views
             {
                 return y == null ? 0 : -1;
             }
-
             return y != null
                 ? CompareUnknownAndExtraConfirmed(x, y)
                 : 1;
@@ -33,19 +32,17 @@ namespace Warehouse.Mobile.Reception.Views
 
         private int CompareUnknownAndExtraConfirmed(IReceptionGood x, IReceptionGood y)
         {
-            if (x.IsUnknown && y.IsUnknown)
+            if (x.IsUnknown)
             {
-                if (x.IsExtraConfirmed && y.IsExtraConfirmed)
-                {
-                    return 0;
-                }
-                else
-                {
-                    return y.IsExtraConfirmed ? 1 : -1;
-                }
+                return y.IsUnknown ? 0 : 1;
             }
 
-            return -1;
+            if (x.IsExtraConfirmed)
+            {
+                return y.IsExtraConfirmed ? 0 : 1;
+            }
+
+            return y.IsExtraConfirmed ? -1 : 0;
         }
     }
 }

@@ -26,11 +26,12 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Warehouse\Warehouse.Mobile.csproj" />
   </ItemGroup>
-  
   <ItemGroup>
-    <None Remove="Newtonsoft.Json" />
-    <None Remove="Prism.Plugin.Popups" />
-    <None Remove="Warehouse.Core" />
-    <None Remove="SimpleStorage" />
+    <None Remove="Data\UnsortedGoodsData.json" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Data\UnsortedGoodsData.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
   </ItemGroup>
 </Project>
