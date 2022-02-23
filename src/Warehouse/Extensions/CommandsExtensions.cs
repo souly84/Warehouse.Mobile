@@ -34,7 +34,7 @@ namespace Warehouse.Mobile.Extensions
                     }
                 });
                 return taskCompletionSource.Task;
-            }, name: name);
+            }, name: name, forceExecution : true);
         }
     }
 }

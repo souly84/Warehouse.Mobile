@@ -5,6 +5,7 @@ using Dotnet.Commands;
 using EbSoft.Warehouse.SDK;
 using Prism.Mvvm;
 using Prism.Navigation;
+using Prism.Services;
 using Warehouse.Core;
 
 namespace Warehouse.Mobile.ViewModels
@@ -56,7 +57,6 @@ namespace Warehouse.Mobile.ViewModels
         public async Task InitializeAsync(INavigationParameters parameters)
         {
             SelectedDate = DateTime.Now;
-            await RefreshAvailableSupplierList();
         }
 
         private Task RefreshAvailableSupplierList()

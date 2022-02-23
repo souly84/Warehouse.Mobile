@@ -15,6 +15,7 @@ namespace Warehouse.Mobile.ViewModels
     public class ReceptionDetailsViewModel : ScannerViewModel, IInitializeAsync
     {
         private readonly IScanner _scanner;
+        private readonly IPageDialogService _dialog;
         private readonly INavigationService _navigationService;
         private readonly CachedCommands _cachedCommands;
         private readonly ICommands _commands;
@@ -33,6 +34,7 @@ namespace Warehouse.Mobile.ViewModels
             : base(scanner, dialog)
         {
             _scanner = scanner;
+            _dialog = dialog;
             _navigationService = navigationService;
             _commands = commands;
             _cachedCommands = commands.Cached();
@@ -81,11 +83,19 @@ namespace Warehouse.Mobile.ViewModels
 
         public async Task InitializeAsync(INavigationParameters parameters)
         {
-            var supplier = parameters.Value<ISupplier>("Supplier");
-            ReceptionGoods = await supplier.ReceptionViewModelsAsync(_commands, _keyValueStorage);
-            _originalCount = ReceptionGoods.Sum(r => r.Count);
-            SupplierName = supplier.ToDictionary().ValueOrDefault<string>("Name");
-            RefreshCount();
+            try
+            {
+                var supplier = parameters.Value<ISupplier>("Supplier");
+                ReceptionGoods = await supplier.ReceptionViewModelsAsync(_commands, _keyValueStorage);
+                _originalCount = ReceptionGoods.Sum(r => r.Count);
+                SupplierName = supplier.ToDictionary().ValueOrDefault<string>("Name");
+                RefreshCount();
+            }
+            catch (Exception ex)
+            {
+                await _dialog.DisplayAlertAsync("Error", ex.ToString(), "Ok");
+            }
+            
         }
 
         protected override async Task OnScanAsync(IScanningResult barcode)

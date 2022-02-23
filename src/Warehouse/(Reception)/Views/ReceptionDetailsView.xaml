@@ -4,7 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:viewModels="clr-namespace:Warehouse.Mobile.ViewModels"
     xmlns:selectors="clr-namespace:Warehouse.Mobile.Views"
-    xmlns:system="clr-namespace:System;assembly=netstandard"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
     xmlns:neo="clr-namespace:Xamarin.Forms.NeoControls;assembly=Xamarin.Forms.NeoControls"
     Title="Receptions"
@@ -178,7 +178,7 @@
         </Grid>
     </NavigationPage.TitleView>
      <ContentView VerticalOptions="Center" Padding="5">
-       <ContentView.Background>
+       <!--<ContentView.Background>
            <LinearGradientBrush StartPoint="0,1"
                                 EndPoint="0,0">
                <neo:GradientStop
@@ -188,7 +188,7 @@
                    Color="{StaticResource BackgroundColorViewEnd}"
                    Offset="1.0"/>
            </LinearGradientBrush>
-        </ContentView.Background>
+        </ContentView.Background>-->
         <StackLayout VerticalOptions="FillAndExpand">
                 <CollectionView
                     x:Name="ReceptionDetailsCollectionView"
