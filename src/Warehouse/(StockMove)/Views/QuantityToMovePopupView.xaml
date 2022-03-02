@@ -72,7 +72,7 @@
                 </StackLayout>
 
                 <StackLayout HorizontalOptions="Center" Spacing="0">
-                    <controls:CustomEntry WidthRequest="70" DigitsTypesToAllow="Numbers"/>
+                    <controls:CustomEntry WidthRequest="70" DigitsTypesToAllow="Numbers" Text="{Binding QuantityToMove}"/>
                 </StackLayout>
 
                 <StackLayout

@@ -27,5 +27,9 @@ namespace Warehouse.Mobile.ViewModels
         public IAsyncCommand GoToPutAwayCommand => _commands.NavigationCommand(() =>
             _navigationService.NavigateAsync(AppConstants.PutAwayViewId)
         );
+
+        public IAsyncCommand GoToStockMoveCommand => _commands.NavigationCommand(() =>
+            _navigationService.NavigateAsync(AppConstants.StockMoveViewId)
+        );
     }
 }

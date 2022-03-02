@@ -1,9 +1,12 @@
-﻿using Prism;
+﻿using EbSoft.Warehouse.SDK;
+using Prism;
 using Prism.Ioc;
 using Prism.Navigation;
 using Prism.Unity;
 using Unity;
+using Warehouse.Core;
 using Warehouse.Core.Plugins;
+using Warehouse.Droid;
 using Warehouse.Droid.Services;
 using Warehouse.Scanner.SDK;
 using Warehouse.Scanner.SDK.Droid;
@@ -30,6 +33,12 @@ namespace Warehouse.Mobile.Droid
                 )
             );
             container.RegisterInstance<IKeyValueStorage>(new SimpleKeyValueStorage("Warehouse_Mobile_Droid"));
+
+            container.RegisterInstance<ICompany>(
+                   new EbSoftCompany(new LoggedWebRequest(new WebRequest.Elegant.WebRequest("http://wdc-logcnt.eurocenter.be/webservice/apiscanning.php")
+                   //new EbSoftCompany(new LoggedWebRequest(new WebRequest.Elegant.WebRequest("http://wdc-logitest.eurocenter.be/webservice/apitest.php")
+               //new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php")
+                )));
             //Services
 
             //var tracing = (AppCenterTracing)new AppCenterTracing("ac3d4ba2-411b-4ce3-91bb-7ab861e37796").Identify(

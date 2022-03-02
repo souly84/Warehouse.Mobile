@@ -43,7 +43,7 @@ namespace Warehouse.Mobile
             containerRegistry.RegisterForNavigation<MenuSelectionView>();
             containerRegistry.RegisterForNavigation<ReceptionDetailsView>();
             containerRegistry.RegisterForNavigation<PutAwayView>();
-            containerRegistry.RegisterForNavigation<StockMoveView>();
+            containerRegistry.RegisterForNavigation<StockMoveView, StockMoveViewModel>();
             // this registration was missed, is it done by purpose?
             containerRegistry.RegisterForNavigation<QuantityToMovePopupView, QuantityToMovePopupViewModel>();
             containerRegistry.RegisterForNavigation<CustomPopupMessageView>();
@@ -60,11 +60,11 @@ namespace Warehouse.Mobile
                     )
                 );
 #else
-                containerRegistry.RegisterInstance<ICompany>(
-                    new EbSoftCompany("http://wdc-logcnt.eurocenter.be/webservice/apiscanning.php")
-                    //new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php")
+                //containerRegistry.RegisterInstance<ICompany>(
+                //    new EbSoftCompany("http://wdc-logcnt.eurocenter.be/webservice/apiscanning.php")
+                //    //new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php")
 
-                );
+                //);
 #endif
             }
         }

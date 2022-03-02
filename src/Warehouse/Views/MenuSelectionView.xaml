@@ -101,7 +101,7 @@
                             Text="Put Away" />
 
                         <Label
-                            TextColor="Black"
+                            TextColor="Black"   
                             VerticalOptions="End"
                             HorizontalOptions="End"
                             FontSize="Micro"
@@ -117,7 +117,7 @@
                     Grid.Row="1"
                     Grid.Column="0">
 
-                     <neo:NeoButton BackgroundColor="#e3edf7" VerticalOptions="FillAndExpand">
+                     <neo:NeoButton BackgroundColor="#e3edf7" VerticalOptions="FillAndExpand" Command="{Binding GoToStockMoveCommand}">
                        <Grid VerticalOptions="FillAndExpand" Padding="15">
                         <Grid.RowDefinitions>
                             <RowDefinition/>

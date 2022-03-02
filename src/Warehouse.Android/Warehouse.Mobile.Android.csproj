@@ -150,6 +150,7 @@
     <Compile Include="Services\SimpleKeyValueStorage.cs" />
     <Compile Include="Services\AndHudOverlay.cs" />
     <Compile Include="Services\OverlayWithPopupError.cs" />
+    <Compile Include="LoggedWebRequest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
