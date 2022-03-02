@@ -10,14 +10,17 @@ namespace Warehouse.Mobile
     public class QuantityToMovePopupViewModel : BindableBase, IInitialize
     {
         private readonly INavigationService _navigationService;
+        private readonly ICompany _company;
         private IWarehouseGood? _goodToMove;
         private readonly CachedCommands _commands;
 
         public QuantityToMovePopupViewModel(
             ICommands commands,
-            INavigationService navigationService)
+            INavigationService navigationService,
+            ICompany company)
         {
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
+            _company = company;
             _commands = commands.Cached();
         }
 
@@ -35,6 +38,13 @@ namespace Warehouse.Mobile
             set => SetProperty(ref _destinationLocation, value);
         }
 
+        private int _quantityToMove = 1;
+        public int QuantityToMove
+        {
+            get => _quantityToMove;
+            set => SetProperty(ref _quantityToMove, value);
+        }
+
         public IAsyncCommand ValidateCommand => _commands.AsyncCommand(async () =>
         {
             _ = _goodToMove ?? throw new InvalidOperationException($"Good object is not initialized for movement");
@@ -43,8 +53,8 @@ namespace Warehouse.Mobile
                 .Movement
                 .From(OriginLocation)
                 .MoveToAsync(
-                    await _goodToMove.Storages.ByBarcodeAsync(DestinationLocation),
-                    5
+                    await _goodToMove.Storages.ByBarcodeAsync(_company.Warehouse, DestinationLocation),
+                    QuantityToMove
             );
             await _navigationService.GoBackAsync();
         });

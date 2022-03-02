@@ -24,7 +24,7 @@ namespace Warehouse.Mobile.UnitTests
         [Fact]
         public void ArgumentNullException_InConstructor()
         {
-            Assert.Throws<ArgumentNullException>(() => new QuantityToMovePopupViewModel(null, null));
+            Assert.Throws<ArgumentNullException>(() => new QuantityToMovePopupViewModel(null, null, null));
         }
 
         [Fact]

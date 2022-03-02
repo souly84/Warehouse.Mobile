@@ -94,7 +94,6 @@
                 </Label>
             </StackLayout>
 
-
             <StackLayout HeightRequest="150">
                 <Label Text="Existing Race Locations" />
                 <Frame
