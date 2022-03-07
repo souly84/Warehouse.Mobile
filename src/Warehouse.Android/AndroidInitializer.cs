@@ -35,8 +35,8 @@ namespace Warehouse.Mobile.Droid
             container.RegisterInstance<IKeyValueStorage>(new SimpleKeyValueStorage("Warehouse_Mobile_Droid"));
 
             container.RegisterInstance<ICompany>(
-                   new EbSoftCompany(new LoggedWebRequest(new WebRequest.Elegant.WebRequest("http://wdc-logcnt.eurocenter.be/webservice/apiscanning.php")
-                   //new EbSoftCompany(new LoggedWebRequest(new WebRequest.Elegant.WebRequest("http://wdc-logitest.eurocenter.be/webservice/apitest.php")
+                   //new EbSoftCompany(new LoggedWebRequest(new WebRequest.Elegant.WebRequest("http://wdc-logcnt.eurocenter.be/webservice/apiscanning.php")
+                   new EbSoftCompany(new LoggedWebRequest(new WebRequest.Elegant.WebRequest("http://wdc-logitest.eurocenter.be/webservice/apitest.php")
                //new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php")
                 )));
             //Services

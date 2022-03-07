@@ -118,13 +118,13 @@
       <Version>8.0.76</Version>
       </PackageReference>
     <PackageReference Include="Warehouse.Core">
-      <Version>1.0.0.465</Version>
+      <Version>1.0.0.475</Version>
     </PackageReference>
     <PackageReference Include="Honeywell.BarcodeReader">
       <Version>1.32.7.10</Version>
     </PackageReference>
     <PackageReference Include="EbSoft.Warehouse.SDK">
-      <Version>1.0.0.467</Version>
+      <Version>1.0.0.480</Version>
     </PackageReference>
     <PackageReference Include="SimpleStorage">
       <Version>1.4.36</Version>
@@ -166,17 +166,21 @@
     <AndroidResource Include="Resources\values\colors.xml" />
     <AndroidResource Include="Resources\mipmap-anydpi-v26\icon.xml" />
     <AndroidResource Include="Resources\mipmap-anydpi-v26\icon_round.xml" />
-    <AndroidResource Include="Resources\mipmap-hdpi\Icon.png" />
+    <AndroidResource Include="Resources\mipmap-hdpi\customIcon.png" />
     <AndroidResource Include="Resources\mipmap-hdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-mdpi\Icon.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\customIcon.png" />
     <AndroidResource Include="Resources\mipmap-mdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-xhdpi\Icon.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\customIcon.png" />
     <AndroidResource Include="Resources\mipmap-xhdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-xxhdpi\Icon.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\customIcon.png" />
     <AndroidResource Include="Resources\mipmap-xxhdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\Icon.png" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\customIcon.png" />
     <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
     <AndroidResource Include="Resources\layout\splash_layout.xml">
+      <SubType></SubType>
+      <Generator></Generator>
+    </AndroidResource>
+    <AndroidResource Include="Resources\mipmap-anydpi-v26\customIcon.png">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
