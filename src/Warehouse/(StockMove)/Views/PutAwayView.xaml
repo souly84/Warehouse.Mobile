@@ -7,22 +7,36 @@
     xmlns:viewModels="clr-namespace:Warehouse.Mobile.ViewModels"
     Title="Put Away"
     x:DataType="fonts:PutAwayViewModel"
-    x:Class="Warehouse.Mobile.PutAwayView">
-    <!--<NavigationPage.TitleView>
-        <StackLayout>
-            <Label Text="Put Away"></Label>
-              <controls:MaterialSearchBar
-            HorizontalOptions="FillAndExpand"
-            Margin="0,0,20,0"
-            BackgroundColor="White"
-            CornerRadius="5"
-            TextColor="White"
-            CancelButtonColor="White"
-            Placeholder="EAN/Hope"/>
-        </StackLayout>
-        
-      
-    </NavigationPage.TitleView>-->
+    x:Class="Warehouse.Mobile.PutAwayView"
+    NavigationPage.HasBackButton="False">
+    <NavigationPage.TitleView>
+        <Grid Padding="2" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+             <Label
+                    FontFamily="materialicons"
+                    Text="{x:Static fonts:MaterialIcons.ArrowLeft}"
+                    TextColor="{DynamicResource TextsColor}"
+                 VerticalOptions="Center"
+                 HorizontalOptions="Start"
+                 HorizontalTextAlignment="Start"
+                    FontSize="25"
+                Margin="-5,0,0,0">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding BackCommand}"/>
+                </Label.GestureRecognizers>
+            </Label>
+             <Label
+                 Grid.Column="1"
+                Text="Put Away"
+                VerticalOptions="Center"
+                FontSize="18"
+                TextColor="{DynamicResource TextsColor}"/>
+        </Grid>
+    </NavigationPage.TitleView>
 
     <ContentView VerticalOptions="FillAndExpand" Padding="5" BackgroundColor="{DynamicResource MainColor}">
         <StackLayout VerticalOptions="FillAndExpand" BackgroundColor="{DynamicResource MainColor}">

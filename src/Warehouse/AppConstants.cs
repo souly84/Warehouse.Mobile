@@ -12,6 +12,7 @@ namespace Warehouse.Mobile
         public const string QuantityToMovePopupViewId = nameof(QuantityToMovePopupView);
         public const string StockMoveViewId = nameof(StockMoveView);
         public const string CustomPopupMessageViewId = nameof(CustomPopupMessageView);
+        public const string HistoryViewId = nameof(HistoryView);
         public static string Uri { get => "http://wdc-logcnt.eurocenter.be/webservice/api.php"; }
     }
 }

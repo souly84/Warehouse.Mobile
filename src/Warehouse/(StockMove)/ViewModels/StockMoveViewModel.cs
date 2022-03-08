@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
+using Dotnet.Commands;
 using EbSoft.Warehouse.SDK;
 using Prism.Mvvm;
 using Prism.Navigation;
@@ -17,16 +18,19 @@ namespace Warehouse.Mobile
         private readonly IPageDialogService _dialog;
         private readonly ICompany _company;
         private readonly INavigationService _navigationService;
+        private readonly CachedCommands _commands;
 
         public StockMoveViewModel(IScanner scanner,
             IPageDialogService dialog,
             ICompany company,
+            ICommands commands,
             INavigationService navigationService) : base(scanner, dialog)
         {
             _scanner = scanner;
             _dialog = dialog;
             _company = company;
             _navigationService = navigationService;
+            _commands = commands.Cached();
         }
 
         private string _scannedBarcodeOriginLocation;
@@ -134,5 +138,10 @@ namespace Warehouse.Mobile
                     }
             }
         }
+
+        public IAsyncCommand BackCommand => _commands.AsyncCommand(async () =>
+        {
+            await _navigationService.GoBackAsync();
+        });
     }
 }

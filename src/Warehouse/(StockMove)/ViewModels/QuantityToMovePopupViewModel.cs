@@ -69,5 +69,19 @@ namespace Warehouse.Mobile
             DestinationLocation = parameters.Value<string>("Destination");
             _goodToMove = parameters.Value<IWarehouseGood>("Good");
         }
+
+        public IAsyncCommand SetQuantityCommand => _commands.AsyncCommand<string>(async (value) =>
+        {
+            if (value != "-1")
+            {
+                QuantityToMove = Convert.ToInt32($"{QuantityToMove}{value}");
+            }
+            else
+            {
+                QuantityToMove = QuantityToMove / 10;
+            }
+        });
+
+        
     }
 }

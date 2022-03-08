@@ -14,26 +14,26 @@
     HasSystemPadding="True"
     Padding="20">
 
-    <StackLayout Padding="10" VerticalOptions="CenterAndExpand">
+    <StackLayout VerticalOptions="CenterAndExpand">
         <Frame
             CornerRadius="10"
             BackgroundColor="{DynamicResource MainColor}">
 
             <StackLayout>
-                <Grid ColumnSpacing="0"
-                      Padding="10,0,10,0">
+                <Grid ColumnSpacing="0">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="70"/>
-                        <ColumnDefinition/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="70"/>
+                        <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
                      <Label
                          FontFamily="materialicons"
                          FontSize="25"
                          Text="{x:Static fonts:MaterialIcons.MapMarker}"
-                         VerticalTextAlignment="End"/>
+                         VerticalTextAlignment="End"
+                         HorizontalOptions="EndAndExpand"/>
 
                      <Label
                          Grid.Column="1"
@@ -56,7 +56,9 @@
                          FontFamily="materialicons"
                          FontSize="25"
                          Text="{x:Static fonts:MaterialIcons.MapMarker}"
-                         VerticalTextAlignment="End"/>
+                         VerticalTextAlignment="End"
+                         HorizontalOptions="EndAndExpand"
+                         HorizontalTextAlignment="End"/>
 
                     <Label
                         Grid.Column="4"
@@ -71,44 +73,213 @@
                     <Label Text="How many items would you like to place here?" />
                 </StackLayout>
 
-                <StackLayout HorizontalOptions="Center" Spacing="0">
-                    <controls:CustomEntry WidthRequest="70" DigitsTypesToAllow="Numbers" Text="{Binding QuantityToMove}"/>
+                <StackLayout HorizontalOptions="Center" Spacing="0" >
+                    <Frame BackgroundColor="Transparent" BorderColor="{DynamicResource TextsColor}" CornerRadius="10" VerticalOptions="CenterAndExpand" HeightRequest="15">
+                        <Label WidthRequest="70" Text="{Binding QuantityToMove}" HorizontalTextAlignment="Center" VerticalOptions="EndAndExpand"/>
+                    </Frame>
                 </StackLayout>
 
-                <StackLayout
-                    Orientation="Horizontal"
-                    VerticalOptions="EndAndExpand"
-                    Spacing="0"
-                    HeightRequest="70"
-                    HorizontalOptions="CenterAndExpand">
-                <NeoButton
+                <StackLayout Padding="5">
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+
+                           <NeoButton
                     Style="{DynamicResource ActionButton}"
-                    Command="{Binding CancelCommand}"
+                    Command="{Binding SetQuantityCommand}"
+                               CommandParameter="1"
                     HeightRequest="70"
                     WidthRequest="70">
                     <Label
                         Style="{DynamicResource ButtonActionIcon}"
                         FontSize="30"
                         FontFamily="icomoon"
-                        Text="{x:Static fonts:IcoMoon.History}">
+                        Text="{x:Static fonts:MaterialIcons.Numeric1}">
                     </Label>
                 </NeoButton>
-                <NeoButton
+
+                        <NeoButton
+                            Grid.Column="1"
                     Style="{DynamicResource ActionButton}"
-                    Command="{Binding ValidateCommand}">
+                    Command="{Binding SetQuantityCommand}"
+                               CommandParameter="2"
+                    HeightRequest="70"
+                    WidthRequest="70">
                     <Label
                         Style="{DynamicResource ButtonActionIcon}"
-                        FontFamily="icomoon"
                         FontSize="30"
-                        Text="{x:Static fonts:IcoMoon.Validate}">
+                        FontFamily="icomoon"
+                        Text="{x:Static fonts:MaterialIcons.Numeric2}">
                     </Label>
                 </NeoButton>
-            </StackLayout>
-            </StackLayout>
 
-            
-            
+                         <NeoButton
+                            Grid.Column="2"
+                    Style="{DynamicResource ActionButton}"
+                    Command="{Binding SetQuantityCommand}"
+                               CommandParameter="3"
+                    HeightRequest="70"
+                    WidthRequest="70">
+                    <Label
+                        Style="{DynamicResource ButtonActionIcon}"
+                        FontSize="30"
+                        FontFamily="icomoon"
+                        Text="{x:Static fonts:MaterialIcons.Numeric3}">
+                    </Label>
+                </NeoButton>
 
+                         <NeoButton
+                             Grid.Row="1"
+                            Grid.Column="0"
+                    Style="{DynamicResource ActionButton}"
+                    Command="{Binding SetQuantityCommand}"
+                               CommandParameter="4"
+                    HeightRequest="70"
+                    WidthRequest="70">
+                    <Label
+                        Style="{DynamicResource ButtonActionIcon}"
+                        FontSize="30"
+                        FontFamily="icomoon"
+                        Text="{x:Static fonts:MaterialIcons.Numeric4}">
+                    </Label>
+                </NeoButton>
+
+                        <NeoButton
+                             Grid.Row="1"
+                            Grid.Column="1"
+                    Style="{DynamicResource ActionButton}"
+                    Command="{Binding SetQuantityCommand}"
+                               CommandParameter="5"
+                    HeightRequest="70"
+                    WidthRequest="70">
+                    <Label
+                        Style="{DynamicResource ButtonActionIcon}"
+                        FontSize="30"
+                        FontFamily="icomoon"
+                        Text="{x:Static fonts:MaterialIcons.Numeric5}">
+                    </Label>
+                </NeoButton>
+                        <NeoButton
+                             Grid.Row="1"
+                            Grid.Column="2"
+                    Style="{DynamicResource ActionButton}"
+                    Command="{Binding SetQuantityCommand}"
+                               CommandParameter="6"
+                    HeightRequest="70"
+                    WidthRequest="70">
+                    <Label
+                        Style="{DynamicResource ButtonActionIcon}"
+                        FontSize="30"
+                        FontFamily="icomoon"
+                        Text="{x:Static fonts:MaterialIcons.Numeric6}">
+                    </Label>
+                </NeoButton>
+
+                        <NeoButton
+                             Grid.Row="2"
+                            Grid.Column="0"
+                    Style="{DynamicResource ActionButton}"
+                    Command="{Binding SetQuantityCommand}"
+                               CommandParameter="7"
+                    HeightRequest="70"
+                    WidthRequest="70">
+                    <Label
+                        Style="{DynamicResource ButtonActionIcon}"
+                        FontSize="30"
+                        FontFamily="icomoon"
+                        Text="{x:Static fonts:MaterialIcons.Numeric7}">
+                    </Label>
+                </NeoButton>
+
+                        <NeoButton
+                             Grid.Row="2"
+                            Grid.Column="1"
+                    Style="{DynamicResource ActionButton}"
+                    Command="{Binding SetQuantityCommand}"
+                               CommandParameter="8"
+                    HeightRequest="70"
+                    WidthRequest="70">
+                    <Label
+                        Style="{DynamicResource ButtonActionIcon}"
+                        FontSize="30"
+                        FontFamily="icomoon"
+                        Text="{x:Static fonts:MaterialIcons.Numeric8}">
+                    </Label>
+                </NeoButton>
+
+                        <NeoButton
+                             Grid.Row="2"
+                            Grid.Column="2"
+                    Style="{DynamicResource ActionButton}"
+                    Command="{Binding SetQuantityCommand}"
+                               CommandParameter="9"
+                    HeightRequest="70"
+                    WidthRequest="70">
+                    <Label
+                        Style="{DynamicResource ButtonActionIcon}"
+                        FontSize="30"
+                        FontFamily="icomoon"
+                        Text="{x:Static fonts:MaterialIcons.Numeric9}">
+                    </Label>
+                </NeoButton>
+
+                          <NeoButton
+                             Grid.Row="3"
+                            Grid.Column="0"
+                    Style="{DynamicResource ActionButton}"
+                    Command="{Binding SetQuantityCommand}"
+                               CommandParameter="-1"
+                    HeightRequest="70"
+                    WidthRequest="70">
+                    <Label
+                        Style="{DynamicResource ButtonActionIcon}"
+                        FontSize="30"
+                        FontFamily="materialicons"
+                        Text="{x:Static fonts:MaterialIcons.Backspace}">
+                    </Label>
+                </NeoButton>
+
+                         <NeoButton
+                             Grid.Row="3"
+                            Grid.Column="1"
+                    Style="{DynamicResource ActionButton}"
+                    Command="{Binding SetQuantityCommand}"
+                               CommandParameter="0"
+                    WidthRequest="70">
+                    <Label
+                        Style="{DynamicResource ButtonActionIcon}"
+                        FontSize="30"
+                        FontFamily="icomoon"
+                        Text="{x:Static fonts:MaterialIcons.Numeric0}">
+                    </Label>
+                </NeoButton>
+
+                          <NeoButton
+                             Grid.Row="3"
+                            Grid.Column="2"
+                    Style="{DynamicResource ActionButton}"
+                    Command="{Binding ValidateCommand}"
+                    HeightRequest="70"
+                    WidthRequest="70">
+                    <Label
+                        Style="{DynamicResource ButtonActionIcon}"
+                        FontSize="30"
+                        FontFamily="materialicons"
+                        Text="{x:Static fonts:MaterialIcons.KeyboardReturn}">
+                    </Label>
+                </NeoButton>
+                    </Grid>
+                </StackLayout>
+            </StackLayout>
     </Frame>
     </StackLayout>
     

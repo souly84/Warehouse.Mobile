@@ -6,7 +6,36 @@
     xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
     xmlns:viewModels="clr-namespace:Warehouse.Mobile"
     xmlns:controls1="clr-namespace:Warehouse.Mobile.Controls;assembly=Warehouse.Mobile"
-    x:Class="Warehouse.Mobile.Views.StockMoveView">
+    x:Class="Warehouse.Mobile.Views.StockMoveView"
+    NavigationPage.HasBackButton="False">
+    <NavigationPage.TitleView>
+        <Grid Padding="2" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+             <Label
+                    FontFamily="materialicons"
+                    Text="{x:Static fonts:MaterialIcons.ArrowLeft}"
+                    TextColor="{DynamicResource TextsColor}"
+                 VerticalOptions="Center"
+                 HorizontalOptions="Start"
+                 HorizontalTextAlignment="Start"
+                    FontSize="25"
+                Margin="-5,0,0,0">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding BackCommand}"/>
+                </Label.GestureRecognizers>
+            </Label>
+             <Label
+                 Grid.Column="1"
+                Text="Stock Move"
+                VerticalOptions="Center"
+                FontSize="18"
+                TextColor="{DynamicResource TextsColor}"/>
+        </Grid>
+    </NavigationPage.TitleView>
      <ContentView VerticalOptions="FillAndExpand" Padding="5" BackgroundColor="{DynamicResource MainColor}">
         <StackLayout VerticalOptions="FillAndExpand" BackgroundColor="{DynamicResource MainColor}">
             <StackLayout Orientation="Horizontal" BackgroundColor="{DynamicResource MainColor}">
@@ -131,7 +160,7 @@
                                                 <Label.FormattedText>
                                                     <FormattedString>
                                                         <Span Text="#" />
-                                                        <Span Text="{Binding Quantity}" />
+                                                        <Span Text="{Binding Quantity.Value}" />
                                                     </FormattedString>
                                                 </Label.FormattedText>
                                             </Label>

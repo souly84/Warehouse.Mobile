@@ -185,5 +185,10 @@ namespace Warehouse.Mobile
             IsRecognizedProduct = false;
             PutAwayStorage = null;
         }
+
+        public IAsyncCommand BackCommand => _commands.AsyncCommand(async () =>
+        {
+            await _navigationService.GoBackAsync();
+        });
     }
 }

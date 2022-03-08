@@ -24,6 +24,7 @@ namespace Warehouse.Mobile.ViewModels
         private string? _itemCount;
         private int _originalCount;
         private string? _supplierName;
+        private ISupplier _supplier;
 
         public ReceptionDetailsViewModel(
             IScanner scanner,
@@ -40,6 +41,7 @@ namespace Warehouse.Mobile.ViewModels
             _cachedCommands = commands.Cached();
             _keyValueStorage = keyValueStorage;
         }
+
 
         public ObservableCollection<ReceptionGroup> ReceptionGoods
         {
@@ -79,16 +81,45 @@ namespace Warehouse.Mobile.ViewModels
             await _navigationService.GoBackAsync();
         });
 
+        public IAsyncCommand GoToHistoryCommand => _cachedCommands.AsyncCommand(async () =>
+        {
+            try
+            {
+                await _navigationService.NavigateAsync(AppConstants.HistoryViewId, new NavigationParameters{ { "Supplier", _supplier } });
+            }
+            catch (Exception ex)
+            {
+                await _navigationService.ShowMessageAsync(PopupSeverity.Error, "Error!",
+                    "Synchronization failed. " + ex.Message);
+            }
+        });
+
+        public IAsyncCommand BackCommand => _cachedCommands.AsyncCommand(async () =>
+        {
+            try
+            {
+                if (await _dialog.DisplayAlertAsync("Warning", "Are you sure you want to leave this reception?", "Yes", "No"))
+                {
+                    await _navigationService.GoBackAsync();
+                }
+            }
+            catch (Exception ex)
+            {
+                await _navigationService.ShowMessageAsync(PopupSeverity.Error, "Error!",
+                    "Synchronization failed. " + ex.Message);
+            }
+        });
+
         public Func<Task<bool>>? AnimateCounter { get; set; }
 
         public async Task InitializeAsync(INavigationParameters parameters)
         {
             try
             {
-                var supplier = parameters.Value<ISupplier>("Supplier");
-                ReceptionGoods = await supplier.ReceptionViewModelsAsync(_commands, _keyValueStorage);
+                _supplier = parameters.Value<ISupplier>("Supplier");
+                ReceptionGoods = await _supplier.ReceptionViewModelsAsync(_commands, _keyValueStorage);
                 _originalCount = ReceptionGoods.Sum(r => r.Count);
-                SupplierName = supplier.ToDictionary().ValueOrDefault<string>("Name");
+                SupplierName = _supplier.ToDictionary().ValueOrDefault<string>("Name");
                 RefreshCount();
             }
             catch (Exception ex)

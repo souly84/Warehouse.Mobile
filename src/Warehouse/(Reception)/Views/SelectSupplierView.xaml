@@ -9,9 +9,36 @@
     xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
     xmlns:behaviors="clr-namespace:Warehouse.Mobile.Behavior"
     x:Name="ThisPage"
-
     x:DataType="viewModels:SelectSupplierViewModel"
-    >
+    NavigationPage.HasBackButton="False">
+     <NavigationPage.TitleView>
+        <Grid Padding="2" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+             <Label
+                    FontFamily="materialicons"
+                    Text="{x:Static fonts:MaterialIcons.ArrowLeft}"
+                    TextColor="{DynamicResource TextsColor}"
+                 VerticalOptions="Center"
+                 HorizontalOptions="Start"
+                 HorizontalTextAlignment="Start"
+                    FontSize="25"
+                Margin="-5,0,0,0">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding BackCommand}"/>
+                </Label.GestureRecognizers>
+            </Label>
+             <Label
+                 Grid.Column="1"
+                Text="Select Supplier"
+                VerticalOptions="Center"
+                FontSize="18"
+                TextColor="{DynamicResource TextsColor}"/>
+        </Grid>
+    </NavigationPage.TitleView>
     <ContentView VerticalOptions="Center" Padding="5">
         <StackLayout VerticalOptions="FillAndExpand">
 

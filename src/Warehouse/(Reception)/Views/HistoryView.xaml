@@ -2,16 +2,11 @@
 <ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    xmlns:viewModels="clr-namespace:Warehouse.Mobile.ViewModels"
-    xmlns:selectors="clr-namespace:Warehouse.Mobile.Views"
-    xmlns:system="clr-namespace:System;assembly=mscorlib"
     xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
-    xmlns:neo="clr-namespace:Xamarin.Forms.NeoControls;assembly=Xamarin.Forms.NeoControls"
-    Title="Receptions"
-    NavigationPage.HasBackButton="False"
-    x:DataType="viewModels:ReceptionDetailsViewModel"
-    x:Class="Warehouse.Mobile.Views.ReceptionDetailsView">
-    <ContentPage.Resources>
+    xmlns:neo="clr-namespace:Xamarin.Forms.NeoControls;assembly=Xamarin.Forms.NeoControls" xmlns:selectors="clr-namespace:Warehouse.Mobile.Views" xmlns:viewModels="clr-namespace:Warehouse.Mobile.ViewModels"
+    x:Class="Warehouse.Mobile.Views.HistoryView"
+    NavigationPage.HasBackButton="False">
+     <ContentPage.Resources>
         <DataTemplate x:Key="UnknownTemplate" x:DataType="viewModels:ReceptionGoodViewModel">
             <Grid
                 Padding="2"
@@ -142,72 +137,54 @@
             Regular="{StaticResource RegularTemplate}"/>
     </ContentPage.Resources>
     <NavigationPage.TitleView>
-        <Grid Padding="2">
+        <Grid Padding="2" >
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Label
+             <Label
                     FontFamily="materialicons"
-                    Text="{x:Static fonts:MaterialIcons.ArrowLeft}"
+                    Text="{x:Static fonts:MaterialIcons.KeyboardBackspace}"
                     TextColor="{DynamicResource TextsColor}"
                  VerticalOptions="Center"
                  HorizontalOptions="Start"
                  HorizontalTextAlignment="Start"
-                    FontSize="25"
-                Margin="-5,0,0,0">
-                <Label.GestureRecognizers>
-                    <TapGestureRecognizer Command="{Binding BackCommand}"/>
-                </Label.GestureRecognizers>
-            </Label>
-
+                    FontSize="45"/>
              <Label
                  Grid.Column="1"
-                Text="{Binding SupplierName}"
+                Text="History"
                 VerticalOptions="Center"
                 FontSize="18"
                 TextColor="{DynamicResource TextsColor}"/>
-
             <Grid Grid.Column="2">
-                    <Label
-                        Margin="15,7,0,0"
-                        FontFamily="materialicons"
-                        Text="{x:Static fonts:MaterialIcons.Truck}"
-                        TextColor="{DynamicResource TextsColor}"
-                        FontSize="45"/>
-                    <Grid VerticalOptions="StartAndExpand"
+                <Label
+                    Margin="15,7,0,0"
+                    FontFamily="materialicons"
+                    Text="{x:Static fonts:MaterialIcons.Truck}"
+                    TextColor="{DynamicResource TextsColor}"
+                    FontSize="45"/>
+                <Grid VerticalOptions="StartAndExpand"
                         HorizontalOptions="StartAndExpand"
                         WidthRequest="35"
                         HeightRequest="35">
                         <Frame BackgroundColor="Red"
                                 CornerRadius="50">
                         </Frame>
-                        <Label Text="{Binding ItemCount}"
+                        <Label Text="0"
                                x:Name="CountLabel"
                                 FontSize="8"
                                 HorizontalOptions="Center"
                                 VerticalOptions="CenterAndExpand"
                                 FontAttributes="Bold"
                                 TextColor="White"/>
-                    </Grid>
+                </Grid>
             </Grid>
         </Grid>
     </NavigationPage.TitleView>
-     <ContentView VerticalOptions="Center" Padding="5">
-       <!--<ContentView.Background>
-           <LinearGradientBrush StartPoint="0,1"
-                                EndPoint="0,0">
-               <neo:GradientStop
-                   Color="{StaticResource BackgroundColorViewStart}"
-                   Offset="0.1"/>
-               <neo:GradientStop
-                   Color="{StaticResource BackgroundColorViewEnd}"
-                   Offset="1.0"/>
-           </LinearGradientBrush>
-        </ContentView.Background>-->
-        <StackLayout VerticalOptions="FillAndExpand">
-                <CollectionView
+    <ContentView>
+        <StackLayout>
+            <CollectionView
                     x:Name="ReceptionDetailsCollectionView"
                     IsGrouped="True"
                     VerticalOptions="FillAndExpand"
@@ -222,27 +199,6 @@
                         </DataTemplate>
                     </CollectionView.GroupHeaderTemplate>
             </CollectionView>
-
-            <StackLayout Orientation="Horizontal"  VerticalOptions="EndAndExpand" Spacing="0" HeightRequest="90" HorizontalOptions="CenterAndExpand">
-                <neo:NeoButton
-                    Style="{DynamicResource ActionButton}"
-                    Command="{Binding GoToHistoryCommand}">
-                    <Label
-                        Style="{DynamicResource ButtonActionIcon}"
-                        FontFamily="icomoon"
-                        Text="{x:Static fonts:IcoMoon.History}">
-                    </Label>
-                </neo:NeoButton>
-                <neo:NeoButton
-                    Style="{DynamicResource ActionButton}"
-                    Command="{Binding ValidateReceptionCommand}">
-                    <Label
-                        Style="{DynamicResource ButtonActionIcon}"
-                        FontFamily="icomoon"
-                        Text="{x:Static fonts:IcoMoon.Validate}">
-                    </Label>
-                </neo:NeoButton>
-            </StackLayout>
         </StackLayout>
     </ContentView>
 </ContentPage>
