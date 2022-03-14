@@ -3,7 +3,10 @@
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
-    xmlns:neo="clr-namespace:Xamarin.Forms.NeoControls;assembly=Xamarin.Forms.NeoControls" xmlns:selectors="clr-namespace:Warehouse.Mobile.Views" xmlns:viewModels="clr-namespace:Warehouse.Mobile.ViewModels"
+    xmlns:selectors="clr-namespace:Warehouse.Mobile.Views"
+    xmlns:viewModels="clr-namespace:Warehouse.Mobile.ViewModels"
+    xmlns:system="clr-namespace:System;assembly=mscorlib"
+    x:DataType="viewModels:HistoryViewModel"
     x:Class="Warehouse.Mobile.Views.HistoryView"
     NavigationPage.HasBackButton="False">
      <ContentPage.Resources>
@@ -39,6 +42,7 @@
                 <BoxView
                     Grid.ColumnSpan="3"
                     HeightRequest="1"
+                    Margin="0,0,0,-2"
                     HorizontalOptions="Fill"
                     VerticalOptions="End"
                     BackgroundColor="Gray"/>
@@ -76,6 +80,7 @@
                         Text="{Binding RemainingQuantity}"/>
                     <BoxView
                         Grid.ColumnSpan="3"
+                        Margin="0,0,0,-2"
                         HeightRequest="1"
                         HorizontalOptions="Fill"
                         VerticalOptions="End"
@@ -83,7 +88,7 @@
                 </Grid>
         </DataTemplate>
         <DataTemplate x:Key="RegularTemplate" x:DataType="viewModels:ReceptionGoodViewModel">
-            <Grid Padding="2" VerticalOptions="FillAndExpand" >
+            <Grid Padding="2" VerticalOptions="FillAndExpand" BackgroundColor="#A4FBA6">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="30"/>
                         <ColumnDefinition/>
@@ -119,12 +124,13 @@
                         HorizontalOptions="End"
                         TextColor="{DynamicResource SuccessColor}"
                         Style="{DynamicResource ReceptionGoodCategoryIcon}"
-                        FontFamily="warehouseIcons"
-                        Text="{x:Static fonts:IcoMoon.Barcode}"/>
+                        FontFamily="materialicons"
+                        Text="{x:Static fonts:MaterialIcons.Check}"/>
 
                 <BoxView
                         Grid.ColumnSpan="3"
                         HeightRequest="1"
+                    Margin="0,0,0,-1"
                         HorizontalOptions="Fill"
                         VerticalOptions="End"
                         BackgroundColor="Gray"/>
@@ -143,43 +149,27 @@
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-             <Label
+            <StackLayout BackgroundColor="Transparent">
+                 <Label
                     FontFamily="materialicons"
-                    Text="{x:Static fonts:MaterialIcons.KeyboardBackspace}"
+                    Text="{x:Static fonts:MaterialIcons.ArrowLeft}"
                     TextColor="{DynamicResource TextsColor}"
                  VerticalOptions="Center"
                  HorizontalOptions="Start"
                  HorizontalTextAlignment="Start"
-                    FontSize="45"/>
+                    FontSize="25"
+                Margin="-5,0,0,0"/>
+                 <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding BackCommand}"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+              
              <Label
                  Grid.Column="1"
                 Text="History"
                 VerticalOptions="Center"
                 FontSize="18"
                 TextColor="{DynamicResource TextsColor}"/>
-            <Grid Grid.Column="2">
-                <Label
-                    Margin="15,7,0,0"
-                    FontFamily="materialicons"
-                    Text="{x:Static fonts:MaterialIcons.Truck}"
-                    TextColor="{DynamicResource TextsColor}"
-                    FontSize="45"/>
-                <Grid VerticalOptions="StartAndExpand"
-                        HorizontalOptions="StartAndExpand"
-                        WidthRequest="35"
-                        HeightRequest="35">
-                        <Frame BackgroundColor="Red"
-                                CornerRadius="50">
-                        </Frame>
-                        <Label Text="0"
-                               x:Name="CountLabel"
-                                FontSize="8"
-                                HorizontalOptions="Center"
-                                VerticalOptions="CenterAndExpand"
-                                FontAttributes="Bold"
-                                TextColor="White"/>
-                </Grid>
-            </Grid>
         </Grid>
     </NavigationPage.TitleView>
     <ContentView>

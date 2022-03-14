@@ -19,7 +19,7 @@ namespace Warehouse.Mobile.ViewModels
             ICommands commands)
         {
             _receptionGood = receptionGood ?? throw new ArgumentNullException(nameof(receptionGood));
-            ErrorMessage = IsUnkownGood ? $"Not expected {_receptionGood.ToDictionary().ValueOrDefault<string>("Barcode")}" : "Received more than expected";
+            ErrorMessage = IsUnkownGood ? $"Not expected {_receptionGood.ToDictionary().ValueOrDefault<string>("Ean")}" : "Received more than expected";
             _commands = commands.Cached();
         }
 
@@ -47,7 +47,7 @@ namespace Warehouse.Mobile.ViewModels
 
         public string Name => GoodData.ValueOrDefault<string>("Article");
 
-        public int Quantity => GoodData.ValueOrDefault<int>("Quantity");
+        public int Quantity => _receptionGood.Quantity;
 
         public string Oa => GoodData.ValueOrDefault<string>("oa");
 

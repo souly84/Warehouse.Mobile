@@ -113,6 +113,7 @@ namespace Warehouse.Mobile
                                         { "Good", WarehouseGood }
                                      }
                                  );
+                            ResetFields();
                             break;
                         }
                         else
@@ -124,19 +125,34 @@ namespace Warehouse.Mobile
                     }
                 default:
                     {
-                        ScannedProductToMove = barcode.BarcodeData;
-                        IsRecognizedProduct = true;
-                        WarehouseGood = await _company
-                            .Warehouse
-                            .Goods.For(barcode.BarcodeData)
-                            .FirstAsync();
-                        var storage = await WarehouseGood.Storages.ByBarcodeAsync(ScannedBarcodeOriginLocation);
-                        OriginLocationVm = new LocationViewModel(storage);
-                        RaceLocations = (ObservableCollection<LocationViewModel>)await WarehouseGood.Storages.Race.ToViewModelListAsync();
-                        ReserveLocations = (ObservableCollection<LocationViewModel>)await WarehouseGood.Storages.Reserve.ToViewModelListAsync();
+                        if (IsRecognizedOriginLocation)
+                        {
+                            ScannedProductToMove = barcode.BarcodeData;
+                            IsRecognizedProduct = true;
+                            WarehouseGood = await _company
+                                .Warehouse
+                                .Goods.For(barcode.BarcodeData)
+                                .FirstAsync();
+                            var storage = await WarehouseGood.Storages.ByBarcodeAsync(ScannedBarcodeOriginLocation);
+                            OriginLocationVm = new LocationViewModel(storage);
+                            RaceLocations = (ObservableCollection<LocationViewModel>)await WarehouseGood.Storages.Race.ToViewModelListAsync();
+                            ReserveLocations = (ObservableCollection<LocationViewModel>)await WarehouseGood.Storages.Reserve.ToViewModelListAsync();
+                        }
+                        else
+                        {
+                            await _dialog.DisplayAlertAsync("Error", "Please scan the location you wants to move from before scanning a product", "Ok");
+                        }
                         break;
                     }
             }
+        }
+
+        private void ResetFields()
+        {
+            IsRecognizedOriginLocation = false;
+            IsRecognizedProduct = false;
+            ScannedProductToMove = "";
+            ScannedBarcodeOriginLocation = "";
         }
 
         public IAsyncCommand BackCommand => _commands.AsyncCommand(async () =>

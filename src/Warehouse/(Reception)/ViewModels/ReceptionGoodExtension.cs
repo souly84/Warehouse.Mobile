@@ -65,5 +65,25 @@ namespace Warehouse.Mobile.ViewModels
                 $"Reception groups dont contain any good with barcode {barcodeData}"
             );
         }
+
+        public static async Task<T> FirstOrDefaultAsync<T>(
+            this Task<IEnumerable<T>> listTask)
+        {
+            return (await listTask).FirstOrDefault();
+        }
+
+        public static async Task<T> FirstOrDefaultAsync<T>(
+            this IEnumerable<T> list,
+            Func<T, Task<bool>> predicateAsync)
+        {
+            foreach (var item in list)
+            {
+                if (await predicateAsync(item))
+                {
+                    return item;
+                }
+            }
+            return default(T);
+        }
     }
 }

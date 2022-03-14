@@ -55,7 +55,7 @@ namespace Warehouse.Mobile.ViewModels
             try
             {
                 var supplier = parameters.Value<ISupplier>("Supplier");
-                ReceptionGoods = await supplier.ReceptionViewModelsAsync(_commands, _keyValueStorage);
+                ReceptionGoods = await supplier.HistoryReceptionViewModelsAsync(_commands, _keyValueStorage);
                 _originalCount = ReceptionGoods.Sum(r => r.Count);
                 SupplierName = supplier.ToDictionary().ValueOrDefault<string>("Name");
             }
@@ -64,5 +64,10 @@ namespace Warehouse.Mobile.ViewModels
                 await _dialog.DisplayAlertAsync("Error", ex.ToString(), "Ok");
             }
         }
+
+        public IAsyncCommand BackCommand => _cachedCommands.AsyncCommand(async () =>
+        {
+            await _navigationService.GoBackAsync();
+        });
     }
 }

@@ -118,7 +118,7 @@ namespace Warehouse.Mobile.ViewModels
             {
                 _supplier = parameters.Value<ISupplier>("Supplier");
                 ReceptionGoods = await _supplier.ReceptionViewModelsAsync(_commands, _keyValueStorage);
-                _originalCount = ReceptionGoods.Sum(r => r.Count);
+                _originalCount = ReceptionGoods.Sum(r => r.Sum((z) => z.Quantity));
                 SupplierName = _supplier.ToDictionary().ValueOrDefault<string>("Name");
                 RefreshCount();
             }
@@ -133,15 +133,37 @@ namespace Warehouse.Mobile.ViewModels
         {
             if (barcode.Symbology.ToLower() == "ean13")
             {
-                _scanner.BeepSuccess();
                 var good = await ReceptionGoods.ByBarcodeAsync(barcode.BarcodeData, true);
                 var confirmed = await TryToConfirmGood(good);
                 if (!confirmed)
                 {
                     var goodViewModel = new ReceptionGoodViewModel(good, _commands);
                     goodViewModel.IncreaseQuantityCommand.Execute();
-                    ReceptionGoods.First().Insert(0, goodViewModel);
+                    ReceptionGroup? reception = null;
+                    if (good.IsExtraConfirmed)
+                    {
+                        reception = await ReceptionGoods.FirstOrDefaultAsync(async (x) =>
+                        {
+                            var item = await x.ByBarcodeAsync(barcode.BarcodeData, false);
+                            return item.Any(xx => xx.IsExtraConfirmed);
+                        });
+                    }
+                    if (reception == null)
+                    {
+                        reception = ReceptionGoods.First();
+                    }
+                    reception.Insert(0, goodViewModel);
+                    _scanner.BeepFailure();
                     await ShowExtraGoodWarningMessageAsync(good);
+                }
+                else
+                {
+                    _scanner.BeepSuccess();
+                    RefreshCount();
+                    if (AnimateCounter != null)
+                    {
+                        await AnimateCounter();
+                    }
                 }
             }
             else
@@ -162,11 +184,6 @@ namespace Warehouse.Mobile.ViewModels
                     if (await good.ConfirmedAsync())
                     {
                         reception.Remove(goodViewModel);
-                        RefreshCount();
-                        if (AnimateCounter != null)
-                        {
-                            await AnimateCounter();
-                        }
                     }
                     return true;
                 }
@@ -197,7 +214,7 @@ namespace Warehouse.Mobile.ViewModels
 
         private void RefreshCount()
         {
-            var total = ReceptionGoods.Sum(receptionGroup => receptionGroup.Count(x => x.Regular));
+            var total = ReceptionGoods.Sum(receptionGroup => receptionGroup.Sum((x) => x.Regular ? x.Quantity - x.ConfirmedQuantity : 0));
             ItemCount = $"{total}/{_originalCount}";
         }
     }

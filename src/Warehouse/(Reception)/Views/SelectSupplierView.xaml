@@ -4,7 +4,6 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:viewModels="clr-namespace:Warehouse.Mobile.ViewModels"
     x:Class="Warehouse.Mobile.Views.SelectSupplierView"
-    Title="Select supplier"
     xmlns:neo="clr-namespace:Xamarin.Forms.NeoControls;assembly=Xamarin.Forms.NeoControls"
     xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
     xmlns:behaviors="clr-namespace:Warehouse.Mobile.Behavior"
@@ -12,13 +11,14 @@
     x:DataType="viewModels:SelectSupplierViewModel"
     NavigationPage.HasBackButton="False">
      <NavigationPage.TitleView>
-        <Grid Padding="2" >
+        <Grid Padding="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
                 <ColumnDefinition Width="*" />
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-             <Label
+            <StackLayout >
+                 <Label
                     FontFamily="materialicons"
                     Text="{x:Static fonts:MaterialIcons.ArrowLeft}"
                     TextColor="{DynamicResource TextsColor}"
@@ -26,11 +26,12 @@
                  HorizontalOptions="Start"
                  HorizontalTextAlignment="Start"
                     FontSize="25"
-                Margin="-5,0,0,0">
-                <Label.GestureRecognizers>
+                Margin="-5,0,0,0"/>
+                 <StackLayout.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding BackCommand}"/>
-                </Label.GestureRecognizers>
-            </Label>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+              
              <Label
                  Grid.Column="1"
                 Text="Select Supplier"
@@ -39,9 +40,8 @@
                 TextColor="{DynamicResource TextsColor}"/>
         </Grid>
     </NavigationPage.TitleView>
-    <ContentView VerticalOptions="Center" Padding="5">
-        <StackLayout VerticalOptions="FillAndExpand">
-
+    <ContentView>
+        <StackLayout>
             <StackLayout
                 Spacing="0"
                 Orientation="Horizontal"

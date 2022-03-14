@@ -37,7 +37,6 @@
                 TextColor="{DynamicResource TextsColor}"/>
         </Grid>
     </NavigationPage.TitleView>
-
     <ContentView VerticalOptions="FillAndExpand" Padding="5" BackgroundColor="{DynamicResource MainColor}">
         <StackLayout VerticalOptions="FillAndExpand" BackgroundColor="{DynamicResource MainColor}">
 
@@ -67,8 +66,6 @@
                     </Label> 
                 </Grid>
             </StackLayout>
-
-
             <!--Product Is Recognized-->
             <StackLayout IsVisible="{Binding IsRecognizedProduct}">
                 <StackLayout Orientation="Horizontal" Padding="35" >
@@ -118,16 +115,33 @@
                         ItemsLayout="HorizontalList" >
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="viewModels:LocationViewModel">
-                                <Frame CornerRadius="10" >
-                                    <StackLayout Orientation="Horizontal">
-                                        <Label
-                                            FontFamily="materialicons"
-                                            FontSize="25"
-                                            Text="{x:Static fonts:MaterialIcons.MapMarker}"
-                                            VerticalTextAlignment="Center"/> 
-                                        <Label Text="{Binding Location}"  VerticalTextAlignment="Center" FontSize="18"/>
-                                    </StackLayout>
-                                </Frame>
+                                 <Frame CornerRadius="10" VerticalOptions="FillAndExpand" Padding="10" BorderColor="Transparent">
+                                        <StackLayout>
+                                            <Label
+                                                FontFamily="materialicons"
+                                                FontSize="25"
+                                                Text="{x:Static fonts:MaterialIcons.MapMarker}"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="StartAndExpand"
+                                                VerticalTextAlignment="Center" />
+
+                                            <Label Text="{Binding Location}"
+                                                   VerticalTextAlignment="Center"
+                                                   FontSize="14" />
+                                            <Label
+                                                   FontAttributes="Bold"
+                                                   VerticalTextAlignment="Center"
+                                                   HorizontalOptions="Center"
+                                                   FontSize="12" >
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="#" />
+                                                        <Span Text="{Binding Quantity.Value}" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </StackLayout>
+                                    </Frame>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>
@@ -136,27 +150,42 @@
                 </Frame>
             </StackLayout>
 
-            <StackLayout HeightRequest="150">
+            <StackLayout HeightRequest="150" >
                 <Label Text="Existing Reserve Locations" />
                 <Frame
-                    BackgroundColor="White"
                     CornerRadius="10">
                     <CollectionView
                          ItemsSource="{Binding ReserveLocations}"
                         ItemsLayout="HorizontalList" >
                         <CollectionView.ItemTemplate>
                             <DataTemplate x:DataType="viewModels:LocationViewModel">
-                                <Frame CornerRadius="10" >
-                                    <StackLayout Orientation="Horizontal">
-                                        <Label
-                                        FontFamily="materialicons"
-                                        FontSize="25"
-                                        Text="{x:Static fonts:MaterialIcons.MapMarker}"
-                                            VerticalTextAlignment="Center"/> 
-                                    <Label Text="{Binding Location}"  VerticalTextAlignment="Center" FontSize="18"/>
-                                    </StackLayout>
-                                    
-                                </Frame>
+                                 <Frame CornerRadius="10" VerticalOptions="FillAndExpand" Padding="10" BorderColor="Transparent">
+                                        <StackLayout>
+                                            <Label
+                                                FontFamily="materialicons"
+                                                FontSize="25"
+                                                Text="{x:Static fonts:MaterialIcons.MapMarker}"
+                                                HorizontalOptions="Center"
+                                                VerticalOptions="StartAndExpand"
+                                                VerticalTextAlignment="Center" />
+
+                                            <Label Text="{Binding Location}"
+                                                   VerticalTextAlignment="Center"
+                                                   FontSize="14" />
+                                            <Label
+                                                   FontAttributes="Bold"
+                                                   VerticalTextAlignment="Center"
+                                                   HorizontalOptions="Center"
+                                                   FontSize="12" >
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="#" />
+                                                        <Span Text="{Binding Quantity.Value}" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </StackLayout>
+                                    </Frame>
                             </DataTemplate>
                         </CollectionView.ItemTemplate>
                     </CollectionView>

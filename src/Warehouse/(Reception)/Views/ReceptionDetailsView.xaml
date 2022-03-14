@@ -44,6 +44,7 @@
                 <BoxView
                     Grid.ColumnSpan="3"
                     HeightRequest="1"
+                    Margin="0,0,0,-2"
                     HorizontalOptions="Fill"
                     VerticalOptions="End"
                     BackgroundColor="Gray"/>
@@ -82,6 +83,7 @@
                     <BoxView
                         Grid.ColumnSpan="3"
                         HeightRequest="1"
+                    Margin="0,0,0,-2"
                         HorizontalOptions="Fill"
                         VerticalOptions="End"
                         BackgroundColor="Gray"/>
@@ -128,11 +130,12 @@
                         Text="{x:Static fonts:IcoMoon.Barcode}"/>
 
                 <BoxView
-                        Grid.ColumnSpan="3"
-                        HeightRequest="1"
-                        HorizontalOptions="Fill"
-                        VerticalOptions="End"
-                        BackgroundColor="Gray"/>
+                    Grid.ColumnSpan="3"
+                    HeightRequest="1"
+                    Margin="0,0,0,-2"
+                    HorizontalOptions="Fill"
+                    VerticalOptions="End"
+                    BackgroundColor="Gray"/>
                 </Grid>
         </DataTemplate>
         <selectors:ReceptionGoodsTemplateSelector
@@ -148,19 +151,22 @@
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
             </Grid.ColumnDefinitions>
-            <Label
+            <StackLayout>
+                <Label
+                    
                     FontFamily="materialicons"
                     Text="{x:Static fonts:MaterialIcons.ArrowLeft}"
                     TextColor="{DynamicResource TextsColor}"
-                 VerticalOptions="Center"
+                 VerticalOptions="CenterAndExpand"
                  HorizontalOptions="Start"
                  HorizontalTextAlignment="Start"
                     FontSize="25"
-                Margin="-5,0,0,0">
-                <Label.GestureRecognizers>
+                Margin="-5,0,0,0"/>
+                <StackLayout.GestureRecognizers>
                     <TapGestureRecognizer Command="{Binding BackCommand}"/>
-                </Label.GestureRecognizers>
-            </Label>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+            
 
              <Label
                  Grid.Column="1"

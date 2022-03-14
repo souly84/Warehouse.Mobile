@@ -33,5 +33,30 @@ namespace Warehouse.Mobile.Extensions
             }
             return receptionGroups;
         }
+
+        public static async Task<ObservableCollection<ReceptionGroup>> HistoryReceptionViewModelsAsync(
+            this ISupplier supplier,
+            ICommands commands,
+            IKeyValueStorage keyValueStorage)
+        {
+            var receptions = await supplier.Receptions.ToListAsync();
+            var receptionGroups = new ObservableCollection<ReceptionGroup>();
+            foreach (var reception in receptions)
+            {
+                var statefulReception = reception
+                   .WithExtraConfirmed()
+                   .WithConfirmationProgress(keyValueStorage);
+                receptionGroups.Add(
+                    new ReceptionGroup(
+                        statefulReception,
+                        await statefulReception
+                            .Confirmation()
+                            .History()
+                            .ToViewModelListAsync(commands)
+                    )
+                );
+            }
+            return receptionGroups;
+        }
     }
 }
