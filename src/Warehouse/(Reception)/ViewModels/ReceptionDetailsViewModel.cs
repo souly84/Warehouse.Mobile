@@ -75,8 +75,11 @@ namespace Warehouse.Mobile.ViewModels
             }
             catch (Exception ex)
             {
-                await _navigationService.ShowMessageAsync(PopupSeverity.Error, "Error!",
-                    "Synchronization failed. " + ex.Message);
+                await _navigationService.ShowMessageAsync(
+                    PopupSeverity.Error,
+                    "Error!",
+                    "Synchronization failed. " + ex.Message
+                );
             }
             await _navigationService.GoBackAsync();
         });

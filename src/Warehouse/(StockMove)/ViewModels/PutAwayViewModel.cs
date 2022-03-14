@@ -99,7 +99,14 @@ namespace Warehouse.Mobile
 
         public IAsyncCommand GoToPopupCommand => _commands.NavigationCommand(() =>
             _navigationService.NavigateAsync(
-                AppConstants.QuantityToMovePopupViewId
+                AppConstants.QuantityToMovePopupViewId,
+                new NavigationParameters
+                {
+                    // Not we have mock params here
+                    { "Origin", new MockStorage("MockStorage") },
+                    { "Destination", "Mock Destination" },
+                    { "Good", new MockWarehouseGood("1", 2) },
+                }
             )
         );
 

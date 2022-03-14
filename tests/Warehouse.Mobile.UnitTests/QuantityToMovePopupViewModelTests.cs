@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using Dotnet.Commands;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
-using Warehouse.Mobile.Extensions;
 using Xunit;
 
 namespace Warehouse.Mobile.UnitTests
@@ -11,14 +10,15 @@ namespace Warehouse.Mobile.UnitTests
     [Collection(XUnitCollectionDefinitions.NavigationDependent)]
     public class QuantityToMovePopupViewModelTests
     {
-        private App _app = WarehouseMobile
-            .Application()
-            .QuantityToMovePopup();
-
         [Fact]
         public void QuantityToMovePopupViewModelOnTheTopOfTheStack()
         {
-            Assert.IsType<QuantityToMovePopupViewModel>(_app.CurrentViewModel<object>());
+            Assert.IsType<QuantityToMovePopupViewModel>(
+                WarehouseMobile
+                    .Application()
+                    .GoToQuantityToMovePopup()
+                    .CurrentViewModel<object>()
+            );
         }
 
         [Fact]
@@ -54,8 +54,9 @@ namespace Warehouse.Mobile.UnitTests
         public async Task CancelCommand()
         {
             var app = await AppInQuantityToMovePopupStateAsync();
-            app.CurrentViewModel<QuantityToMovePopupViewModel>()
-               .CancelCommand.Execute();
+            await app
+                .CurrentViewModel<QuantityToMovePopupViewModel>()
+                .CancelCommand.ExecuteAsync();
             Assert.IsType<PutAwayViewModel>(await app.WaitViewModel<PutAwayViewModel>());
         }
 
@@ -63,8 +64,9 @@ namespace Warehouse.Mobile.UnitTests
         public async Task ValidateCommand_NavigatesBackToPutAwayViewModel()
         {
             var app = await AppInQuantityToMovePopupStateAsync();
-            app.CurrentViewModel<QuantityToMovePopupViewModel>()
-               .ValidateCommand.Execute();
+            await app
+                .CurrentViewModel<QuantityToMovePopupViewModel>()
+                .ValidateCommand.ExecuteAsync();
             Assert.IsType<PutAwayViewModel>(await app.WaitViewModel<PutAwayViewModel>());
         }
 
@@ -72,8 +74,9 @@ namespace Warehouse.Mobile.UnitTests
         public async Task ValidateCommand_SendMovementRequestToTheServer()
         {
             var app = await AppInQuantityToMovePopupStateAsync();
-            app.CurrentViewModel<QuantityToMovePopupViewModel>()
-               .ValidateCommand.Execute();
+            await app
+                .CurrentViewModel<QuantityToMovePopupViewModel>()
+                .ValidateCommand.ExecuteAsync();
             Assert.IsType<PutAwayViewModel>(await app.WaitViewModel<PutAwayViewModel>());
         }
 
@@ -82,14 +85,15 @@ namespace Warehouse.Mobile.UnitTests
             var app = WarehouseMobile.Application(
                 new MockWarehouse(
                      new MockStorage(
-                            "Storage111",
-                            new MockWarehouseGood("1", 5, "1111"),
-                            new MockWarehouseGood("2", 5, "2222")
+                        "Storage111",
+                        new MockWarehouseGood("1", 5, "1111"),
+                        new MockWarehouseGood("2", 5, "2222")
                     )
                 )
             ).GoToPutAway();
             app.Scan("2222") // Scan good
-               .CurrentViewModel<PutAwayViewModel>().CheckInQuantity = 2;
+               .CurrentViewModel<PutAwayViewModel>()
+               .CheckInQuantity = 2;
             app.Scan(new ScanningResult("Storage111", "code128", DateTime.Now.TimeOfDay));
             // Scanning barcodes happens in async mode that's why the code should wait here
             await app.WaitViewModel<QuantityToMovePopupViewModel>();

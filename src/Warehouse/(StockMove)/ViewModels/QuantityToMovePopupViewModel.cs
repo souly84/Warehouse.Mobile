@@ -20,8 +20,8 @@ namespace Warehouse.Mobile
             ICompany company)
         {
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
-            _company = company;
-            _commands = commands.Cached();
+            _company = company ?? throw new ArgumentNullException(nameof(company));
+            _commands = commands?.Cached() ?? throw new ArgumentNullException(nameof(commands));
         }
 
         private IStorage? _originLocation;

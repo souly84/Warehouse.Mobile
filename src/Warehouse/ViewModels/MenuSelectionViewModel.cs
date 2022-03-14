@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Windows.Input;
 using Dotnet.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
@@ -20,7 +19,7 @@ namespace Warehouse.Mobile.ViewModels
             _commands = commands.Cached();
         }
 
-        public ICommand GoToAvailableSuppliersCommand => _commands.NavigationCommand(() =>
+        public IAsyncCommand GoToAvailableSuppliersCommand => _commands.NavigationCommand(() =>
              _navigationService.NavigateAsync(AppConstants.SupplierViewId)
         );
 

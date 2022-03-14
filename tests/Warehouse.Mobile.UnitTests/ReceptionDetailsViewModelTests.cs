@@ -4,16 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Dotnet.Commands;
 using EbSoft.Warehouse.SDK;
-using Newtonsoft.Json.Linq;
 using Prism.Navigation;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
-using Warehouse.Mobile.Extensions;
 using Warehouse.Mobile.Tests;
 using Warehouse.Mobile.UnitTests.Extensions;
 using Warehouse.Mobile.UnitTests.Mocks;
 using Warehouse.Mobile.ViewModels;
-using WebRequest.Elegant.Fakes;
 using Xunit;
 using static Warehouse.Mobile.Tests.MockPageDialogService;
 
@@ -217,34 +214,28 @@ namespace Warehouse.Mobile.UnitTests
         }
 
         [Fact]
-        public void PopupMessageIfValidateReceptionCommandError()
+        public async Task PopupMessageIfValidateReceptionCommandError()
         {
-            App app = null;
-            try
-            {
-                app = WarehouseMobile.Application(
-                   new MockPlatformInitializer(
-                      new ValidateExceptionReception(
-                          new InvalidOperationException("Test error message")
-                      )
-                   )
-                ).GoToReceptionDetails();
-                app.CurrentViewModel<ReceptionDetailsViewModel>()
-                .ValidateReceptionCommand.Execute();
-                    Assert.Contains(
-                        new DialogPage
-                        {
-                            Title = "Error!",
-                            Message = "Synchronization failed. Test error message",
-                            CancelButton = "GOT IT!"
-                        },
-                        WarehouseMobile.Popup().ShownPopups.ToDialogPages()
-                    );
-            }
-            finally
-            {
-                app?.ClosePopup();
-            }
+            await WarehouseMobile.Application(
+               new MockPlatformInitializer(
+                  new ValidateExceptionReception(
+                      new InvalidOperationException("Test error message")
+                  )
+               )
+            ).GoToReceptionDetails()
+             .CurrentViewModel<ReceptionDetailsViewModel>()
+             .ValidateReceptionCommand
+             .ExecuteAsync();
+            
+            Assert.Contains(
+                new DialogPage
+                {
+                    Title = "Error!",
+                    Message = "Synchronization failed. Test error message",
+                    CancelButton = "GOT IT!"
+                },
+                WarehouseMobile.Popup().ShownPopups
+            );
         }
 
         [Fact]

@@ -5,7 +5,6 @@ using Dotnet.Commands;
 using Prism.Common;
 using Prism.Navigation;
 using Warehouse.Core.Plugins;
-using Warehouse.Mobile.Extensions;
 using Warehouse.Mobile.ViewModels;
 using Xamarin.Forms;
 
@@ -96,27 +95,28 @@ namespace Warehouse.Mobile.UnitTests
         {
             app.CurrentViewModel<MenuSelectionViewModel>()
                .GoToPutAwayCommand
-               .Execute(null);
+               .ExecuteAsync().Wait();
             return app;
         }
 
-        public static App QuantityToMovePopup(this App app)
+        public static App GoToQuantityToMovePopup(this App app)
         {
-            app.GoToPutAway()
-               .CurrentViewModel<PutAwayViewModel>()
+            app.GoToPutAway();
+            app.CurrentViewModel<PutAwayViewModel>()
                .GoToPopupCommand
-               .Execute();
+               .ExecuteAsync().Wait();
             return app;
         }
 
         public static App GoToReceptionDetails(this App app)
         {
             app.CurrentViewModel<MenuSelectionViewModel>()
-                .GoToAvailableSuppliersCommand
-                .Execute(null);
+               .GoToAvailableSuppliersCommand
+               .ExecuteAsync().Wait();
             app.CurrentViewModel<SelectSupplierViewModel>()
                .Suppliers.First()
-               .GoToReceptionDetailsCommand.Execute();
+               .GoToReceptionDetailsCommand
+               .ExecuteAsync().Wait();
             return app;
         }
 
@@ -124,7 +124,8 @@ namespace Warehouse.Mobile.UnitTests
         {
             app.CurrentViewModel<MenuSelectionViewModel>()
                .GoToAvailableSuppliersCommand
-               .Execute(null);
+               .ExecuteAsync()
+               .Wait();
             return app;
         }
     }
