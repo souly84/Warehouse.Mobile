@@ -81,7 +81,5 @@ namespace Warehouse.Mobile
                 QuantityToMove = QuantityToMove / 10;
             }
         });
-
-        
     }
 }

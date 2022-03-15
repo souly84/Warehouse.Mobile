@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Dotnet.Commands;
@@ -29,61 +27,6 @@ namespace Warehouse.Mobile.ViewModels
                 confirmations
                     .Select(x => new ReceptionGoodViewModel(x.Good, commands))
             );
-        }
-
-        public static async Task<IReceptionGood> ByBarcodeAsync(
-            this ObservableCollection<ReceptionGroup> receptionGroups,
-            string barcodeData,
-            bool ignoreConfirmed = false)
-        {
-            var extraConfrirmed = new List<IReceptionGood>();
-            foreach (var receptionGroup in receptionGroups)
-            {
-                var goods = await receptionGroup.ByBarcodeAsync(barcodeData, ignoreConfirmed);
-                if (goods.Any(g => g.IsExtraConfirmed))
-                {
-                    extraConfrirmed.AddRange(goods);
-                }
-                else if (goods.Any(g => !g.IsUnknown))
-                {
-                    return goods.First();
-                }
-            }
-
-            if (extraConfrirmed.Any())
-            {
-                return extraConfrirmed.First();
-            }
-
-            if (receptionGroups.Any())
-            {
-                var goods = await receptionGroups.First().ByBarcodeAsync(barcodeData);
-                return goods.First();
-            }
-
-            throw new InvalidOperationException(
-                $"Reception groups dont contain any good with barcode {barcodeData}"
-            );
-        }
-
-        public static async Task<T> FirstOrDefaultAsync<T>(
-            this Task<IEnumerable<T>> listTask)
-        {
-            return (await listTask).FirstOrDefault();
-        }
-
-        public static async Task<T> FirstOrDefaultAsync<T>(
-            this IEnumerable<T> list,
-            Func<T, Task<bool>> predicateAsync)
-        {
-            foreach (var item in list)
-            {
-                if (await predicateAsync(item))
-                {
-                    return item;
-                }
-            }
-            return default(T);
         }
     }
 }

@@ -43,7 +43,7 @@
     <PackageReference Include="WebRequest.Elegant" Version="1.1.0.2" />
     <PackageReference Include="EbSoft.Warehouse.SDK" Version="1.0.0.480" />
     <PackageReference Include="Prism.Plugin.Popups" Version="8.0.76" />
-    <PackageReference Include="Elegant.Dotnet.Commands" Version="1.0.0.2" />
+    <PackageReference Include="Elegant.Dotnet.Commands" Version="1.0.0.3" />
   </ItemGroup>
   <ItemGroup>
     <Compile Update="Translation\Translations.Designer.cs">

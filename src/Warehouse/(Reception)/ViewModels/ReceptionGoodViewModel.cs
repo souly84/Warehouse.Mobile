@@ -68,13 +68,12 @@ namespace Warehouse.Mobile.ViewModels
                 return $"{ConfirmedQuantity}/{Quantity}";
             }
         }
-        
+
         public ICommand IncreaseQuantityCommand => _commands.Command(() =>
         {
             _receptionGood.Confirmation.Increase(1);
             RaisePropertyChanged(nameof(ConfirmedQuantity));
             RaisePropertyChanged(nameof(RemainingQuantity));
-
         });
 
         public ICommand DecreaseQuantityCommand => _commands.Command(() =>

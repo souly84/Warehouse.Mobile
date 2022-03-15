@@ -48,7 +48,11 @@ namespace Warehouse.Mobile
             containerRegistry.RegisterForNavigation<QuantityToMovePopupView, QuantityToMovePopupViewModel>();
             containerRegistry.RegisterForNavigation<CustomPopupMessageView>();
             containerRegistry.RegisterForNavigation<HistoryView>();
-            containerRegistry.RegisterInstance<ICommands>(new Commands().Validated());
+            if (!containerRegistry.IsRegistered<ICommands>())
+            {
+                containerRegistry.RegisterInstance(new Commands().Validated());
+            }
+               
             if (!containerRegistry.IsRegistered<ICompany>())
             {
 #if MOCK

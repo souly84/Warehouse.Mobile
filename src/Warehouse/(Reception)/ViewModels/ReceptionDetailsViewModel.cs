@@ -24,7 +24,7 @@ namespace Warehouse.Mobile.ViewModels
         private string? _itemCount;
         private int _originalCount;
         private string? _supplierName;
-        private ISupplier _supplier;
+        private ISupplier? _supplier;
 
         public ReceptionDetailsViewModel(
             IScanner scanner,
@@ -41,7 +41,6 @@ namespace Warehouse.Mobile.ViewModels
             _cachedCommands = commands.Cached();
             _keyValueStorage = keyValueStorage;
         }
-
 
         public ObservableCollection<ReceptionGroup> ReceptionGoods
         {
@@ -61,6 +60,8 @@ namespace Warehouse.Mobile.ViewModels
             set => SetProperty(ref _supplierName, value);
         }
 
+        public Func<Task<bool>>? AnimateCounter { get; set; }
+
         public IAsyncCommand ValidateReceptionCommand => _cachedCommands.AsyncCommand(async () =>
         {
             try
@@ -70,8 +71,11 @@ namespace Warehouse.Mobile.ViewModels
                     await receptionGroup.CommitAsync();
                 }
                 
-                await _navigationService.ShowMessageAsync(PopupSeverity.Info, "Success!",
-                    "Your reception has been synchronized successfully.");
+                await _navigationService.ShowMessageAsync(
+                    PopupSeverity.Info,
+                    "Success!",
+                    "Your reception has been synchronized successfully."
+                );
             }
             catch (Exception ex)
             {
@@ -88,12 +92,18 @@ namespace Warehouse.Mobile.ViewModels
         {
             try
             {
-                await _navigationService.NavigateAsync(AppConstants.HistoryViewId, new NavigationParameters{ { "Supplier", _supplier } });
+                await _navigationService.NavigateAsync(
+                    AppConstants.HistoryViewId,
+                    new NavigationParameters{ { "Supplier", _supplier } }
+                );
             }
             catch (Exception ex)
             {
-                await _navigationService.ShowMessageAsync(PopupSeverity.Error, "Error!",
-                    "Synchronization failed. " + ex.Message);
+                await _navigationService.ShowMessageAsync(
+                    PopupSeverity.Error,
+                    "Error!",
+                    ex.Message
+                );
             }
         });
 
@@ -108,28 +118,28 @@ namespace Warehouse.Mobile.ViewModels
             }
             catch (Exception ex)
             {
-                await _navigationService.ShowMessageAsync(PopupSeverity.Error, "Error!",
-                    "Synchronization failed. " + ex.Message);
+                await _navigationService.ShowMessageAsync(
+                    PopupSeverity.Error,
+                    "Error!",
+                    "Synchronization failed. " + ex.Message
+                );
             }
         });
-
-        public Func<Task<bool>>? AnimateCounter { get; set; }
 
         public async Task InitializeAsync(INavigationParameters parameters)
         {
             try
             {
                 _supplier = parameters.Value<ISupplier>("Supplier");
-                ReceptionGoods = await _supplier.ReceptionViewModelsAsync(_commands, _keyValueStorage);
-                _originalCount = ReceptionGoods.Sum(r => r.Sum((z) => z.Quantity));
                 SupplierName = _supplier.ToDictionary().ValueOrDefault<string>("Name");
+                ReceptionGoods = await _supplier.ReceptionViewModelsAsync(_commands, _keyValueStorage);
+                _originalCount = ReceptionGoods.TotalQuantity();
                 RefreshCount();
             }
             catch (Exception ex)
             {
                 await _dialog.DisplayAlertAsync("Error", ex.ToString(), "Ok");
             }
-            
         }
 
         protected override async Task OnScanAsync(IScanningResult barcode)
@@ -137,24 +147,12 @@ namespace Warehouse.Mobile.ViewModels
             if (barcode.Symbology.ToLower() == "ean13")
             {
                 var good = await ReceptionGoods.ByBarcodeAsync(barcode.BarcodeData, true);
-                var confirmed = await TryToConfirmGood(good);
+                var confirmed = await ReceptionGoods.TryToConfirmGood(good);
                 if (!confirmed)
                 {
                     var goodViewModel = new ReceptionGoodViewModel(good, _commands);
                     goodViewModel.IncreaseQuantityCommand.Execute();
-                    ReceptionGroup? reception = null;
-                    if (good.IsExtraConfirmed)
-                    {
-                        reception = await ReceptionGoods.FirstOrDefaultAsync(async (x) =>
-                        {
-                            var item = await x.ByBarcodeAsync(barcode.BarcodeData, false);
-                            return item.Any(xx => xx.IsExtraConfirmed);
-                        });
-                    }
-                    if (reception == null)
-                    {
-                        reception = ReceptionGoods.First();
-                    }
+                    var reception = await ReceptionGoods.GoodReceptionAsync(good, barcode.BarcodeData);
                     reception.Insert(0, goodViewModel);
                     _scanner.BeepFailure();
                     await ShowExtraGoodWarningMessageAsync(good);
@@ -174,24 +172,6 @@ namespace Warehouse.Mobile.ViewModels
                 _scanner.BeepFailure();
                 await _navigationService.ShowErrorAsync(new InvalidOperationException("This barcode type is not supported"));
             }
-        }
-
-        private async Task<bool> TryToConfirmGood(IReceptionGood good)
-        {
-            foreach (var reception in ReceptionGoods)
-            {
-                var goodViewModel = reception.FirstOrDefault(x => x.Equals(good));
-                if (goodViewModel != null)
-                {
-                    goodViewModel.IncreaseQuantityCommand.Execute();
-                    if (await good.ConfirmedAsync())
-                    {
-                        reception.Remove(goodViewModel);
-                    }
-                    return true;
-                }
-            }
-            return false;
         }
 
         private Task ShowExtraGoodWarningMessageAsync(IReceptionGood good)
@@ -217,8 +197,7 @@ namespace Warehouse.Mobile.ViewModels
 
         private void RefreshCount()
         {
-            var total = ReceptionGoods.Sum(receptionGroup => receptionGroup.Sum((x) => x.Regular ? x.Quantity - x.ConfirmedQuantity : 0));
-            ItemCount = $"{total}/{_originalCount}";
+            ItemCount = $"{ReceptionGoods.RemainToConfrim()}/{_originalCount}";
         }
     }
 }
