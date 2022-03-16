@@ -4,7 +4,7 @@ using DataMocker.Mock;
 
 namespace Warehouse.Mobile.Mock
 {
-    public class MockDataComponent
+    public static class MockDataComponent
     {
         public static HttpClient HttpClient()
         {

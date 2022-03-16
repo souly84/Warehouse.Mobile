@@ -22,8 +22,6 @@ namespace Warehouse.Mobile.ViewModels
         private readonly CachedCommands _cachedCommands;
         private readonly ICommands _commands;
         private readonly IKeyValueStorage _keyValueStorage;
-        private int _originalCount;
-
 
         public HistoryViewModel(
             IPageDialogService dialog,
@@ -56,7 +54,6 @@ namespace Warehouse.Mobile.ViewModels
             {
                 var supplier = parameters.Value<ISupplier>("Supplier");
                 ReceptionGoods = await supplier.HistoryReceptionViewModelsAsync(_commands, _keyValueStorage);
-                _originalCount = ReceptionGoods.Sum(r => r.Count);
                 SupplierName = supplier.ToDictionary().ValueOrDefault<string>("Name");
             }
             catch (Exception ex)

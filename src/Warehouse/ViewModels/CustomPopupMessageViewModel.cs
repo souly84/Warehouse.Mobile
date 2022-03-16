@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Windows.Input;
 using Dotnet.Commands;
-using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Warehouse.Mobile.Extensions;
@@ -51,8 +50,7 @@ namespace Warehouse.Mobile.ViewModels
             set => SetProperty(ref _actionText, value);
         }
 
-        private ICommand actionCommand;
-        public ICommand ActionCommand => actionCommand ??= new DelegateCommand(async () =>
+        public ICommand ActionCommand => _commands.AsyncCommand(async () =>
         {
             try
             {
@@ -63,7 +61,7 @@ namespace Warehouse.Mobile.ViewModels
             {
                 _callBack?.Invoke(false, ex);
             }
-        });
+        }, forceExecution: true);
 
         public void Initialize(INavigationParameters parameters)
         {

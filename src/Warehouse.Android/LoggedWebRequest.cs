@@ -18,9 +18,9 @@ namespace Warehouse.Droid
 
         public IUri Uri => _origin.Uri;
 
-        public IWebRequest WithBody(IBodyContent postBody)
+        public IWebRequest WithBody(IBodyContent body)
         {
-            return new LoggedWebRequest(_origin.WithBody(postBody));
+            return new LoggedWebRequest(_origin.WithBody(body));
         }
 
         public async Task<HttpResponseMessage> GetResponseAsync()
@@ -35,9 +35,9 @@ namespace Warehouse.Droid
                     {
                         Log.Info("Warehouse.Mobile", await response.Content.ReadAsStringAsync());
                     }
-                    catch (System.Exception ex)
+                    catch (System.Exception)
                     {
-                        //DO NOTHING
+                        // DO NOTHING
                     }
                 }); 
                 return response;

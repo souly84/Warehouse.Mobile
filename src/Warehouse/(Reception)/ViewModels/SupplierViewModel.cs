@@ -2,7 +2,6 @@
 using Dotnet.Commands;
 using MediaPrint;
 using Prism.Navigation;
-using Prism.Services;
 using Warehouse.Core;
 using Warehouse.Mobile.Extensions;
 
@@ -26,31 +25,22 @@ namespace Warehouse.Mobile.ViewModels
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
             _ = commands ?? throw new ArgumentNullException(nameof(commands));
             _commands = commands.Cached();
-            GoToReceptionDetailsCommand =  _commands.NavigationCommand(async () =>
-            {
-
-                var result = await _overlay.OverlayAsync<INavigationResult>(
-                   () => _navigationService.NavigateAsync(
-                      AppConstants.ReceptionDetailsViewId,
-                      new NavigationParameters
-                      {
-                          { "Supplier", _supplier }
-                      }
-                   ),
-                   $"{Name} receptions loading..."
-                );
-
-                return result;
-            });
-
         }
 
         public string Name => _supplier.ToDictionary().ValueOrDefault<string>("Name");
 
-        public IAsyncCommand GoToReceptionDetailsCommand
+        public IAsyncCommand GoToReceptionDetailsCommand => _commands.NavigationCommand(() =>
         {
-            get;
-        }
-        
+            return _overlay.OverlayAsync<INavigationResult>(
+               () => _navigationService.NavigateAsync(
+                  AppConstants.ReceptionDetailsViewId,
+                  new NavigationParameters
+                  {
+                      { "Supplier", _supplier }
+                  }
+               ),
+               $"{Name} receptions loading..."
+            );
+        });
     }
 }

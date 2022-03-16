@@ -54,9 +54,10 @@ namespace Warehouse.Mobile.ViewModels
 
         public IAsyncCommand ChangeSelectedDateCommand => _cachedCommands.AsyncCommand(() => RefreshAvailableSupplierList());
 
-        public async Task InitializeAsync(INavigationParameters parameters)
+        public Task InitializeAsync(INavigationParameters parameters)
         {
             SelectedDate = DateTime.Now;
+            return Task.CompletedTask;
         }
 
         private Task RefreshAvailableSupplierList()

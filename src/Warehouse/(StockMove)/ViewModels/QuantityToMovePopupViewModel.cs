@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Windows.Input;
 using Dotnet.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
@@ -53,9 +54,11 @@ namespace Warehouse.Mobile
                 .Movement
                 .From(OriginLocation)
                 .MoveToAsync(
-                    await _goodToMove.Storages.ByBarcodeAsync(_company.Warehouse, DestinationLocation),
+                    await _goodToMove
+                        .Storages
+                        .ByBarcodeAsync(_company.Warehouse, DestinationLocation),
                     QuantityToMove
-            );
+                );
             await _navigationService.GoBackAsync();
         });
 
@@ -70,7 +73,7 @@ namespace Warehouse.Mobile
             _goodToMove = parameters.Value<IWarehouseGood>("Good");
         }
 
-        public IAsyncCommand SetQuantityCommand => _commands.AsyncCommand<string>(async (value) =>
+        public ICommand SetQuantityCommand => _commands.Command<string>((value) =>
         {
             if (value != "-1")
             {

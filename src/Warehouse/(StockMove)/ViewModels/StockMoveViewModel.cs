@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Dotnet.Commands;
 using EbSoft.Warehouse.SDK;
-using Prism.Mvvm;
 using Prism.Navigation;
 using Prism.Services;
 using Warehouse.Core;
@@ -20,7 +18,8 @@ namespace Warehouse.Mobile
         private readonly INavigationService _navigationService;
         private readonly CachedCommands _commands;
 
-        public StockMoveViewModel(IScanner scanner,
+        public StockMoveViewModel(
+            IScanner scanner,
             IPageDialogService dialog,
             ICompany company,
             ICommands commands,
@@ -33,22 +32,22 @@ namespace Warehouse.Mobile
             _commands = commands.Cached();
         }
 
-        private string _scannedBarcodeOriginLocation;
-        public string ScannedBarcodeOriginLocation
+        private string? _scannedBarcodeOriginLocation;
+        public string? ScannedBarcodeOriginLocation
         {
             get => _scannedBarcodeOriginLocation;
             set => SetProperty(ref _scannedBarcodeOriginLocation, value);
         }
 
-        private string _scannedProductToMove;
-        public string ScannedProductToMove
+        private string? _scannedProductToMove;
+        public string? ScannedProductToMove
         {
             get => _scannedProductToMove;
             set => SetProperty(ref _scannedProductToMove, value);
         }
 
-        private string _scannedBarcodeDestinationLocation;
-        public string ScannedBarcodeDestinationLocation
+        private string? _scannedBarcodeDestinationLocation;
+        public string? ScannedBarcodeDestinationLocation
         {
             get => _scannedBarcodeDestinationLocation;
             set => SetProperty(ref _scannedBarcodeDestinationLocation, value);
@@ -96,6 +95,8 @@ namespace Warehouse.Mobile
             set => SetProperty(ref _raceLocations, value);
         }
 
+        public IAsyncCommand BackCommand => _commands.AsyncCommand(() => _navigationService.GoBackAsync());
+
         protected override async Task OnScanAsync(IScanningResult barcode)
         {
             switch (barcode.Symbology.ToLower())
@@ -105,14 +106,14 @@ namespace Warehouse.Mobile
                         if (IsRecognizedProduct)
                         {
                             await _navigationService.NavigateAsync(
-                                     AppConstants.QuantityToMovePopupViewId,
-                                     new NavigationParameters
-                                     {
-                                        { "Origin", OriginLocationVm.ToStorage() },
-                                        { "Destination", barcode.BarcodeData },
-                                        { "Good", WarehouseGood }
-                                     }
-                                 );
+                                AppConstants.QuantityToMovePopupViewId,
+                                new NavigationParameters
+                                {
+                                   { "Origin", OriginLocationVm.ToStorage() },
+                                   { "Destination", barcode.BarcodeData },
+                                   { "Good", WarehouseGood }
+                                }
+                            );
                             ResetFields();
                             break;
                         }
@@ -133,14 +134,18 @@ namespace Warehouse.Mobile
                                 .Warehouse
                                 .Goods.For(barcode.BarcodeData)
                                 .FirstAsync();
-                            var storage = await WarehouseGood.Storages.ByBarcodeAsync(ScannedBarcodeOriginLocation);
+                            var storage = await WarehouseGood.Storages.ByBarcodeAsync(ScannedBarcodeOriginLocation ?? string.Empty);
                             OriginLocationVm = new LocationViewModel(storage);
-                            RaceLocations = (ObservableCollection<LocationViewModel>)await WarehouseGood.Storages.Race.ToViewModelListAsync();
-                            ReserveLocations = (ObservableCollection<LocationViewModel>)await WarehouseGood.Storages.Reserve.ToViewModelListAsync();
+                            RaceLocations = await WarehouseGood.Storages.Race.ToViewModelListAsync();
+                            ReserveLocations = await WarehouseGood.Storages.Reserve.ToViewModelListAsync();
                         }
                         else
                         {
-                            await _dialog.DisplayAlertAsync("Error", "Please scan the location you wants to move from before scanning a product", "Ok");
+                            await _dialog.DisplayAlertAsync(
+                                "Error",
+                                "Please scan the location you wants to move from before scanning a product",
+                                "Ok"
+                            );
                         }
                         break;
                     }
@@ -154,10 +159,5 @@ namespace Warehouse.Mobile
             ScannedProductToMove = "";
             ScannedBarcodeOriginLocation = "";
         }
-
-        public IAsyncCommand BackCommand => _commands.AsyncCommand(async () =>
-        {
-            await _navigationService.GoBackAsync();
-        });
     }
 }
