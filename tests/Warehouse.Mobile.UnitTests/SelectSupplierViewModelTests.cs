@@ -51,7 +51,7 @@ namespace Warehouse.Mobile.UnitTests
         public void ChangeSelectedDateCommand()
         {
             var vm = _app.CurrentViewModel<SelectSupplierViewModel>();
-            vm.CurrentDate = DateTime.Now.AddDays(1);
+            vm.SelectedDate = DateTime.Now.AddDays(1);
             vm.ChangeSelectedDateCommand.Execute();
             Assert.NotEmpty(vm.Suppliers);
         }
@@ -60,7 +60,7 @@ namespace Warehouse.Mobile.UnitTests
         public void SelectedDate_TodayByDefault()
         {
             Assert.Equal(
-                System.DateTime.Now.Date,
+                DateTime.Now.Date,
                 _app.CurrentViewModel<SelectSupplierViewModel>()
                     .SelectedDate.Date
             );

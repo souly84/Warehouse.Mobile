@@ -5,7 +5,6 @@ using Dotnet.Commands;
 using EbSoft.Warehouse.SDK;
 using Prism.Mvvm;
 using Prism.Navigation;
-using Prism.Services;
 using Warehouse.Core;
 
 namespace Warehouse.Mobile.ViewModels
@@ -43,13 +42,6 @@ namespace Warehouse.Mobile.ViewModels
         {
             get => _selectedDate;
             set => SetProperty(ref _selectedDate, value);
-        }
-
-        private DateTime _currentDate;
-        public DateTime CurrentDate
-        {
-            get => _currentDate;
-            set => SetProperty(ref _currentDate, value);
         }
 
         public IAsyncCommand ChangeSelectedDateCommand => _cachedCommands.AsyncCommand(() => RefreshAvailableSupplierList());
