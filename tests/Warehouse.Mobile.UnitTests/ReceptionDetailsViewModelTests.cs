@@ -161,14 +161,18 @@ namespace Warehouse.Mobile.UnitTests
                 new MockReceptionGood("2", 2, "2222"),
                 new MockReceptionGood("3", 4, "3333")
             );
-            WarehouseMobile.Application(reception)
+            var app = WarehouseMobile.Application(reception)
                 .GoToReceptionDetails()
                 .Scan("UknownBarcode").ClosePopup()
                 .Scan("1111")
                 .Scan("1111").ClosePopup()
-                .Scan("2222")
+                .Scan("2222");
+            var commandTask = app
                 .CurrentViewModel<ReceptionDetailsViewModel>()
-                .ValidateReceptionCommand.Execute();
+                .ValidateReceptionCommand
+                .ExecuteAsync();
+            app.ClosePopup();
+            await commandTask;
             Assert.Equal(
                 new List<IGoodConfirmation>
                 {
@@ -176,6 +180,7 @@ namespace Warehouse.Mobile.UnitTests
                         new MockReceptionGood("1", 1, "1111")
                     ).PartiallyConfirmed(2)).Confirmation,
                     (await new MockReceptionGood("", 1000, "UknownBarcode", isUnknown: true).PartiallyConfirmed(1)).Confirmation,
+                    (await new MockReceptionGood("1", 1, "1").FullyConfirmed()).Confirmation,
                     (await new MockReceptionGood("2", 2, "2222").PartiallyConfirmed(1)).Confirmation,
                 },
                 reception.ValidatedGoods
@@ -213,20 +218,23 @@ namespace Warehouse.Mobile.UnitTests
             );
         }
 
-        [Fact(Skip = "The test is stuck need to investigate")]
+        [Fact]
         public async Task PopupMessageIfValidateReceptionCommandError()
         {
-            await WarehouseMobile.Application(
+            var app = WarehouseMobile.Application(
                new MockPlatformInitializer(
                   new ValidateExceptionReception(
                       new InvalidOperationException("Test error message")
                   )
                )
-            ).GoToReceptionDetails()
+            ).GoToReceptionDetails();
+            var commnadTask = app
              .CurrentViewModel<ReceptionDetailsViewModel>()
              .ValidateReceptionCommand
              .ExecuteAsync();
-            
+
+            app.ClosePopup();
+            await commnadTask;
             Assert.Contains(
                 new DialogPage
                 {

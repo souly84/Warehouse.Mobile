@@ -139,6 +139,7 @@ namespace Warehouse.Mobile.ViewModels
             catch (Exception ex)
             {
                 await _dialog.DisplayAlertAsync("Error", ex.ToString(), "Ok");
+                throw;
             }
         }
 
