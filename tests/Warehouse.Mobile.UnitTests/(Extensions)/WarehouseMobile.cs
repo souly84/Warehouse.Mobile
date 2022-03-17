@@ -27,12 +27,12 @@ namespace Warehouse.Mobile.UnitTests
             );
         }
 
-        public static App Application(IReception reception)
+        public static App Application(params IReception[] receptions)
         {
             return Application(
                  new MockSupplier(
                      "Electrolux",
-                     reception
+                     receptions
                  )
             );
         }
@@ -44,10 +44,10 @@ namespace Warehouse.Mobile.UnitTests
             );
         }
 
-        public static App Application(ISupplier supplier)
+        public static App Application(params ISupplier[] suppliers)
         {
             return Application(
-                new MockWarehouseCompany(supplier)
+                new MockWarehouseCompany(suppliers)
             );
         }
 
@@ -92,7 +92,7 @@ namespace Warehouse.Mobile.UnitTests
 
         internal static MockPopupPlatform Popup()
         {
-            return Xamarin.Forms.DependencyService.Resolve<IPopupPlatform>() as MockPopupPlatform;
+            return DependencyService.Resolve<IPopupPlatform>() as MockPopupPlatform;
         }
     }
 }

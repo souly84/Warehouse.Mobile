@@ -4,7 +4,6 @@ using System.Linq;
 using Dotnet.Commands;
 using Prism.Navigation;
 using Warehouse.Core;
-using Warehouse.Mobile.Extensions;
 using Warehouse.Mobile.UnitTests.Mocks;
 using Warehouse.Mobile.ViewModels;
 using Xunit;
@@ -50,7 +49,20 @@ namespace Warehouse.Mobile.UnitTests
         [Fact]
         public void ChangeSelectedDateCommand()
         {
-            var vm = _app.CurrentViewModel<SelectSupplierViewModel>();
+            var vm = WarehouseMobile
+                .Application(
+                    new MockWarehouseCompany(
+                        new MockSupplier(
+                            "Electrolux",
+                            new MockReception(
+                                "1",
+                                DateTime.Now.AddDays(1)
+                            )
+                        )
+                    )
+                )
+                .GoToSuppliers()
+                .CurrentViewModel<SelectSupplierViewModel>();
             vm.SelectedDate = DateTime.Now.AddDays(1);
             vm.ChangeSelectedDateCommand.Execute();
             Assert.NotEmpty(vm.Suppliers);
