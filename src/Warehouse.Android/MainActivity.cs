@@ -10,11 +10,12 @@ using Microsoft.AppCenter.Crashes;
 using Prism.Plugin.Popups;
 using Warehouse.Droid.Permissions;
 using PerpetualEngine.Storage;
+using Plugin.CurrentActivity;
 
 namespace Warehouse.Mobile.Droid
 {
     [Activity(Label = "Warehouse",
-        Icon = "@mipmap/icon",
+        Icon = "@mipmap/customicon",
         Theme = "@style/MainTheme",
         ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation,
         ScreenOrientation = ScreenOrientation.Portrait,
@@ -35,6 +36,7 @@ namespace Warehouse.Mobile.Droid
             global::Rg.Plugins.Popup.Popup.Init(this);
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
             Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
+            CrossCurrentActivity.Current.Init(this, savedInstanceState);
             App = new App(new AndroidInitializer(this));
             LoadApplication(App);
 

@@ -132,6 +132,9 @@
     <PackageReference Include="AndHUD">
       <Version>1.4.3</Version>
     </PackageReference>
+    <PackageReference Include="Plugin.CurrentActivity">
+      <Version>2.1.0.4</Version>
+    </PackageReference>
   </ItemGroup>
   <ItemGroup Condition="'$(Configuration)|$(Platform)'=='Mock|AnyCPU'">
     <PackageReference Include="DataMocker.Mock" Version="1.0.5" />
@@ -151,6 +154,7 @@
     <Compile Include="Services\AndHudOverlay.cs" />
     <Compile Include="Services\OverlayWithPopupError.cs" />
     <Compile Include="LoggedWebRequest.cs" />
+    <Compile Include="Environment\AndroidEnvironment.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\AboutResources.txt" />
@@ -166,21 +170,16 @@
     <AndroidResource Include="Resources\values\colors.xml" />
     <AndroidResource Include="Resources\mipmap-anydpi-v26\icon.xml" />
     <AndroidResource Include="Resources\mipmap-anydpi-v26\icon_round.xml" />
-    <AndroidResource Include="Resources\mipmap-hdpi\customIcon.png" />
-    <AndroidResource Include="Resources\mipmap-hdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-mdpi\customIcon.png" />
-    <AndroidResource Include="Resources\mipmap-mdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-xhdpi\customIcon.png" />
-    <AndroidResource Include="Resources\mipmap-xhdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-xxhdpi\customIcon.png" />
-    <AndroidResource Include="Resources\mipmap-xxhdpi\launcher_foreground.png" />
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\customIcon.png" />
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\launcher_foreground.png" />
+    <AndroidResource Include="Resources\mipmap-hdpi\customicon.png" />
+    <AndroidResource Include="Resources\mipmap-mdpi\customicon.png" />
+    <AndroidResource Include="Resources\mipmap-xhdpi\customicon.png" />
+    <AndroidResource Include="Resources\mipmap-xxhdpi\customicon.png" />
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\customicon.png" />
     <AndroidResource Include="Resources\layout\splash_layout.xml">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\mipmap-anydpi-v26\customIcon.png">
+    <AndroidResource Include="Resources\mipmap-anydpi-v26\customicon.png">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
@@ -200,6 +199,7 @@
     <Folder Include="Resources\drawable-xxhdpi\" />
     <Folder Include="Resources\drawable-xxxhdpi\" />
     <Folder Include="Permissions\" />
+    <Folder Include="Environment\" />
   </ItemGroup>
   <ItemGroup>
     <AndroidAsset Include="Assets\splash.json" />

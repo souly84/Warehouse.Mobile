@@ -12,7 +12,7 @@ namespace Warehouse.Mobile.UnitTests
         [Fact]
         public void ArgumentNullReferenceExceptionWhenNavigationServiceNull()
         {
-            Assert.Throws<ArgumentNullException>(() => new MenuSelectionViewModel(null, null));
+            Assert.Throws<ArgumentNullException>(() => new MenuSelectionViewModel(null, null, null, null));
         }
 
         [Fact]

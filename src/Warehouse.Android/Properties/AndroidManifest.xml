@@ -11,7 +11,7 @@
 	<uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
 	<uses-permission android:name="com.honeywell.decode.permission.DECODE" />
 	<uses-permission android:name="com.symbol.emdk.permission.EMDK" />
-	<application android:label="Warehouse.Android" tools:replace="android:label,android:allowBackup,android:debuggable" android:debuggable="false" android:usesCleartextTraffic="true" android:allowBackup="false" android:icon="@mipmap/customicon">
+	<application android:label="Warehouse.Android" tools:replace="android:label,android:allowBackup,android:debuggable" android:debuggable="false" android:usesCleartextTraffic="true" android:allowBackup="false" android:icon="@mipmap/customIcon">
 		<uses-library android:name="com.symbol.emdk" android:required="false" />
 	</application>
 </manifest>

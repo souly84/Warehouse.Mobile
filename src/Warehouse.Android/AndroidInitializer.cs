@@ -7,7 +7,9 @@ using Unity;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
 using Warehouse.Droid;
+using Warehouse.Droid.Environment;
 using Warehouse.Droid.Services;
+using Warehouse.Mobile.Interfaces;
 using Warehouse.Scanner.SDK;
 using Warehouse.Scanner.SDK.Droid;
 
@@ -26,6 +28,8 @@ namespace Warehouse.Mobile.Droid
         {
             var unityContainer = (UnityContainerExtension)container;
             container.RegisterInstance<IScanner>(new BarcodeScanner().Logged());
+            container.RegisterInstance<IEnvironment>(new AndroidEnvironment());
+
             container.RegisterInstance<IOverlay>(
                 new OverlayWithPopupError(
                     new AndHudOverlay(_activity),

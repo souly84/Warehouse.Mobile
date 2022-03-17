@@ -65,5 +65,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Remove="Elegant.Dotnet.Commands" />
+    <None Remove="Helper\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Interfaces\" />
   </ItemGroup>
 </Project>
