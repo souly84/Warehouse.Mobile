@@ -10,6 +10,7 @@
     <RootNamespace>Warehouse.Mobile.IntegrationTests</RootNamespace>
     <AssemblyName>StoreMobile.AppService.IntegrationTests</AssemblyName>
     <TargetFrameworkVersion>v10.0</TargetFrameworkVersion>
+    <LangVersion>latest</LangVersion>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
