@@ -4,6 +4,7 @@ using Prism.Ioc;
 using Prism.Services;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
+using Warehouse.Mobile.Interfaces;
 using Warehouse.Mobile.Tests;
 using Warehouse.Mobile.UnitTests.Mocks;
 
@@ -57,6 +58,7 @@ namespace Warehouse.Mobile.UnitTests
             containerRegistry.RegisterInstance<IPageDialogService>(_pageDialogService);
             containerRegistry.RegisterInstance<IOverlay>(new MockOverlay());
             containerRegistry.RegisterInstance<IKeyValueStorage>(new KeyValueStorage());
+            containerRegistry.RegisterInstance<IEnvironment>(new MockEnvironment());
         }
     }
 }

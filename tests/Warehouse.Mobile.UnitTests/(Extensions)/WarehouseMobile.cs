@@ -1,4 +1,5 @@
 ﻿using System.Reflection;
+using System.Threading.Tasks;
 using Prism;
 using Prism.Ioc;
 using Prism.Services;
@@ -87,6 +88,12 @@ namespace Warehouse.Mobile.UnitTests
             Xamarin.Forms.Application.Current = app;
             Popup().ShownPopups.Clear();
             Popup().VisiblePopup.Clear();
+            var navigationResult = app.NavigationTask.Result;
+            if (navigationResult.Exception != null)
+            {
+                throw navigationResult.Exception;
+            }
+
             return app;
         }
 

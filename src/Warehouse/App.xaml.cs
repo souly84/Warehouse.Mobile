@@ -25,10 +25,12 @@ namespace Warehouse.Mobile
 
         public IScanner Scanner => Container.Resolve<IScanner>();
 
+        public Task<INavigationResult> NavigationTask { get; private set; }
+
         protected override void OnInitialized()
         {
             InitializeComponent();
-            _ = NavigateToMainPageAsync();
+            NavigationTask = NavigateToMainPageAsync();
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -73,9 +75,9 @@ namespace Warehouse.Mobile
             }
         }
 
-        private Task NavigateToMainPageAsync()
+        private Task<INavigationResult> NavigateToMainPageAsync()
         {
-            return NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(MenuSelectionView)}" );
+            return NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(MenuSelectionView)}");
         }
     }
 }
