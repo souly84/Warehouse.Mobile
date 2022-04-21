@@ -4,7 +4,7 @@ namespace Warehouse.Mobile.Plugins
 {
     public static class PageExtensions
     {
-        public static T FromHistory<T>(this Page page)
+        public static T? FromHistory<T>(this Page page)
             where T : Page
         {
             if (page is NavigationPage navigationPage)
@@ -17,7 +17,7 @@ namespace Warehouse.Mobile.Plugins
                     }
                 }
             }
-            return null;
+            return default;
         }
     }
 }

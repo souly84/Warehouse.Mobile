@@ -25,7 +25,6 @@
     <DefineConstants>DEBUG;UNITTESTS;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AndroidLinkMode>None</AndroidLinkMode>
     <JavaMaximumHeapSize></JavaMaximumHeapSize>
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <AndroidSupportedAbis>arm64-v8a;armeabi-v7a;x86</AndroidSupportedAbis>
@@ -85,23 +84,23 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-hdpi\Icon.png">
+    <AndroidResource Include="Resources\mipmap-hdpi\customicon.png">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\mipmap-mdpi\Icon.png">
+    <AndroidResource Include="Resources\mipmap-mdpi\customicon.png">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\mipmap-xhdpi\Icon.png">
+    <AndroidResource Include="Resources\mipmap-xhdpi\customicon.png">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\mipmap-xxhdpi\Icon.png">
+    <AndroidResource Include="Resources\mipmap-xxhdpi\customicon.png">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\Icon.png">
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\customicon.png">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
@@ -128,7 +127,7 @@
     <PackageReference Include="xunit.runner.testSuiteInstrumentation">
       <Version>1.0.2</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.0" />
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.1" />
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.1</Version>
     </PackageReference>

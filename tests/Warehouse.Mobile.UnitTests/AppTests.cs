@@ -1,5 +1,4 @@
 ﻿using EbSoft.Warehouse.SDK;
-using Prism.Ioc;
 using Warehouse.Core;
 using Warehouse.Mobile.UnitTests.Mocks;
 using Xunit;

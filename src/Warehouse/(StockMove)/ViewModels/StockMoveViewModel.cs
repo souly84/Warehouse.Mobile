@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Dotnet.Commands;
 using EbSoft.Warehouse.SDK;
@@ -8,24 +9,24 @@ using Warehouse.Core;
 using Warehouse.Core.Plugins;
 using Warehouse.Mobile.ViewModels;
 
-namespace Warehouse.Mobile
+namespace Warehouse.Mobile.ViewModels
 {
     public class StockMoveViewModel : ScannerViewModel
     {
-        private readonly IScanner _scanner;
         private readonly IPageDialogService _dialog;
         private readonly ICompany _company;
         private readonly INavigationService _navigationService;
         private readonly CachedCommands _commands;
+        private IWarehouseGood? _warehouseGood;
 
         public StockMoveViewModel(
             IScanner scanner,
             IPageDialogService dialog,
             ICompany company,
             ICommands commands,
-            INavigationService navigationService) : base(scanner, dialog)
+            INavigationService navigationService)
+            : base(scanner, dialog)
         {
-            _scanner = scanner;
             _dialog = dialog;
             _company = company;
             _navigationService = navigationService;
@@ -53,8 +54,8 @@ namespace Warehouse.Mobile
             set => SetProperty(ref _scannedBarcodeDestinationLocation, value);
         }
 
-        private LocationViewModel _originLocationVm;
-        public LocationViewModel OriginLocationVm
+        private LocationViewModel? _originLocationVm;
+        public LocationViewModel? OriginLocationVm
         {
             get => _originLocationVm;
             set => SetProperty(ref _originLocationVm, value);
@@ -74,22 +75,15 @@ namespace Warehouse.Mobile
             set => SetProperty(ref _isRecognizedOriginLocation, value);
         }
 
-        private IWarehouseGood _warehouseGood;
-        public IWarehouseGood WarehouseGood
-        {
-            get => _warehouseGood;
-            set => SetProperty(ref _warehouseGood, value);
-        }
-
-        private ObservableCollection<LocationViewModel> _reserveLocations;
-        public ObservableCollection<LocationViewModel> ReserveLocations
+        private ObservableCollection<LocationViewModel>? _reserveLocations;
+        public ObservableCollection<LocationViewModel>? ReserveLocations
         {
             get => _reserveLocations;
             set => SetProperty(ref _reserveLocations, value);
         }
 
-        private ObservableCollection<LocationViewModel> _raceLocations;
-        public ObservableCollection<LocationViewModel> RaceLocations
+        private ObservableCollection<LocationViewModel>? _raceLocations;
+        public ObservableCollection<LocationViewModel>? RaceLocations
         {
             get => _raceLocations;
             set => SetProperty(ref _raceLocations, value);
@@ -105,13 +99,16 @@ namespace Warehouse.Mobile
                     {
                         if (IsRecognizedProduct)
                         {
+                            _ = OriginLocationVm ?? throw new InvalidOperationException(
+                                "QuantityToMovePopup navigation error. Original location is not specified."
+                            );
                             await _navigationService.NavigateAsync(
                                 AppConstants.QuantityToMovePopupViewId,
                                 new NavigationParameters
                                 {
                                    { "Origin", OriginLocationVm.ToStorage() },
                                    { "Destination", barcode.BarcodeData },
-                                   { "Good", WarehouseGood }
+                                   { "Good", _warehouseGood }
                                 }
                             );
                             ResetFields();
@@ -130,21 +127,21 @@ namespace Warehouse.Mobile
                         {
                             ScannedProductToMove = barcode.BarcodeData;
                             IsRecognizedProduct = true;
-                            WarehouseGood = await _company
+                            _warehouseGood = await _company
                                 .Warehouse
                                 .Goods.For(barcode.BarcodeData)
                                 .FirstAsync();
-                            var storage = await WarehouseGood.Storages.ByBarcodeAsync(ScannedBarcodeOriginLocation ?? string.Empty);
+                            var storage = await _warehouseGood
+                                .Storages
+                                .ByBarcodeAsync(ScannedBarcodeOriginLocation ?? string.Empty);
                             OriginLocationVm = new LocationViewModel(storage);
-                            RaceLocations = await WarehouseGood.Storages.Race.ToViewModelListAsync();
-                            ReserveLocations = await WarehouseGood.Storages.Reserve.ToViewModelListAsync();
+                            RaceLocations = await _warehouseGood.Storages.Race.ToViewModelListAsync();
+                            ReserveLocations = await _warehouseGood.Storages.Reserve.ToViewModelListAsync();
                         }
                         else
                         {
-                            await _dialog.DisplayAlertAsync(
-                                "Error",
-                                "Please scan the location you wants to move from before scanning a product",
-                                "Ok"
+                            await _dialog.ErrorAsync(
+                                "Please scan the location you wants to move from before scanning a product"
                             );
                         }
                         break;

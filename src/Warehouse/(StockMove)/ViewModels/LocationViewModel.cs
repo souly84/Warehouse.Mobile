@@ -30,7 +30,7 @@ namespace Warehouse.Mobile.ViewModels
             }
         }
 
-        public string Location { get => StorageData().ValueOrDefault<string>("Location", "Ean") ?? string.Empty; }
+        public string Location => StorageData().ValueOrDefault<string>("Location", "Ean") ?? string.Empty; 
 
         public IStorage ToStorage()
         {

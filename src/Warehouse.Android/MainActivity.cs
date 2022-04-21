@@ -33,7 +33,7 @@ namespace Warehouse.Mobile.Droid
 
             base.OnCreate(savedInstanceState);
             SimpleStorage.SetContext(ApplicationContext);
-            global::Rg.Plugins.Popup.Popup.Init(this);
+            Rg.Plugins.Popup.Popup.Init(this);
             Xamarin.Forms.Forms.Init(this, savedInstanceState);
             Xamarin.Forms.FormsMaterial.Init(this, savedInstanceState);
             CrossCurrentActivity.Current.Init(this, savedInstanceState);

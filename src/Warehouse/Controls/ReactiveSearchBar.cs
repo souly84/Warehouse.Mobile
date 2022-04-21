@@ -9,7 +9,7 @@ namespace Warehouse.Mobile.Controls
     {
         public const int TextChangedKeyPressedDelayInMilliseconds = 300;
 
-        private CancellationTokenSource _cts;
+        private CancellationTokenSource? _cts;
 
         public static readonly BindableProperty KeyPressedCommandProperty = BindableProperty.Create(
             nameof(KeyPressedCommand),
