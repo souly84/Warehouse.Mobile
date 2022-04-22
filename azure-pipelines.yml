@@ -34,7 +34,7 @@ steps:
 - task: NuGetToolInstaller@1
   displayName: 'Use Nuget'
   inputs:
-    versionSpec: 5.x
+    versionSpec: 5.8
     checkLatest: true
 
 - task: NuGetCommand@2
