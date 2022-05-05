@@ -77,7 +77,7 @@ steps:
 - task: UseDotNet@2
   displayName: 'Use .Net 5'
   inputs:
-    version: 5.x
+    version: 5.0.x
     vsVersion: 16.x
   continueOnError: true
 
