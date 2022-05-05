@@ -1,18 +1,19 @@
 <Project Sdk="Microsoft.NET.Sdk">
-
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
+    <UseWindowsForms>false</UseWindowsForms>
     <GenerateErrorForMissingTargetingPacks>false</GenerateErrorForMissingTargetingPacks>
     <IsPackable>false</IsPackable>
     <LangVersion>latest</LangVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
-    <DefineConstants>TRACE;DEBUG;NETCOREAPP;NETCOREAPP3_1;UNITTESTS;</DefineConstants>
+    <DefineConstants>TRACE;DEBUG;NETCOREAPP;UNITTESTS;</DefineConstants>
   </PropertyGroup>
   <ItemGroup>
     <PackageReference Include="xunit" Version="2.4.1" />
-    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.3"><IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    <PackageReference Include="xunit.runner.visualstudio" Version="2.4.4">
+        <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
         <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.1.0" />
@@ -30,12 +31,17 @@
   <ItemGroup>
     <ProjectReference Include="..\..\src\Warehouse\Warehouse.Mobile.csproj" />
   </ItemGroup>
-  <ItemGroup>
-    <None Remove="Data\UnsortedGoodsData.json" />
-  </ItemGroup>
+  
   <ItemGroup>
     <Content Include="Data\UnsortedGoodsData.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>
+  <Target BeforeTargets="_CheckForTransitiveWindowsDesktopDependencies" Name="_FixStupidSdkError_NETSDK1136">
+    <ItemGroup>
+      <TransitiveFrameworkReference Remove="Microsoft.WindowsDesktop.App" />
+      <TransitiveFrameworkReference Remove="Microsoft.WindowsDesktop.App.WPF" />
+      <TransitiveFrameworkReference Remove="Microsoft.WindowsDesktop.App.WindowsForms" />
+    </ItemGroup>
+  </Target>
 </Project>

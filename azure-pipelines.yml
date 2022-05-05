@@ -34,7 +34,7 @@ steps:
 - task: NuGetToolInstaller@1
   displayName: 'Use Nuget'
   inputs:
-    versionSpec: 5.8
+    versionSpec: 5.x
     checkLatest: true
 
 - task: NuGetCommand@2
@@ -71,6 +71,13 @@ steps:
   displayName: 'Use .Net Core sdk'
   inputs:
     version: 3.x
+    vsVersion: 16.x
+  continueOnError: true
+
+- task: UseDotNet@2
+  displayName: 'Use .Net 5'
+  inputs:
+    version: 5.x
     vsVersion: 16.x
   continueOnError: true
 
