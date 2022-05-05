@@ -78,7 +78,7 @@ steps:
   displayName: 'Use .Net 5'
   inputs:
     packageType: 'sdk'
-    version: '5.0.x
+    version: '5.0.x'
 
 - task: MSBuild@1
   displayName: 'Build solution'
