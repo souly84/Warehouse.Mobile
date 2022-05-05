@@ -77,9 +77,8 @@ steps:
 - task: UseDotNet@2
   displayName: 'Use .Net 5'
   inputs:
-    version: 5.0.x
-    vsVersion: 16.x
-  continueOnError: true
+    packageType: 'sdk'
+    version: '5.0.x
 
 - task: MSBuild@1
   displayName: 'Build solution'
