@@ -34,6 +34,88 @@ namespace Warehouse.Mobile.UnitTests
         }
 
         [Fact]
+        public void ItemCount()
+        {
+            Assert.Equal(
+                "8/8", // by default Electrolux supplier is used
+                _app
+                    .CurrentViewModel<ReceptionDetailsViewModel>()
+                    .ItemCount
+            );
+        }
+
+        [Fact]
+        public void SupplierName()
+        {
+            Assert.Equal(
+                "Electrolux",
+                _app
+                    .CurrentViewModel<ReceptionDetailsViewModel>()
+                    .SupplierName
+            );
+        }
+
+        [Fact]
+        public async Task GoToHistory()
+        {
+            await _app
+                .CurrentViewModel<ReceptionDetailsViewModel>()
+                .GoToHistoryCommand.ExecuteAsync();
+            Assert.Equal(
+                "/NavigationPage/MenuSelectionView/SelectSupplierView/ReceptionDetailsView/HistoryView",
+               _app.GetNavigationUriPath()
+            );
+
+            Assert.IsType<HistoryViewModel>(_app.CurrentViewModel<object>());
+        }
+
+        [Fact]
+        public async Task GoBack_ShowsWarningDialog()
+        {
+            var dialog = new MockPageDialogService();
+            await WarehouseMobile.Application(
+                new MockPlatformInitializer(
+                    new MockWarehouseCompany(
+                       new MockReceptionGood("1", 1, "1111")
+                    ),
+                    pageDialogService: dialog
+                )
+            ).GoToReceptionDetails()
+             .CurrentViewModel<ReceptionDetailsViewModel>()
+             .BackCommand.ExecuteAsync();
+            Assert.Contains(
+                new DialogPage
+                {
+                    Title = "Warning",
+                    Message = "Are you sure you want to leave this reception?",
+                    AcceptButton = "Yes",
+                    CancelButton = "No"
+                },
+                dialog.ShownDialogs
+            );
+        }
+
+        [Fact(Skip = "Does not work at the moment")]
+        public async Task GoBackToSupplier_WhenWarningDialogAccepted()
+        {
+            var dialog = new MockPageDialogService();
+            await WarehouseMobile.Application(
+                new MockPlatformInitializer(
+                    new MockWarehouseCompany(
+                       new MockReceptionGood("1", 1, "1111")
+                    ),
+                    pageDialogService: dialog
+                )
+            ).GoToReceptionDetails()
+             .CurrentViewModel<ReceptionDetailsViewModel>()
+             .BackCommand.ExecuteAsync();
+
+            Assert.IsType<SelectSupplierViewModel>(
+                await _app.WaitViewModel<SelectSupplierViewModel>()
+            );
+        }
+
+        [Fact]
         public void ScannerEnabled()
         {
             Assert.Equal(
