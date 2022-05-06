@@ -30,6 +30,19 @@ namespace Warehouse.Mobile
         {
         }
 
+        public MockWarehouseCompany(params IReceptionGood[] goods)
+            : this(
+                  new MockSupplier(
+                      "Electrolux",
+                      new MockReception(
+                          "Reception01",
+                          goods
+                      )
+                  )
+              )
+        {
+        }
+
         public MockWarehouseCompany(params IStorage[] storages)
             : this(new MockWarehouse(storages))
         {

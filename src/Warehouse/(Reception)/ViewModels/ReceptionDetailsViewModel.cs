@@ -79,9 +79,7 @@ namespace Warehouse.Mobile.ViewModels
             }
             catch (Exception ex)
             {
-                await _navigationService.ShowMessageAsync(
-                    PopupSeverity.Error,
-                    "Error!",
+                await _navigationService.ShowErrorAsync(
                     "Synchronization failed. " + ex.Message
                 );
             }
@@ -99,11 +97,7 @@ namespace Warehouse.Mobile.ViewModels
             }
             catch (Exception ex)
             {
-                await _navigationService.ShowMessageAsync(
-                    PopupSeverity.Error,
-                    "Error!",
-                    ex.Message
-                );
+                await _navigationService.ShowErrorAsync(ex);
             }
         });
 
@@ -113,14 +107,12 @@ namespace Warehouse.Mobile.ViewModels
             {
                 if (await _dialog.DisplayAlertAsync("Warning", "Are you sure you want to leave this reception?", "Yes", "No"))
                 {
-                    await _navigationService.GoBackAsync();
+                    var result = await _navigationService.GoBackAsync();
                 }
             }
             catch (Exception ex)
             {
-                await _navigationService.ShowMessageAsync(
-                    PopupSeverity.Error,
-                    "Error!",
+                await _navigationService.ShowErrorAsync(
                     "Synchronization failed. " + ex.Message
                 );
             }
@@ -171,7 +163,7 @@ namespace Warehouse.Mobile.ViewModels
             else
             {
                 _scanner.BeepFailure();
-                await _navigationService.ShowErrorAsync(new InvalidOperationException("This barcode type is not supported"));
+                await _navigationService.ShowErrorAsync("This barcode type is not supported");
             }
         }
 
@@ -180,9 +172,7 @@ namespace Warehouse.Mobile.ViewModels
             _scanner.BeepFailure();
             if (good.IsUnknown)
             {
-                return _navigationService.ShowMessageAsync(
-                    PopupSeverity.Error,
-                    "Error!",
+                return _navigationService.ShowErrorAsync(
                     "This item is not part of this delivery!"
                 );
             }

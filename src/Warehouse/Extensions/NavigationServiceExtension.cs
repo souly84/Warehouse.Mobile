@@ -10,10 +10,19 @@ namespace Warehouse.Mobile.Extensions
             this INavigationService _navigationService,
             Exception exception)
         {
+            return _navigationService.ShowErrorAsync(
+                exception.Message
+            );
+        }
+
+        public static Task ShowErrorAsync(
+            this INavigationService _navigationService,
+            string errorMessage)
+        {
             return _navigationService.ShowMessageAsync(
                 PopupSeverity.Error,
                 "Error!",
-                exception.Message
+                errorMessage
             );
         }
 
