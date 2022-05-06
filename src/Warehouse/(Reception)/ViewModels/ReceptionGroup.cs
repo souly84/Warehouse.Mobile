@@ -13,6 +13,13 @@ namespace Warehouse.Mobile.ViewModels
 
         public ReceptionGroup(
             IReception reception,
+            params ReceptionGoodViewModel[] goods)
+            : this(reception, (IEnumerable<ReceptionGoodViewModel>)goods)
+        {
+        }
+
+        public ReceptionGroup(
+            IReception reception,
             IEnumerable<ReceptionGoodViewModel> goods)
             : base(goods)
         {

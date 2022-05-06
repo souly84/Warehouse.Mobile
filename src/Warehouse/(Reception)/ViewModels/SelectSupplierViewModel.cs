@@ -46,6 +46,8 @@ namespace Warehouse.Mobile.ViewModels
 
         public IAsyncCommand ChangeSelectedDateCommand => _cachedCommands.AsyncCommand(() => RefreshAvailableSupplierList());
 
+        public IAsyncCommand BackCommand => _cachedCommands.AsyncCommand(() => _navigationService.GoBackAsync());
+
         public Task InitializeAsync(INavigationParameters parameters)
         {
             SelectedDate = DateTime.Now;
@@ -66,10 +68,5 @@ namespace Warehouse.Mobile.ViewModels
                 "Suppliers Loading..."
             );
         }
-
-        public IAsyncCommand BackCommand => _cachedCommands.AsyncCommand(async () =>
-        {
-            await _navigationService.GoBackAsync();
-        });
     }
 }

@@ -25,7 +25,7 @@ namespace Warehouse.Mobile
 
         public IScanner Scanner => Container.Resolve<IScanner>();
 
-        public Task<INavigationResult> NavigationTask { get; private set; }
+        public Task<INavigationResult>? NavigationTask { get; private set; }
 
         protected override void OnInitialized()
         {

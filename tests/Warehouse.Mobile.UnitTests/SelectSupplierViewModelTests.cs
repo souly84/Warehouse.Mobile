@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Dotnet.Commands;
 using Prism.Navigation;
 using Warehouse.Core;
@@ -101,6 +102,17 @@ namespace Warehouse.Mobile.UnitTests
             );
 
             Assert.IsType<ReceptionDetailsViewModel>(_app.CurrentViewModel<object>());
+        }
+
+        [Fact]
+        public async Task GoBackToMenuSelection()
+        {
+            await _app
+                .CurrentViewModel<SelectSupplierViewModel>()
+                .BackCommand
+                .ExecuteAsync();
+
+            Assert.IsType<MenuSelectionViewModel>(_app.CurrentViewModel<object>());
         }
     }
 }

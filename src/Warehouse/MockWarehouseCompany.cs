@@ -5,7 +5,6 @@ using Warehouse.Core;
 
 namespace Warehouse.Mobile
 {
-    [Obsolete("Should be moved to Warehouse.Core")]
     public class MockWarehouseCompany : ICompany
     {
         public MockWarehouseCompany()

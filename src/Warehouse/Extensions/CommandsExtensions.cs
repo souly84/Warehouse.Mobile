@@ -11,29 +11,20 @@ namespace Warehouse.Mobile.Extensions
     {
         public static IAsyncCommand NavigationCommand(
             this CachedCommands commands,
-            Func<Task<INavigationResult>> onNavigation,
+            Func<Task<INavigationResult?>> onNavigation,
             [CallerMemberName] string? name = null)
         {
             return commands.AsyncCommand(() =>
             {
-                var taskCompletionSource = new TaskCompletionSource<bool>();
-                Device.BeginInvokeOnMainThread(async () =>
+                return Device.InvokeOnMainThreadAsync(async () =>
                 {
-                    try
+                    var navigationResult = await onNavigation();
+                    _ = navigationResult ?? throw new InvalidOperationException("Navigation result can not be null");
+                    if (navigationResult.Exception != null)
                     {
-                        var navigationResult = await onNavigation();
-                        if (navigationResult.Exception != null)
-                        {
-                            throw navigationResult.Exception;
-                        }
-                        taskCompletionSource.SetResult(true);
-                    }
-                    catch (Exception ex)
-                    {
-                        taskCompletionSource.SetException(ex);
+                        throw navigationResult.Exception;
                     }
                 });
-                return taskCompletionSource.Task;
             }, name: name, forceExecution : true);
         }
     }

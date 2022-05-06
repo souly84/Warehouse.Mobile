@@ -30,8 +30,7 @@ namespace Warehouse.Mobile.ViewModels
         public string Name => _supplier.ToDictionary().ValueOrDefault<string>("Name");
 
         public IAsyncCommand GoToReceptionDetailsCommand => _commands.NavigationCommand(() =>
-        {
-            return _overlay.OverlayAsync<INavigationResult>(
+            _overlay.OverlayAsync<INavigationResult>(
                () => _navigationService.NavigateAsync(
                   AppConstants.ReceptionDetailsViewId,
                   new NavigationParameters
@@ -40,7 +39,7 @@ namespace Warehouse.Mobile.ViewModels
                   }
                ),
                $"{Name} receptions loading..."
-            );
-        });
+            )
+        );
     }
 }

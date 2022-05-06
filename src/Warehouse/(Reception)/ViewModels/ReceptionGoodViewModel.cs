@@ -14,6 +14,11 @@ namespace Warehouse.Mobile.ViewModels
         private readonly CachedCommands _commands;
         private string? _errorMessage;
 
+        public ReceptionGoodViewModel(IReceptionGood receptionGood)
+            : this(receptionGood, new Commands())
+        {
+        }
+
         public ReceptionGoodViewModel(
             IReceptionGood receptionGood,
             ICommands commands)

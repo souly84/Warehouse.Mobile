@@ -1,5 +1,4 @@
-﻿using System;
-namespace Warehouse.Mobile.Interfaces
+﻿namespace Warehouse.Mobile.Interfaces
 {
     public interface IEnvironment
     {
@@ -50,7 +49,6 @@ namespace Warehouse.Mobile.Interfaces
 
         public void BeepLoudly()
         {
-            return;
         }
 
         public string GetApplicationPath()
@@ -70,7 +68,6 @@ namespace Warehouse.Mobile.Interfaces
 
         public void HideKeyboard()
         {
-            return;
         }
 
         public string LoadFile(string fileName)
@@ -80,7 +77,6 @@ namespace Warehouse.Mobile.Interfaces
 
         public void SaveFile(string fileName, string text)
         {
-            return;
         }
     }
 }

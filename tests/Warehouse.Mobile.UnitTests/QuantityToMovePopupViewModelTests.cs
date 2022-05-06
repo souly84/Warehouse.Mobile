@@ -80,7 +80,7 @@ namespace Warehouse.Mobile.UnitTests
             Assert.IsType<PutAwayViewModel>(await app.WaitViewModel<PutAwayViewModel>());
         }
 
-        private async Task<App> AppInQuantityToMovePopupStateAsync()
+        private static async Task<App> AppInQuantityToMovePopupStateAsync()
         {
             var app = WarehouseMobile.Application(
                 new MockWarehouse(
