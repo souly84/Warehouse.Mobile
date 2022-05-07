@@ -115,6 +115,25 @@ namespace Warehouse.Mobile.UnitTests
         }
 
         [Fact]
+        public async Task DoesNotGoBackToSupplier_WhenWarningDialogDeclined()
+        {
+            var app = WarehouseMobile.Application(
+                new MockPlatformInitializer(
+                    new MockWarehouseCompany(
+                       new MockReceptionGood("1", 1, "1111")
+                    ),
+                    pageDialogService: new MockPageDialogService(false)
+                )
+            ).GoToReceptionDetails();
+            await app
+                .CurrentViewModel<ReceptionDetailsViewModel>()
+                .BackCommand.ExecuteAsync();
+            Assert.IsType<ReceptionDetailsViewModel>(
+                app.CurrentViewModel<object>()
+            );
+        }
+
+        [Fact]
         public void ScannerEnabled()
         {
             Assert.Equal(
@@ -245,8 +264,7 @@ namespace Warehouse.Mobile.UnitTests
             var app = WarehouseMobile.Application(reception)
                 .GoToReceptionDetails()
                 .Scan("UknownBarcode").ClosePopup()
-                .Scan("1111")
-                .Scan("1111").ClosePopup()
+                .Scan("1111", "1111").ClosePopup()
                 .Scan("2222");
             var commandTask = app
                 .CurrentViewModel<ReceptionDetailsViewModel>()
@@ -326,6 +344,34 @@ namespace Warehouse.Mobile.UnitTests
                 WarehouseMobile.Popup().ShownPopups
             );
         }
+
+        [Fact]
+        public void PopupMessageIfScannedNotEAN13()
+        {
+            _app.Scan(new ScanningResult("1111", "code128", DateTime.Now.TimeOfDay));
+            _app.ClosePopup();
+            Assert.Contains(
+                new DialogPage
+                {
+                    Title = "Error!",
+                    Message = "This barcode type is not supported",
+                    CancelButton = "GOT IT!"
+                },
+                WarehouseMobile.Popup().ShownPopups
+            );
+        }
+
+        [Fact]
+        public void ScannerBeepFailureIfScannedNotEAN13()
+        {
+            _app.Scan(new ScanningResult("1111", "code128", DateTime.Now.TimeOfDay));
+            _app.ClosePopup();
+            Assert.Equal(
+                1,
+                (_app.Scanner as MockScanner).BeepFailureCount
+            );
+        }
+
 
         [Fact]
         public void ScanAlreadyConfirmedItem_AddsExtraConfirmedItemIntoCollection()

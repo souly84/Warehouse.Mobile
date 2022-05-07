@@ -22,7 +22,6 @@ namespace Warehouse.Mobile.UnitTests
           new List<object[]>
           {
                 new object[] { null, null, null, null },
-                new object[] { new MockWarehouseCompany(), null, null, null, },
                 new object[] { null, new MockOverlay(), new Commands(), new MockNavigationService() },
                 new object[] { new MockWarehouseCompany(), null, new Commands(), new MockNavigationService() },
                 new object[] { new MockWarehouseCompany(), new MockOverlay(), null, new MockNavigationService() },

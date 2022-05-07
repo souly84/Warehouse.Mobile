@@ -22,9 +22,9 @@ namespace Warehouse.Mobile.ViewModels
             IEnvironment environment)
         {
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
-            _environment = environment;
-            _commands = commands.Cached();
-            _dialog = dialog;
+            _environment = environment ?? throw new ArgumentNullException(nameof(environment));
+            _commands = commands?.Cached() ?? throw new ArgumentNullException(nameof(commands));
+            _dialog = dialog ?? throw new ArgumentNullException(nameof(dialog));
         }
 
         public IAsyncCommand GoToAvailableSuppliersCommand => _commands.NavigationCommand(() =>
@@ -41,7 +41,7 @@ namespace Warehouse.Mobile.ViewModels
 
         public IAsyncCommand BackCommand => _commands.AsyncCommand(async () =>
         {
-            if (await _dialog.DisplayAlertAsync("Warning", "Are you sure you want to quit the application", "Yes", "No"))
+            if (await _dialog.WarningAsync("Are you sure you want to quit the application?"))
             {
                 _environment.ExitApp();
             }

@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Dotnet.Commands;
+using Prism.Navigation;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
+using Warehouse.Mobile.UnitTests.Mocks;
 using Xunit;
 
 namespace Warehouse.Mobile.UnitTests
@@ -21,10 +24,46 @@ namespace Warehouse.Mobile.UnitTests
             );
         }
 
-        [Fact]
-        public void ArgumentNullException_InConstructor()
+        [Theory, MemberData(nameof(QuantityToMovePopupViewModelData))]
+        public void ArgumentNullException(
+            ICommands commands,
+            INavigationService navigationService,
+            ICompany company)
         {
-            Assert.Throws<ArgumentNullException>(() => new QuantityToMovePopupViewModel(null, null, null));
+            Assert.Throws<ArgumentNullException>(
+                () => new QuantityToMovePopupViewModel(commands, navigationService, company)
+            );
+        }
+
+        [Fact]
+        public async Task SetQuantityCommand_PositiveValueIncreasesQuantityToMoveOn10X()
+        {
+            var app = await AppInQuantityToMovePopupStateAsync();
+            await app
+                .CurrentViewModel<QuantityToMovePopupViewModel>()
+                .SetQuantityCommand
+                .ExecuteAsync("3");
+
+            Assert.Equal(
+                13,
+                app.CurrentViewModel<QuantityToMovePopupViewModel>().QuantityToMove
+            );
+        }
+
+        [Fact]
+        public async Task SetQuantityCommand_NegativeValueDecreasesQuantityToMoveOn10X()
+        {
+            var app = await AppInQuantityToMovePopupStateAsync();
+            app.CurrentViewModel<QuantityToMovePopupViewModel>().QuantityToMove = 23;
+            await app
+                .CurrentViewModel<QuantityToMovePopupViewModel>()
+                .SetQuantityCommand
+                .ExecuteAsync("-1");
+
+            Assert.Equal(
+                2,
+                app.CurrentViewModel<QuantityToMovePopupViewModel>().QuantityToMove
+            );
         }
 
         [Fact]
@@ -99,5 +138,14 @@ namespace Warehouse.Mobile.UnitTests
             await app.WaitViewModel<QuantityToMovePopupViewModel>();
             return app;
         }
+
+        public static IEnumerable<object[]> QuantityToMovePopupViewModelData =>
+          new List<object[]>
+          {
+                new object[] { null, null, null },
+                new object[] { null, new MockNavigationService(), new MockWarehouseCompany(), },
+                new object[] { new Commands(), null, new MockWarehouseCompany() },
+                new object[] { new Commands(), new MockNavigationService(), null },
+          };
     }
 }

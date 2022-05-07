@@ -54,7 +54,11 @@ namespace Warehouse.Mobile.ViewModels
         {
             try
             {
-                await _navigationService.GoBackAsync();
+                var result = await _navigationService.GoBackAsync();
+                if (result.Exception != null)
+                {
+                    throw result.Exception;
+                }
                 _callBack?.Invoke(true, null);
             }
             catch (Exception ex)

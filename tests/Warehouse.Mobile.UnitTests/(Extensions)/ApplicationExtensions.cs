@@ -98,6 +98,14 @@ namespace Warehouse.Mobile.UnitTests
             return app;
         }
 
+        public static App GoToStockMovement(this App app)
+        {
+            app.CurrentViewModel<MenuSelectionViewModel>()
+               .GoToStockMoveCommand
+               .ExecuteAsync().Wait();
+            return app;
+        }
+
         public static App GoToQuantityToMovePopup(this App app)
         {
             app.GoToPutAway();
