@@ -20,12 +20,7 @@ namespace Warehouse.Mobile
 
         public MockWarehouseCompany(params IWarehouseGood[] goods)
             : this(
-                  new MockWarehouse(
-                      new MockStorage(
-                          "ST01",
-                          goods
-                    )
-                  )
+                  new MockStorage("ST01", goods)
               )
         {
         }

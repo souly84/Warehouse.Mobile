@@ -2,7 +2,6 @@
 using System.Collections.ObjectModel;
 using System.Threading.Tasks;
 using Dotnet.Commands;
-using EbSoft.Warehouse.SDK;
 using Prism.Navigation;
 using Prism.Services;
 using Warehouse.Core;
@@ -129,8 +128,7 @@ namespace Warehouse.Mobile.ViewModels
                             IsRecognizedProduct = true;
                             _warehouseGood = await _company
                                 .Warehouse
-                                .Goods.For(barcode.BarcodeData)
-                                .FirstAsync();
+                                .Goods.FirstAsync(barcode.BarcodeData);
                             var storage = await _warehouseGood
                                 .Storages
                                 .ByBarcodeAsync(ScannedBarcodeOriginLocation ?? string.Empty);

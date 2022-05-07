@@ -51,7 +51,6 @@ namespace Warehouse.Mobile
             _ = _goodToMove ?? throw new InvalidOperationException($"Good object is not initialized for movement");
             _ = OriginLocation ?? throw new InvalidOperationException($"Origin location value is not initialized for movement");
             await _goodToMove
-                .Movement
                 .From(OriginLocation)
                 .MoveToAsync(
                     await _goodToMove
