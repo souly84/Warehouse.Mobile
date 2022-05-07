@@ -2,8 +2,195 @@
 <ContentPage
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
-    x:Class="Warehouse.Mobile.Views.StockMoveView">
-    <ContentPage.Content>
-        
-    </ContentPage.Content>
+    Title="Stock move"
+    xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
+    xmlns:viewModels="clr-namespace:Warehouse.Mobile.ViewModels"
+    xmlns:controls="clr-namespace:Warehouse.Mobile.Controls;assembly=Warehouse.Mobile"
+    x:Class="Warehouse.Mobile.Views.StockMoveView"
+    x:DataType="viewModels:StockMoveViewModel"
+    NavigationPage.HasBackButton="False">
+    <NavigationPage.TitleView>
+        <Grid Padding="2" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <Label
+                FontFamily="materialicons"
+                FontSize="25"
+                Text="{x:Static fonts:MaterialIcons.ArrowLeft}"
+                TextColor="{DynamicResource TextsColor}"
+                VerticalOptions="Center"
+                HorizontalOptions="Start"
+                HorizontalTextAlignment="Start"
+                Margin="-5,0,0,0">
+                <Label.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding BackCommand}"/>
+                </Label.GestureRecognizers>
+            </Label>
+            <Label
+                Grid.Column="1"
+                Text="Stock Move"
+                VerticalOptions="Center"
+                FontSize="18"
+                TextColor="{DynamicResource TextsColor}"/>
+        </Grid>
+    </NavigationPage.TitleView>
+    <ContentView VerticalOptions="FillAndExpand" Padding="5" BackgroundColor="{DynamicResource MainColor}">
+        <StackLayout VerticalOptions="FillAndExpand" BackgroundColor="{DynamicResource MainColor}">
+            <StackLayout Orientation="Horizontal" BackgroundColor="{DynamicResource MainColor}">
+                <Grid HorizontalOptions="FillAndExpand">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition />
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Column="0"
+                        HorizontalOptions="End"
+                        TextColor="{DynamicResource TextsColor}"
+                        Style="{DynamicResource ReceptionGoodCategoryIcon}"
+                        FontFamily="materialicons"
+                        Text="{x:Static fonts:MaterialIcons.MapMarker}">
+                    </Label>
+
+                    <controls:CustomEntry
+                        Grid.Column="1"
+                        HorizontalOptions="FillAndExpand"
+                        Keyboard="Numeric"
+                        DigitsTypesToAllow="Numbers"
+                        Text="{Binding ScannedBarcodeOriginLocation}"
+                        TextColor="{DynamicResource TextsColor}"
+                        Placeholder="Scan origin"/>
+                </Grid>
+            </StackLayout>
+
+            <!--Origin location is recognized-->
+            <StackLayout Orientation="Horizontal" Padding="35"
+                         IsVisible="{Binding IsRecognizedOriginLocation}">
+                <Grid HorizontalOptions="FillAndExpand">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+
+                    <Label
+                        Grid.Column="0"
+                        HorizontalOptions="End"
+                        TextColor="{DynamicResource TextsColor}"
+                        Style="{DynamicResource ReceptionGoodCategoryIcon}"
+                        FontFamily="warehouseIcons"
+                        Text="{x:Static fonts:IcoMoon.Crate}"/>
+
+                    <controls:CustomEntry
+                          Grid.Column="1"
+                          HorizontalOptions="FillAndExpand"
+                          Keyboard="Numeric"
+                         TextColor="{DynamicResource TextsColor}"
+                          Text="{Binding ScannedProductToMove}"
+                          DigitsTypesToAllow="Numbers"
+                          Placeholder="Scan product"/>
+                </Grid>
+            </StackLayout>
+
+            <!--Product to move is recognized-->
+            <StackLayout IsVisible="{Binding IsRecognizedProduct}" >
+                <StackLayout>
+                    <Label
+                        Text="Please scan destination location"
+                        FontAttributes="Bold"
+                        FontSize="18"
+                        HorizontalOptions="Center"
+                        HorizontalTextAlignment="Center"/>
+                </StackLayout>
+
+                <StackLayout HeightRequest="150">
+                    <Label Text="Existing Race Locations" />
+                    <Frame
+                        BackgroundColor="White"
+                        CornerRadius="10">
+                        <CollectionView
+                            x:DataType="viewModels:LocationViewModel"
+                            ItemsSource="{Binding RaceLocations}"
+                            ItemsLayout="HorizontalList">
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate>
+                                    <Frame CornerRadius="10" VerticalOptions="FillAndExpand" Padding="10"  BorderColor="Transparent">
+                                        <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand">
+                                            <Label
+                                                FontFamily="materialicons"
+                                                FontSize="25"
+                                                Text="{x:Static fonts:MaterialIcons.MapMarker}"
+                                                HorizontalOptions="Center"
+                                                VerticalTextAlignment="Center" />
+
+                                            <Label Text="{Binding Location}"
+                                                   VerticalTextAlignment="Center"
+                                                   FontSize="14" />
+                                            <Label 
+                                                   FontAttributes="Bold"
+                                                   VerticalTextAlignment="Center"
+                                                   HorizontalOptions="Center"
+                                                   FontSize="12" >
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="#" />
+                                                        <Span Text="{Binding Quantity.Value}" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </StackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Frame>
+                </StackLayout>
+                <StackLayout HeightRequest="150">
+                    <Label Text="Existing Reserve Locations" />
+                    <Frame
+                        Padding="0"
+                        CornerRadius="10">
+                        <CollectionView
+                            VerticalOptions="FillAndExpand"
+                            HorizontalOptions="FillAndExpand"
+                            ItemsSource="{Binding ReserveLocations}"
+                            ItemsLayout="HorizontalList" >
+                            <CollectionView.ItemTemplate>
+                                <DataTemplate >
+                                    <Frame CornerRadius="10" VerticalOptions="FillAndExpand" Padding="10"  BorderColor="Transparent">
+                                        <StackLayout Orientation="Vertical" VerticalOptions="FillAndExpand">
+                                            <Label
+                                                FontFamily="materialicons"
+                                                FontSize="25"
+                                                Text="{x:Static fonts:MaterialIcons.MapMarker}"
+                                                HorizontalOptions="Center"
+                                                VerticalTextAlignment="Center" />
+
+                                            <Label Text="{Binding Location}"
+                                                   VerticalTextAlignment="Center"
+                                                   FontSize="14" />
+                                            <Label 
+                                                   FontAttributes="Bold"
+                                                   VerticalTextAlignment="Center"
+                                                   HorizontalOptions="Center"
+                                                   FontSize="12" >
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <Span Text="#" />
+                                                        <Span Text="{Binding Quantity.Value}" />
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </StackLayout>
+                                    </Frame>
+                                </DataTemplate>
+                            </CollectionView.ItemTemplate>
+                        </CollectionView>
+                    </Frame>
+                </StackLayout>
+            </StackLayout>
+        </StackLayout>
+    </ContentView>
 </ContentPage>

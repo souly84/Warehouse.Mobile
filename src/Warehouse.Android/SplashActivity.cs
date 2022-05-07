@@ -8,7 +8,7 @@ using Warehouse.Droid;
 
 namespace Warehouse.Mobile.Droid
 {
-    [Activity(Theme = "@style/MainTheme.Splash", MainLauncher = true, NoHistory = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, ScreenOrientation = ScreenOrientation.Portrait)]
+    [Activity(Theme = "@style/MainTheme.Splash", Icon = "@mipmap/customicon", MainLauncher = true, NoHistory = true, ConfigurationChanges = ConfigChanges.ScreenSize | ConfigChanges.Orientation, ScreenOrientation = ScreenOrientation.Portrait)]
     public class SplashActivity : Activity, Animator.IAnimatorListener
     {
         static readonly string TAG = "X:" + typeof(SplashActivity).Name;

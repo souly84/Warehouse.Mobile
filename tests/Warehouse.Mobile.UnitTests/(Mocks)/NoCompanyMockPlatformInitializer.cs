@@ -2,6 +2,7 @@
 using Prism.Ioc;
 using Prism.Services;
 using Warehouse.Core.Plugins;
+using Warehouse.Mobile.Interfaces;
 using Warehouse.Mobile.Tests;
 
 namespace Warehouse.Mobile.UnitTests.Mocks
@@ -12,6 +13,7 @@ namespace Warehouse.Mobile.UnitTests.Mocks
         {
             containerRegistry.RegisterInstance<IScanner>(new MockScanner());
             containerRegistry.RegisterInstance<IPageDialogService>(new MockPageDialogService());
+            containerRegistry.RegisterInstance<IEnvironment>(new MockEnvironment());
         }
     }
 }

@@ -1,9 +1,13 @@
-﻿using Prism;
+﻿using System.Reflection;
+using System.Threading.Tasks;
+using Prism;
 using Prism.Ioc;
 using Prism.Services;
 using Rg.Plugins.Popup.Contracts;
+using Rg.Plugins.Popup.Services;
 using Warehouse.Core;
 using Warehouse.Mobile.UnitTests.Mocks;
+using Xamarin.Forms;
 
 namespace Warehouse.Mobile.UnitTests
 {
@@ -24,12 +28,12 @@ namespace Warehouse.Mobile.UnitTests
             );
         }
 
-        public static App Application(IReception reception)
+        public static App Application(params IReception[] receptions)
         {
             return Application(
                  new MockSupplier(
                      "Electrolux",
-                     reception
+                     receptions
                  )
             );
         }
@@ -41,10 +45,10 @@ namespace Warehouse.Mobile.UnitTests
             );
         }
 
-        public static App Application(ISupplier supplier)
+        public static App Application(params ISupplier[] suppliers)
         {
             return Application(
-                new MockWarehouseCompany(supplier)
+                new MockWarehouseCompany(suppliers)
             );
         }
 
@@ -74,21 +78,28 @@ namespace Warehouse.Mobile.UnitTests
 
         public static App Application(IPlatformInitializer platformInitializer)
         {
-           
             ContainerLocator.ResetContainer();
             Xamarin.Forms.Mocks.MockForms.Init();
             NavigationServiceExtensions.ResetPageNavigationRegistry();
-            var app = new App(platformInitializer);
+            Popup().RaiseOnInitialized();
+            PopupNavigation.RestoreDefaultInstance();
             Xamarin.Forms.Application.Current = null;
+            var app = new App(platformInitializer);
             Xamarin.Forms.Application.Current = app;
             Popup().ShownPopups.Clear();
             Popup().VisiblePopup.Clear();
+            var navigationResult = app.NavigationTask.Result;
+            if (navigationResult.Exception != null)
+            {
+                throw navigationResult.Exception;
+            }
+
             return app;
         }
 
         internal static MockPopupPlatform Popup()
         {
-            return Xamarin.Forms.DependencyService.Resolve<IPopupPlatform>() as MockPopupPlatform;
+            return DependencyService.Resolve<IPopupPlatform>() as MockPopupPlatform;
         }
     }
 }

@@ -1,8 +1,10 @@
-﻿using Prism;
+﻿using Dotnet.Commands;
+using Prism;
 using Prism.Ioc;
 using Prism.Services;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
+using Warehouse.Mobile.Interfaces;
 using Warehouse.Mobile.Tests;
 using Warehouse.Mobile.UnitTests.Mocks;
 
@@ -50,11 +52,13 @@ namespace Warehouse.Mobile.UnitTests
 
         public void RegisterTypes(IContainerRegistry containerRegistry)
         {
+            containerRegistry.RegisterInstance(new Commands(0).Validated());
             containerRegistry.RegisterInstance<IScanner>(_scanner);
             containerRegistry.RegisterInstance<ICompany>(_company);
             containerRegistry.RegisterInstance<IPageDialogService>(_pageDialogService);
+            containerRegistry.RegisterInstance<IOverlay>(new MockOverlay());
             containerRegistry.RegisterInstance<IKeyValueStorage>(new KeyValueStorage());
-            
+            containerRegistry.RegisterInstance<IEnvironment>(new MockEnvironment());
         }
     }
 }

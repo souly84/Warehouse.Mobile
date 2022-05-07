@@ -8,6 +8,13 @@ namespace Warehouse.Mobile.Tests
 {
     public class MockPageDialogService : IPageDialogService
     {
+        private readonly bool _acceptByDefault;
+
+        public MockPageDialogService(bool acceptByDefault = true)
+        {
+            _acceptByDefault = acceptByDefault;
+        }
+
         public List<DialogPage> ShownDialogs { get; } = new List<DialogPage>();
 
         public Task<bool> DisplayAlertAsync(
@@ -23,7 +30,7 @@ namespace Warehouse.Mobile.Tests
                 AcceptButton = acceptButton,
                 CancelButton = cancelButton,
             });
-            return Task.FromResult(true);
+            return Task.FromResult(_acceptByDefault);
         }
 
         public Task DisplayAlertAsync(string title, string message, string cancelButton)
@@ -51,7 +58,7 @@ namespace Warehouse.Mobile.Tests
                 AcceptButton = acceptButton,
                 CancelButton = cancelButton,
             });
-            return Task.FromResult(true);
+            return Task.FromResult(_acceptByDefault);
         }
 
         public Task DisplayAlertAsync(string title, string message, string cancelButton, FlowDirection flowDirection)
@@ -133,11 +140,11 @@ namespace Warehouse.Mobile.Tests
 
             public override bool Equals(object obj)
             {
-                return obj is DialogPage page &&
-                       Title == page.Title &&
-                       Message == page.Message &&
-                       AcceptButton == page.AcceptButton &&
-                       CancelButton == page.CancelButton;
+                return obj is DialogPage page
+                    && Title == page.Title
+                    && Message == page.Message
+                    && AcceptButton == page.AcceptButton
+                    && CancelButton == page.CancelButton;
             }
 
             public override int GetHashCode()

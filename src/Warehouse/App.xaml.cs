@@ -1,4 +1,5 @@
-﻿using EbSoft.Warehouse.SDK;
+﻿using Dotnet.Commands;
+using EbSoft.Warehouse.SDK;
 using Prism;
 using Prism.Ioc;
 using Prism.Navigation;
@@ -24,10 +25,12 @@ namespace Warehouse.Mobile
 
         public IScanner Scanner => Container.Resolve<IScanner>();
 
+        public Task<INavigationResult>? NavigationTask { get; private set; }
+
         protected override void OnInitialized()
         {
             InitializeComponent();
-            _ = NavigateToMainPageAsync();
+            NavigationTask = NavigateToMainPageAsync();
         }
 
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
@@ -42,23 +45,39 @@ namespace Warehouse.Mobile
             containerRegistry.RegisterForNavigation<MenuSelectionView>();
             containerRegistry.RegisterForNavigation<ReceptionDetailsView>();
             containerRegistry.RegisterForNavigation<PutAwayView>();
-            containerRegistry.RegisterForNavigation<StockMoveView>();
+            containerRegistry.RegisterForNavigation<StockMoveView, StockMoveViewModel>();
             // this registration was missed, is it done by purpose?
             containerRegistry.RegisterForNavigation<QuantityToMovePopupView, QuantityToMovePopupViewModel>();
             containerRegistry.RegisterForNavigation<CustomPopupMessageView>();
+            containerRegistry.RegisterForNavigation<HistoryView>();
+            if (!containerRegistry.IsRegistered<ICommands>())
+            {
+                containerRegistry.RegisterInstance(new Commands().Validated());
+            }
+               
             if (!containerRegistry.IsRegistered<ICompany>())
             {
-               containerRegistry.RegisterInstance<ICompany>(
-                   new EbSoftCompany("http://wdc-logcnt.eurocenter.be/webservice/apiscanning.php")
-                   //new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php")
-
-               );
+#if MOCK
+                containerRegistry.RegisterInstance<ICompany>(
+                    new EbSoftCompany(
+                        new WebRequest.Elegant.WebRequest(
+                            "http://wdc-logcnt.eurocenter.be/webservice/apiscanning.php",
+                            Mock.MockDataComponent.HttpClient()
+                        )
+                    )
+                );
+#else
+                containerRegistry.RegisterInstance<ICompany>(
+                    new EbSoftCompany("http://wdc-logcnt.eurocenter.be/webservice/apiscanning.php")
+                    //new EbSoftCompany("http://wdc-logitest.eurocenter.be/webservice/apitest.php")
+                );
+#endif
             }
         }
 
-        private Task NavigateToMainPageAsync()
+        private Task<INavigationResult> NavigateToMainPageAsync()
         {
-            return NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(MenuSelectionView)}" );
+            return NavigationService.NavigateAsync($"{nameof(NavigationPage)}/{nameof(MenuSelectionView)}");
         }
     }
 }

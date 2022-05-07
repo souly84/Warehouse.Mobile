@@ -5,7 +5,7 @@ namespace Warehouse.Mobile.Extensions
 {
     public static class DictionaryMediaExtensions
     {
-        public static T ValueOrDefault<T>(this DictionaryMedia dictionary, params string[] keys)
+        public static T? ValueOrDefault<T>(this DictionaryMedia dictionary, params string[] keys)
         {
             var targetKey = keys.FirstOrDefault(key => dictionary.Contains(key));
             if (targetKey != null)

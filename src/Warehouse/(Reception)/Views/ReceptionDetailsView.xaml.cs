@@ -2,7 +2,6 @@
 using System.Reflection;
 using Warehouse.Mobile.ViewModels;
 using Xamarin.Forms;
-using System.Linq;
 using System.Collections.Specialized;
 using System.Threading.Tasks;
 

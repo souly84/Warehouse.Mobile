@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Windows.Input;
 using Xamarin.Forms;
+
 namespace Warehouse.Mobile.Controls
 {
     public class CustomEntry : Entry
@@ -36,7 +37,7 @@ namespace Warehouse.Mobile.Controls
             typeof(CustomEntry),
             int.MaxValue);
 
-        public Action SelectAll { get; set; }
+        public Action? SelectAll { get; set; }
 
         public virtual AllowedDigitTypes DigitsTypesToAllow
         {

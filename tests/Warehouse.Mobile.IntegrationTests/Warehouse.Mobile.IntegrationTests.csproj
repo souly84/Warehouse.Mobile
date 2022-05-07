@@ -10,6 +10,7 @@
     <RootNamespace>Warehouse.Mobile.IntegrationTests</RootNamespace>
     <AssemblyName>StoreMobile.AppService.IntegrationTests</AssemblyName>
     <TargetFrameworkVersion>v10.0</TargetFrameworkVersion>
+    <LangVersion>latest</LangVersion>
     <AndroidApplication>True</AndroidApplication>
     <AndroidResgenFile>Resources\Resource.designer.cs</AndroidResgenFile>
     <AndroidResgenClass>Resource</AndroidResgenClass>
@@ -22,10 +23,9 @@
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
     <OutputPath>bin\Debug</OutputPath>
-    <DefineConstants>DEBUG;</DefineConstants>
+    <DefineConstants>DEBUG;UNITTESTS;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <AndroidLinkMode>None</AndroidLinkMode>
     <JavaMaximumHeapSize></JavaMaximumHeapSize>
     <AndroidUseAapt2>true</AndroidUseAapt2>
     <AndroidSupportedAbis>arm64-v8a;armeabi-v7a;x86</AndroidSupportedAbis>
@@ -53,8 +53,7 @@
     <OutputPath>bin\Mock</OutputPath>
     <WarningLevel>4</WarningLevel>
     <JavaMaximumHeapSize></JavaMaximumHeapSize>
-    <AndroidUseAapt2>false</AndroidUseAapt2>
-    <AndroidManifest></AndroidManifest>
+    <AndroidUseAapt2>true</AndroidUseAapt2>
     <EmbedAssembliesIntoApk>true</EmbedAssembliesIntoApk>
     <AndroidSupportedAbis>arm64-v8a;armeabi-v7a;x86</AndroidSupportedAbis>
   </PropertyGroup>
@@ -86,23 +85,23 @@
     <None Include="Properties\AndroidManifest.xml" />
   </ItemGroup>
   <ItemGroup>
-    <AndroidResource Include="Resources\mipmap-hdpi\Icon.png">
+    <AndroidResource Include="Resources\mipmap-hdpi\customicon.png">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\mipmap-mdpi\Icon.png">
+    <AndroidResource Include="Resources\mipmap-mdpi\customicon.png">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\mipmap-xhdpi\Icon.png">
+    <AndroidResource Include="Resources\mipmap-xhdpi\customicon.png">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\mipmap-xxhdpi\Icon.png">
+    <AndroidResource Include="Resources\mipmap-xxhdpi\customicon.png">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
-    <AndroidResource Include="Resources\mipmap-xxxhdpi\Icon.png">
+    <AndroidResource Include="Resources\mipmap-xxxhdpi\customicon.png">
       <SubType></SubType>
       <Generator></Generator>
     </AndroidResource>
@@ -129,7 +128,7 @@
     <PackageReference Include="xunit.runner.testSuiteInstrumentation">
       <Version>1.0.2</Version>
     </PackageReference>
-    <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.0" />
+    <PackageReference Include="Xamarin.CommunityToolkit" Version="2.0.1" />
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.1</Version>
     </PackageReference>
@@ -147,12 +146,9 @@
       <Name>Warehouse.Mobile.Android</Name>
     </ProjectReference>
     <ProjectReference Include="..\..\src\Warehouse\Warehouse.Mobile.csproj">
-      <Project>{D14BE91B-55E2-42BE-957A-570E9608D51D}</Project>
+      <Project>{A279610B-743C-4C8E-9A6F-227C9447EEA1}</Project>
       <Name>Warehouse.Mobile</Name>
     </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Resources\values\" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\Android\Xamarin.Android.CSharp.targets" />
 </Project>

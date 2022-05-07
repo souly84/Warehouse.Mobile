@@ -1,6 +1,7 @@
 using System;
+using System.Windows.Input;
+using Dotnet.Commands;
 using MediaPrint;
-using Prism.Commands;
 using Prism.Mvvm;
 using Warehouse.Core;
 
@@ -10,20 +11,28 @@ namespace Warehouse.Mobile.ViewModels
     {
         private readonly IReceptionGood _receptionGood;
         private DictionaryMedia? _goodData;
+        private readonly CachedCommands _commands;
         private string? _errorMessage;
-        private DelegateCommand? increaseQuantityCommand;
-        private DelegateCommand? decreaseQuantityCommand;
 
         public ReceptionGoodViewModel(IReceptionGood receptionGood)
+            : this(receptionGood, new Commands())
+        {
+        }
+
+        public ReceptionGoodViewModel(
+            IReceptionGood receptionGood,
+            ICommands commands)
         {
             _receptionGood = receptionGood ?? throw new ArgumentNullException(nameof(receptionGood));
-            ErrorMessage = IsUnkownGood ? $"Not expected {_receptionGood.ToDictionary().ValueOrDefault<string>("Barcode")}" : "Received more than expected";
-            Console.WriteLine(_receptionGood.ToDictionary().ValueOrDefault<string>("Ean"));
+            ErrorMessage = IsUnkownGood ? $"Not expected {_receptionGood.ToDictionary().ValueOrDefault<string>("Ean")}" : "Received more than expected";
+            _commands = commands.Cached();
         }
 
         public bool IsUnkownGood => _receptionGood.IsUnknown;
 
         public bool IsExtraConfirmedReceptionGood => _receptionGood.IsExtraConfirmed;
+
+        public bool Regular => !IsExtraConfirmedReceptionGood && !IsUnkownGood;
 
         private DictionaryMedia GoodData
         {
@@ -39,11 +48,11 @@ namespace Warehouse.Mobile.ViewModels
 
         public int Total { get; set; }
 
-        public int ConfirmedQuantity => _receptionGood.Confirmation.ToDictionary().Value<int>("Confirmed");
+        public int ConfirmedQuantity => _receptionGood.Confirmation.ConfirmedQuantity;
 
         public string Name => GoodData.ValueOrDefault<string>("Article");
 
-        public int Quantity => GoodData.ValueOrDefault<int>("Quantity");
+        public int Quantity => _receptionGood.Quantity;
 
         public string Oa => GoodData.ValueOrDefault<string>("oa");
 
@@ -64,21 +73,20 @@ namespace Warehouse.Mobile.ViewModels
                 return $"{ConfirmedQuantity}/{Quantity}";
             }
         }
-        
-        public DelegateCommand IncreaseQuantityCommand => increaseQuantityCommand ?? (increaseQuantityCommand = new DelegateCommand(() =>
+
+        public ICommand IncreaseQuantityCommand => _commands.Command(() =>
         {
             _receptionGood.Confirmation.Increase(1);
             RaisePropertyChanged(nameof(ConfirmedQuantity));
             RaisePropertyChanged(nameof(RemainingQuantity));
+        });
 
-        }));
-
-        public DelegateCommand DecreaseQuantityCommand => decreaseQuantityCommand ?? (decreaseQuantityCommand = new DelegateCommand(() =>
+        public ICommand DecreaseQuantityCommand => _commands.Command(() =>
         {
             _receptionGood.Confirmation.Decrease(1);
             RaisePropertyChanged(nameof(ConfirmedQuantity));
             RaisePropertyChanged(nameof(RemainingQuantity));
-        }));
+        });
 
         public override bool Equals(object obj)
         {

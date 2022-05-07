@@ -13,15 +13,15 @@ namespace Warehouse.Mobile.ViewModels
             _date = date;
         }
 
-        private string _dateOfMonth;
-        public string DateOfMonth
+        private string? _dateOfMonth;
+        public string? DateOfMonth
         {
             get => _dateOfMonth;
             set => SetProperty(ref _dateOfMonth, value);
         }
 
-        private string _dayOfWeek;
-        public string DayOfWeek
+        private string? _dayOfWeek;
+        public string? DayOfWeek
         {
             get => _dayOfWeek;
             set => SetProperty(ref _dayOfWeek, value);

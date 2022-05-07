@@ -2,17 +2,15 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Dotnet.Commands;
 using EbSoft.Warehouse.SDK;
-using Newtonsoft.Json.Linq;
 using Prism.Navigation;
 using Warehouse.Core;
 using Warehouse.Core.Plugins;
-using Warehouse.Mobile.Extensions;
 using Warehouse.Mobile.Tests;
 using Warehouse.Mobile.UnitTests.Extensions;
 using Warehouse.Mobile.UnitTests.Mocks;
 using Warehouse.Mobile.ViewModels;
-using WebRequest.Elegant.Fakes;
 using Xunit;
 using static Warehouse.Mobile.Tests.MockPageDialogService;
 
@@ -32,6 +30,106 @@ namespace Warehouse.Mobile.UnitTests
                 _app
                     .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
+            );
+        }
+
+        [Fact]
+        public void ItemCount()
+        {
+            Assert.Equal(
+                "8/8", // by default Electrolux supplier is used
+                _app
+                    .CurrentViewModel<ReceptionDetailsViewModel>()
+                    .ItemCount
+            );
+        }
+
+        [Fact]
+        public void SupplierName()
+        {
+            Assert.Equal(
+                "Electrolux",
+                _app
+                    .CurrentViewModel<ReceptionDetailsViewModel>()
+                    .SupplierName
+            );
+        }
+
+        [Fact]
+        public async Task GoToHistory()
+        {
+            await _app
+                .CurrentViewModel<ReceptionDetailsViewModel>()
+                .GoToHistoryCommand.ExecuteAsync();
+            Assert.Equal(
+                "/NavigationPage/MenuSelectionView/SelectSupplierView/ReceptionDetailsView/HistoryView",
+               _app.GetNavigationUriPath()
+            );
+
+            Assert.IsType<HistoryViewModel>(_app.CurrentViewModel<object>());
+        }
+
+        [Fact]
+        public async Task GoBack_ShowsWarningDialog()
+        {
+            var dialog = new MockPageDialogService();
+            await WarehouseMobile.Application(
+                new MockPlatformInitializer(
+                    new MockWarehouseCompany(
+                       new MockReceptionGood("1", 1, "1111")
+                    ),
+                    pageDialogService: dialog
+                )
+            ).GoToReceptionDetails()
+             .CurrentViewModel<ReceptionDetailsViewModel>()
+             .BackCommand.ExecuteAsync();
+            Assert.Contains(
+                new DialogPage
+                {
+                    Title = "Warning",
+                    Message = "Are you sure you want to leave this reception?",
+                    AcceptButton = "Yes",
+                    CancelButton = "No"
+                },
+                dialog.ShownDialogs
+            );
+        }
+
+        [Fact]
+        public async Task GoBackToSupplier_WhenWarningDialogAccepted()
+        {
+            var app = WarehouseMobile.Application(
+                new MockPlatformInitializer(
+                    new MockWarehouseCompany(
+                       new MockReceptionGood("1", 1, "1111")
+                    ),
+                    pageDialogService: new MockPageDialogService()
+                )
+            ).GoToReceptionDetails();
+            await app
+                .CurrentViewModel<ReceptionDetailsViewModel>()
+                .BackCommand.ExecuteAsync();
+            Assert.IsType<SelectSupplierViewModel>(
+                app.CurrentViewModel<object>()
+            );
+        }
+
+        [Fact]
+        public async Task DoesNotGoBackToSupplier_WhenWarningDialogDeclined()
+        {
+            var app = WarehouseMobile.Application(
+                new MockPlatformInitializer(
+                    new MockWarehouseCompany(
+                       new MockReceptionGood("1", 1, "1111")
+                    ),
+                    pageDialogService: new MockPageDialogService(false)
+                )
+            ).GoToReceptionDetails();
+            await app
+                .CurrentViewModel<ReceptionDetailsViewModel>()
+                .BackCommand.ExecuteAsync();
+            Assert.IsType<ReceptionDetailsViewModel>(
+                app.CurrentViewModel<object>()
             );
         }
 
@@ -132,7 +230,7 @@ namespace Warehouse.Mobile.UnitTests
                  .Scan("1111", "2222")
                  .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
-                    .Sum(good => good.ConfirmedQuantity)
+                    .Sum(reception => reception.Sum(good => good.ConfirmedQuantity))
             );
         }
 
@@ -150,7 +248,7 @@ namespace Warehouse.Mobile.UnitTests
                  .ClosePopup()
                  .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
-                    .Count
+                    .Sum(reception => reception.Count)
             );
         }
 
@@ -163,14 +261,17 @@ namespace Warehouse.Mobile.UnitTests
                 new MockReceptionGood("2", 2, "2222"),
                 new MockReceptionGood("3", 4, "3333")
             );
-            WarehouseMobile.Application(reception)
+            var app = WarehouseMobile.Application(reception)
                 .GoToReceptionDetails()
                 .Scan("UknownBarcode").ClosePopup()
-                .Scan("1111")
-                .Scan("1111").ClosePopup()
-                .Scan("2222")
+                .Scan("1111", "1111").ClosePopup()
+                .Scan("2222");
+            var commandTask = app
                 .CurrentViewModel<ReceptionDetailsViewModel>()
-                .ValidateReceptionCommand.Execute();
+                .ValidateReceptionCommand
+                .ExecuteAsync();
+            app.ClosePopup();
+            await commandTask;
             Assert.Equal(
                 new List<IGoodConfirmation>
                 {
@@ -178,6 +279,7 @@ namespace Warehouse.Mobile.UnitTests
                         new MockReceptionGood("1", 1, "1111")
                     ).PartiallyConfirmed(2)).Confirmation,
                     (await new MockReceptionGood("", 1000, "UknownBarcode", isUnknown: true).PartiallyConfirmed(1)).Confirmation,
+                    (await new MockReceptionGood("1", 1, "1").FullyConfirmed()).Confirmation,
                     (await new MockReceptionGood("2", 2, "2222").PartiallyConfirmed(1)).Confirmation,
                 },
                 reception.ValidatedGoods
@@ -197,7 +299,7 @@ namespace Warehouse.Mobile.UnitTests
                  .Scan("2222", "2222")
                  .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
-                    .Count
+                    .Sum(reception => reception.Count)
             );
         }
 
@@ -209,41 +311,67 @@ namespace Warehouse.Mobile.UnitTests
                     new MockScanner(),
                     new MockPageDialogService(),
                     new MockNavigationService(),
+                    new Commands(),
                     new KeyValueStorage()
                 ).InitializeAsync(new NavigationParameters())
             );
         }
 
         [Fact]
-        public void PopupMessageIfValidateReceptionCommandError()
+        public async Task PopupMessageIfValidateReceptionCommandError()
         {
-            App app = null;
-            try
-            {
-                app = WarehouseMobile.Application(
-                   new MockPlatformInitializer(
-                      new ValidateExceptionReception(
-                          new InvalidOperationException("Test error message")
-                      )
-                   )
-                ).GoToReceptionDetails();
-                app.CurrentViewModel<ReceptionDetailsViewModel>()
-                .ValidateReceptionCommand.Execute();
-                    Assert.Contains(
-                        new DialogPage
-                        {
-                            Title = "Error!",
-                            Message = "Synchronization failed. Test error message",
-                            CancelButton = "GOT IT!"
-                        },
-                        WarehouseMobile.Popup().ShownPopups.ToDialogPages()
-                    );
-            }
-            finally
-            {
-                app?.ClosePopup();
-            }
+            var app = WarehouseMobile.Application(
+               new MockPlatformInitializer(
+                  new ValidateExceptionReception(
+                      new InvalidOperationException("Test error message")
+                  )
+               )
+            ).GoToReceptionDetails();
+            var commnadTask = app
+             .CurrentViewModel<ReceptionDetailsViewModel>()
+             .ValidateReceptionCommand
+             .ExecuteAsync();
+
+            app.ClosePopup();
+            await commnadTask;
+            Assert.Contains(
+                new DialogPage
+                {
+                    Title = "Error!",
+                    Message = "Synchronization failed. Test error message",
+                    CancelButton = "GOT IT!"
+                },
+                WarehouseMobile.Popup().ShownPopups
+            );
         }
+
+        [Fact]
+        public void PopupMessageIfScannedNotEAN13()
+        {
+            _app.Scan(new ScanningResult("1111", "code128", DateTime.Now.TimeOfDay));
+            _app.ClosePopup();
+            Assert.Contains(
+                new DialogPage
+                {
+                    Title = "Error!",
+                    Message = "This barcode type is not supported",
+                    CancelButton = "GOT IT!"
+                },
+                WarehouseMobile.Popup().ShownPopups
+            );
+        }
+
+        [Fact]
+        public void ScannerBeepFailureIfScannedNotEAN13()
+        {
+            _app.Scan(new ScanningResult("1111", "code128", DateTime.Now.TimeOfDay));
+            _app.ClosePopup();
+            Assert.Equal(
+                1,
+                (_app.Scanner as MockScanner).BeepFailureCount
+            );
+        }
+
 
         [Fact]
         public void ScanAlreadyConfirmedItem_AddsExtraConfirmedItemIntoCollection()
@@ -259,16 +387,16 @@ namespace Warehouse.Mobile.UnitTests
                  .Scan("2222", "2222")
                  .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
-                    .Count
+                    .Sum(reception => reception.Count)
             );
         }
 
-        [Fact]
         /*
          * We scan 2222 barcode 3 times. The first scan should confirm the original good.
          * 2 extra scans should create Extra Confirmed good in the list and increase its confirmed
          * quantity to 3
          */
+        [Fact]
         public void ScanExtraConfirmedItem_IncreasesConfirmedQuantity()
         {
             Assert.Equal(
@@ -278,22 +406,21 @@ namespace Warehouse.Mobile.UnitTests
                     new MockReceptionGood("2", 1, "2222"),
                     new MockReceptionGood("4", 4, "3333")
                 ).GoToReceptionDetails()
-                 .Scan("2222")
-                 .Scan("2222").ClosePopup()
+                 .Scan("2222", "2222").ClosePopup()
                  .Scan("2222").ClosePopup()
                  .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
-                    .Sum(good => good.ConfirmedQuantity)
+                    .Sum(reception => reception.Sum(good => good.ConfirmedQuantity))
             );
         }
 
-        [Fact]
         /*
          * Only 2 "5449000131805", "5410013108009" element should be presented in the list
          * All other elements were confirmed and should be skipped.
          * "4005176891021" this element is confirmed based on the state that is stored 
          * in key value storage.
          */
+        [Fact]
         public async Task RestoreReceptionState()
         {
             var reception = new EbSoftReception(_data.JsonAsWebRequest(), 9)
@@ -306,7 +433,7 @@ namespace Warehouse.Mobile.UnitTests
                 );
             var viewModels = await reception
                 .NotConfirmedOnly()
-                .ToViewModelListAsync();
+                .ToViewModelListAsync(new Commands());
 
             Assert.Equal(
                 2,

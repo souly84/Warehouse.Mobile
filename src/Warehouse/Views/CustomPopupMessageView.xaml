@@ -76,17 +76,20 @@
                 </StackLayout>
 
                 <StackLayout Padding="20">
-                    <Label FontSize="14" Text="{Binding Message}" />
+                    <ScrollView HeightRequest="100">
+                        <Label FontSize="14" Text="{Binding Message}" />
+                    </ScrollView>
                 </StackLayout>
-                <StackLayout HorizontalOptions="CenterAndExpand" Padding="30">
+                <StackLayout HorizontalOptions="CenterAndExpand" Padding="30" >
                     <NeoButton
                         HorizontalOptions="CenterAndExpand"
+                        VerticalOptions="FillAndExpand"
                         HeightRequest="70"
                         WidthRequest="200"
                         CornerRadius="30"
                         Command="{Binding ActionCommand}"
                         LightShadowColor="Transparent">
-                        <StackLayout>
+                        <StackLayout VerticalOptions="FillAndExpand"  >
                             <Label Text="{Binding ActionText}"
                                    HorizontalOptions="Center"
                                    VerticalOptions="CenterAndExpand"

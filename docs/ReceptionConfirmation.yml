@@ -1,0 +1,20 @@
+@startuml
+ReceptionDetailsViewModel -> StatefulReception: Request for goods to be confirmed
+StatefulReception -> ReceptionWithoutInitiallyConfirmedGoods: Request for goods to be confirmed
+ReceptionWithoutInitiallyConfirmedGoods -> ReceptionWithExtraConfirmedGoods: Request for goods to be confirmed
+ReceptionWithExtraConfirmedGoods -> ReceptionWithUnknownGoods: Request for goods to be confirmed
+ReceptionWithUnknownGoods -> EbSoftReception: Request for goods to be confirmed
+EbSoftReception -> EbSoft_Backend: Request for goods to be confirmed
+EbSoftReception <-- EbSoft_Backend: The list of goods to be confirmed
+
+ReceptionWithUnknownGoods <-- EbSoftReception: The list of goods to be confirmed
+ReceptionWithExtraConfirmedGoods <-- ReceptionWithUnknownGoods: The list of goods to be confirmed
+ReceptionWithoutInitiallyConfirmedGoods<-- ReceptionWithExtraConfirmedGoods: The list of goods to be confirmed
+ReceptionWithoutInitiallyConfirmedGoods->ReceptionWithoutInitiallyConfirmedGoods: Stores the goods that were initially confirmed
+StatefulReception <-- ReceptionWithoutInitiallyConfirmedGoods: The list of goods to be confirmed
+
+StatefulReception --> StatefulConfirmationProgress: Request to restore confirmation progress
+
+StatefulReception <-- StatefulConfirmationProgress: The list of good with restored confirmation progress
+ReceptionDetailsViewModel <-- StatefulReception: The list of goods to be confirmed
+@enduml

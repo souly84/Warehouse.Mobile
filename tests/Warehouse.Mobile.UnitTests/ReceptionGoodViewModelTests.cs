@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Linq;
+using Dotnet.Commands;
 using EbSoft.Warehouse.SDK;
 using Newtonsoft.Json.Linq;
 using Warehouse.Core;
 using Warehouse.Mobile.ViewModels;
+using Warehouse.Mobile.Extensions;
 using Xunit;
 
 namespace Warehouse.Mobile.UnitTests
@@ -45,7 +47,7 @@ namespace Warehouse.Mobile.UnitTests
         public void ThrowArgumentNullReferenceException()
         {
             Assert.Throws<ArgumentNullException>(
-                () => new ReceptionGoodViewModel(null)
+                () => new ReceptionGoodViewModel(null, new Commands())
             );
         }
 
@@ -56,7 +58,8 @@ namespace Warehouse.Mobile.UnitTests
                 new ReceptionGoodViewModel(
                     new ExtraConfirmedReceptionGood(
                         new MockReceptionGood("1", 1)
-                    )
+                    ),
+                    new Commands()
                 ).IsExtraConfirmedReceptionGood
             );
         }
@@ -68,7 +71,7 @@ namespace Warehouse.Mobile.UnitTests
                 "MIELE G7100SCICS",
                 _app
                     .CurrentViewModel<ReceptionDetailsViewModel>()
-                    .ReceptionGoods
+                    .ReceptionGoods.First()
                     .ElementAt(1).Name
             );
         }
@@ -81,7 +84,7 @@ namespace Warehouse.Mobile.UnitTests
                 _app
                     .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
-                    .ElementAt(1).Oa
+                    .First().ElementAt(1).Oa
             );
         }
 
@@ -92,7 +95,7 @@ namespace Warehouse.Mobile.UnitTests
                 2,
                 _app
                     .CurrentViewModel<ReceptionDetailsViewModel>()
-                    .ReceptionGoods
+                    .ReceptionGoods.First()
                     .ElementAt(1).Quantity
             );
         }
@@ -104,7 +107,7 @@ namespace Warehouse.Mobile.UnitTests
                 "0/2",
                 _app
                     .CurrentViewModel<ReceptionDetailsViewModel>()
-                    .ReceptionGoods
+                    .ReceptionGoods.First()
                     .ElementAt(1).RemainingQuantity
             );
         }
@@ -116,7 +119,7 @@ namespace Warehouse.Mobile.UnitTests
                 "0",
                 _app
                     .CurrentViewModel<ReceptionDetailsViewModel>()
-                    .ReceptionGoods
+                    .ReceptionGoods.First()
                     .First()
                     .RemainingQuantity
             );
@@ -128,7 +131,7 @@ namespace Warehouse.Mobile.UnitTests
             Assert.True(
                 _app
                     .CurrentViewModel<ReceptionDetailsViewModel>()
-                    .ReceptionGoods
+                    .ReceptionGoods.First()
                     .First().IsUnkownGood
             );
         }
@@ -140,7 +143,7 @@ namespace Warehouse.Mobile.UnitTests
                 0,
                 _app
                     .CurrentViewModel<ReceptionDetailsViewModel>()
-                    .ReceptionGoods
+                    .ReceptionGoods.First()
                     .First().ConfirmedQuantity
             );
         }
@@ -152,7 +155,7 @@ namespace Warehouse.Mobile.UnitTests
                 0,
                 _app
                     .CurrentViewModel<ReceptionDetailsViewModel>()
-                    .ReceptionGoods
+                    .ReceptionGoods.First()
                     .First().Total
             );
         }
@@ -162,7 +165,7 @@ namespace Warehouse.Mobile.UnitTests
         {
             var goodViewModel = _app
                     .CurrentViewModel<ReceptionDetailsViewModel>()
-                    .ReceptionGoods
+                    .ReceptionGoods.First()
                     .First();
             goodViewModel.IncreaseQuantityCommand.Execute();
             Assert.Equal(
@@ -176,7 +179,7 @@ namespace Warehouse.Mobile.UnitTests
         {
             var goodViewModel = _app
                     .CurrentViewModel<ReceptionDetailsViewModel>()
-                    .ReceptionGoods
+                    .ReceptionGoods.First()
                     .First();
             goodViewModel.IncreaseQuantityCommand.Execute();
             goodViewModel.DecreaseQuantityCommand.Execute();

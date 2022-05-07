@@ -1,5 +1,6 @@
 ﻿using System;
-using Prism.Commands;
+using System.Windows.Input;
+using Dotnet.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Warehouse.Core;
@@ -10,11 +11,18 @@ namespace Warehouse.Mobile
     public class QuantityToMovePopupViewModel : BindableBase, IInitialize
     {
         private readonly INavigationService _navigationService;
+        private readonly ICompany _company;
         private IWarehouseGood? _goodToMove;
+        private readonly CachedCommands _commands;
 
-        public QuantityToMovePopupViewModel(INavigationService navigationService)
+        public QuantityToMovePopupViewModel(
+            ICommands commands,
+            INavigationService navigationService,
+            ICompany company)
         {
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
+            _company = company ?? throw new ArgumentNullException(nameof(company));
+            _commands = commands?.Cached() ?? throw new ArgumentNullException(nameof(commands));
         }
 
         private IStorage? _originLocation;
@@ -31,6 +39,32 @@ namespace Warehouse.Mobile
             set => SetProperty(ref _destinationLocation, value);
         }
 
+        private int _quantityToMove = 1;
+        public int QuantityToMove
+        {
+            get => _quantityToMove;
+            set => SetProperty(ref _quantityToMove, value);
+        }
+
+        public IAsyncCommand ValidateCommand => _commands.AsyncCommand(async () =>
+        {
+            _ = _goodToMove ?? throw new InvalidOperationException($"Good object is not initialized for movement");
+            _ = OriginLocation ?? throw new InvalidOperationException($"Origin location value is not initialized for movement");
+            await _goodToMove
+                .From(OriginLocation)
+                .MoveToAsync(
+                    await _goodToMove
+                        .Storages
+                        .ByBarcodeAsync(_company.Warehouse, DestinationLocation),
+                    QuantityToMove
+                );
+            await _navigationService.GoBackAsync();
+        });
+
+        public IAsyncCommand CancelCommand => _commands.AsyncCommand(() =>
+            _navigationService.GoBackAsync()
+        );
+
         public void Initialize(INavigationParameters parameters)
         {
             OriginLocation = parameters.Value<IStorage>("Origin");
@@ -38,26 +72,16 @@ namespace Warehouse.Mobile
             _goodToMove = parameters.Value<IWarehouseGood>("Good");
         }
 
-        private DelegateCommand? validateCommand;
-
-        public DelegateCommand ValidateCommand => validateCommand ?? (validateCommand = new DelegateCommand(async () =>
+        public ICommand SetQuantityCommand => _commands.Command<string>((value) =>
         {
-            _ = _goodToMove ?? throw new InvalidOperationException($"Good object is not initialized for movement");
-            _ = OriginLocation ?? throw new InvalidOperationException($"Origin location value is not initialized for movement");
-            await _goodToMove
-                .Movement
-                .From(OriginLocation)
-                .MoveToAsync(
-                    await _goodToMove.Storages.ByBarcodeAsync(DestinationLocation),
-                    5
-            );
-            await _navigationService.GoBackAsync();
-        }));
-
-        private DelegateCommand? cancelCommand;
-        public DelegateCommand CancelCommand => cancelCommand ?? (cancelCommand = new DelegateCommand(async () =>
-        {
-            await _navigationService.GoBackAsync();
-        }));
+            if (value != "-1")
+            {
+                QuantityToMove = Convert.ToInt32($"{QuantityToMove}{value}");
+            }
+            else
+            {
+                QuantityToMove = QuantityToMove / 10;
+            }
+        });
     }
 }

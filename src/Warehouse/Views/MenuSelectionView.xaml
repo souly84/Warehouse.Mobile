@@ -6,9 +6,38 @@
     xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
     xmlns:viewmodels="clr-namespace:Warehouse.Mobile.ViewModels"
     xmlns:neo="clr-namespace:Xamarin.Forms.NeoControls;assembly=Xamarin.Forms.NeoControls"
-    Title="Main menu"
     x:DataType="viewmodels:MenuSelectionViewModel"
-    NavigationPage.HasBackButton="True">
+    NavigationPage.HasBackButton="False">
+    <NavigationPage.TitleView>
+        <Grid Padding="2" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackLayout BackgroundColor="Transparent">
+                 <Label
+                    FontFamily="materialicons"
+                    Text="{x:Static fonts:MaterialIcons.ArrowLeft}"
+                    TextColor="{DynamicResource TextsColor}"
+                 VerticalOptions="Center"
+                 HorizontalOptions="Start"
+                 HorizontalTextAlignment="Start"
+                    FontSize="25"
+                Margin="-5,0,0,0"/>
+                 <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding BackCommand}"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+              
+             <Label
+                 Grid.Column="1"
+                Text="Main Menu"
+                VerticalOptions="Center"
+                FontSize="18"
+                TextColor="{DynamicResource TextsColor}"/>
+        </Grid>
+    </NavigationPage.TitleView>
     <ContentView VerticalOptions="Fill" BackgroundColor="#2980B9">
         <StackLayout
             VerticalOptions="FillAndExpand"
@@ -101,7 +130,7 @@
                             Text="Put Away" />
 
                         <Label
-                            TextColor="Black"
+                            TextColor="Black"   
                             VerticalOptions="End"
                             HorizontalOptions="End"
                             FontSize="Micro"
@@ -117,7 +146,7 @@
                     Grid.Row="1"
                     Grid.Column="0">
 
-                     <neo:NeoButton BackgroundColor="#e3edf7" VerticalOptions="FillAndExpand">
+                     <neo:NeoButton BackgroundColor="#e3edf7" VerticalOptions="FillAndExpand" Command="{Binding GoToStockMoveCommand}">
                        <Grid VerticalOptions="FillAndExpand" Padding="15">
                         <Grid.RowDefinitions>
                             <RowDefinition/>

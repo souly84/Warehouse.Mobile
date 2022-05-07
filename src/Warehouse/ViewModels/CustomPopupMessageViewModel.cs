@@ -1,5 +1,6 @@
 ﻿using System;
-using Prism.Commands;
+using System.Windows.Input;
+using Dotnet.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Warehouse.Mobile.Extensions;
@@ -9,12 +10,16 @@ namespace Warehouse.Mobile.ViewModels
     public class CustomPopupMessageViewModel : BindableBase, IInitialize
     {
         private readonly INavigationService _navigationService;
-        private DelegateCommand? _actionCommand;
         private Action<bool, Exception?>? _callBack;
+        private readonly CachedCommands _commands;
 
-        public CustomPopupMessageViewModel(INavigationService navigationService)
+        public CustomPopupMessageViewModel(
+            ICommands commands,
+            INavigationService navigationService)
         {
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
+            _ = commands ?? throw new ArgumentNullException(nameof(commands));
+            _commands = commands.Cached();
         }
 
         private PopupSeverity _severity;
@@ -45,6 +50,23 @@ namespace Warehouse.Mobile.ViewModels
             set => SetProperty(ref _actionText, value);
         }
 
+        public ICommand ActionCommand => _commands.AsyncCommand(async () =>
+        {
+            try
+            {
+                var result = await _navigationService.GoBackAsync();
+                if (result.Exception != null)
+                {
+                    throw result.Exception;
+                }
+                _callBack?.Invoke(true, null);
+            }
+            catch (Exception ex)
+            {
+                _callBack?.Invoke(false, ex);
+            }
+        }, forceExecution: true);
+
         public void Initialize(INavigationParameters parameters)
         {
             Severity = parameters.Value<PopupSeverity>("Severity");
@@ -53,18 +75,5 @@ namespace Warehouse.Mobile.ViewModels
             ActionText = parameters.Value<string>("ActionText");
             _callBack = parameters.Value<Action<bool, Exception?>>("CallBack");
         }
-
-        public DelegateCommand ActionCommand => _actionCommand ?? (_actionCommand = new DelegateCommand(async () =>
-        {
-            try
-            {
-                await _navigationService.GoBackAsync();
-                _callBack?.Invoke(true, null);
-            }
-            catch (Exception ex)
-            {
-                _callBack?.Invoke(false, ex);
-            }
-        }));
     }
 }

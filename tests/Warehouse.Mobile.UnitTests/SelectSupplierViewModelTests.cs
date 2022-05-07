@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
+using Dotnet.Commands;
 using Prism.Navigation;
 using Warehouse.Core;
 using Warehouse.Mobile.UnitTests.Mocks;
@@ -19,16 +21,22 @@ namespace Warehouse.Mobile.UnitTests
         public static IEnumerable<object[]> SelectSupplierViewModelData =>
           new List<object[]>
           {
-                new object[] { null, null },
-                new object[] { new MockWarehouseCompany(), null },
-                new object[] { null, new MockNavigationService() }
+                new object[] { null, null, null, null },
+                new object[] { null, new MockOverlay(), new Commands(), new MockNavigationService() },
+                new object[] { new MockWarehouseCompany(), null, new Commands(), new MockNavigationService() },
+                new object[] { new MockWarehouseCompany(), new MockOverlay(), null, new MockNavigationService() },
+                new object[] { new MockWarehouseCompany(), new MockOverlay(), new Commands(), null }
           };
 
         [Theory, MemberData(nameof(SelectSupplierViewModelData))]
-        public void ArgumentNullException(ICompany company, INavigationService navigationService)
+        public void ArgumentNullException(
+            ICompany company,
+            IOverlay overlay,
+            ICommands commands,
+            INavigationService navigationService)
         {
             Assert.Throws<ArgumentNullException>(
-                () => new SelectSupplierViewModel(company, navigationService)
+                () => new SelectSupplierViewModel(company, overlay, commands, navigationService)
             );
         }
 
@@ -41,8 +49,16 @@ namespace Warehouse.Mobile.UnitTests
         [Fact]
         public void ChangeSelectedDateCommand()
         {
-            var vm = _app.CurrentViewModel<SelectSupplierViewModel>();
-            vm.CurrentDate = DateTime.Now.AddDays(1);
+            var vm = WarehouseMobile.Application(
+                new MockWarehouseCompany(
+                    new MockReception(
+                        "1",
+                        DateTime.Now.AddDays(1)
+                    )
+                )
+            ).GoToSuppliers()
+             .CurrentViewModel<SelectSupplierViewModel>();
+            vm.SelectedDate = DateTime.Now.AddDays(1);
             vm.ChangeSelectedDateCommand.Execute();
             Assert.NotEmpty(vm.Suppliers);
         }
@@ -51,7 +67,7 @@ namespace Warehouse.Mobile.UnitTests
         public void SelectedDate_TodayByDefault()
         {
             Assert.Equal(
-                System.DateTime.Now.Date,
+                DateTime.Now.Date,
                 _app.CurrentViewModel<SelectSupplierViewModel>()
                     .SelectedDate.Date
             );
@@ -80,6 +96,17 @@ namespace Warehouse.Mobile.UnitTests
             );
 
             Assert.IsType<ReceptionDetailsViewModel>(_app.CurrentViewModel<object>());
+        }
+
+        [Fact]
+        public async Task GoBackToMenuSelection()
+        {
+            await _app
+                .CurrentViewModel<SelectSupplierViewModel>()
+                .BackCommand
+                .ExecuteAsync();
+
+            Assert.IsType<MenuSelectionViewModel>(_app.CurrentViewModel<object>());
         }
     }
 }

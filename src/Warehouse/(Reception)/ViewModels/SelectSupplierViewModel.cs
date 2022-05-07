@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Dotnet.Commands;
 using EbSoft.Warehouse.SDK;
-using Prism.Commands;
 using Prism.Mvvm;
 using Prism.Navigation;
 using Warehouse.Core;
@@ -12,14 +12,22 @@ namespace Warehouse.Mobile.ViewModels
     public class SelectSupplierViewModel : BindableBase, IInitializeAsync
     {
         private readonly ICompany _company;
+        private readonly IOverlay _overlay;
+        private readonly CachedCommands _cachedCommands;
+        private readonly ICommands _commands;
         private readonly INavigationService _navigationService;
 
         public SelectSupplierViewModel(
             ICompany company,
+            IOverlay overlay,
+            ICommands commands,
             INavigationService navigationService)
         {
             _company = company ?? throw new ArgumentNullException(nameof(company));
+            _overlay = overlay ?? throw new ArgumentNullException(nameof(overlay));
+            _commands = commands ?? throw new ArgumentNullException(nameof(commands));
             _navigationService = navigationService ?? throw new ArgumentNullException(nameof(navigationService));
+            _cachedCommands = commands.Cached();
         }
 
         private IList<SupplierViewModel>? _suppliers;
@@ -36,31 +44,29 @@ namespace Warehouse.Mobile.ViewModels
             set => SetProperty(ref _selectedDate, value);
         }
 
-        private DateTime _currentDate;
-        public DateTime CurrentDate
-        {
-            get => _currentDate;
-            set => SetProperty(ref _currentDate, value);
-        }
+        public IAsyncCommand ChangeSelectedDateCommand => _cachedCommands.AsyncCommand(RefreshAvailableSupplierList);
+
+        public IAsyncCommand BackCommand => _cachedCommands.AsyncCommand(_navigationService.GoBackAsync);
 
         public Task InitializeAsync(INavigationParameters parameters)
         {
             SelectedDate = DateTime.Now;
-            return RefreshAvailableSupplierList();
+            return Task.CompletedTask;
         }
 
-        private DelegateCommand? changeSelectedDateCommand;
-        public DelegateCommand ChangeSelectedDateCommand => changeSelectedDateCommand ?? (changeSelectedDateCommand = new DelegateCommand(async () =>
+        private Task RefreshAvailableSupplierList()
         {
-            await RefreshAvailableSupplierList();
-        }));
-
-        private async Task RefreshAvailableSupplierList()
-        {
-            Suppliers = await _company
-                .Suppliers
-                .For(SelectedDate)
-                .ToViewModelListAsync(_navigationService);
+            return _overlay.OverlayAsync(async () =>
+                Suppliers = await _company
+                    .Suppliers
+                    .For(SelectedDate)
+                    .ToViewModelListAsync(
+                        _navigationService,
+                        _overlay,
+                        _commands
+                    ),
+                "Suppliers Loading..."
+            );
         }
     }
 }

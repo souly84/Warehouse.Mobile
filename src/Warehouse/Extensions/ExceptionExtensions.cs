@@ -20,9 +20,9 @@ namespace Warehouse.Mobile.Plugins
             return ex;
         }
 
-        public static Dictionary<string, object> ToDictionary(this Exception exc)
+        public static Dictionary<string, object?> ToDictionary(this Exception exc)
         {
-            return new Dictionary<string, object>
+            return new Dictionary<string, object?>
             {
                 ["ClassName"] = exc.GetType().AssemblyQualifiedName,
                 ["Message"] = exc.Message,
@@ -48,10 +48,10 @@ namespace Warehouse.Mobile.Plugins
             );
         }
 
-        public static Exception ToException(this string exceptionJson)
+        public static Exception? ToException(this string exceptionJson)
         {
             var parsedException = JsonConvert.DeserializeObject<JObject>(exceptionJson);
-            return parsedException
+            return parsedException?
                 .WithInnerException()
                 .WithStackTrace(parsedException);
         }
@@ -85,9 +85,10 @@ namespace Warehouse.Mobile.Plugins
 
         private static Exception ToException(this JObject parsedException)
         {
+            _ = parsedException ?? throw new ArgumentException(nameof(parsedException));
             parsedException.FixIncorrectExceptionProperties();
             var excpetionType = Type.GetType(
-                parsedException["ClassName"].Value<string>(),
+                ClassName(parsedException),
                 false
             );
             if (excpetionType != null)
@@ -95,7 +96,9 @@ namespace Warehouse.Mobile.Plugins
                 // https://github.com/dotnet/runtime/issues/42154 issue
                 if (excpetionType == typeof(HttpRequestException))
                 {
-                    return new HttpRequestException(parsedException["Message"].Value<string>());
+                    return new HttpRequestException(
+                        Message(parsedException)
+                    );
                 }
                 try
                 {
@@ -108,9 +111,23 @@ namespace Warehouse.Mobile.Plugins
             }
 
             return new UnknownExceptionTypeException(
-                   parsedException["Message"].Value<string>(),
-                   parsedException["ClassName"].Value<string>()
-               );
+                Message(parsedException),
+                ClassName(parsedException)
+            );
+        }
+
+        private static string Message(JObject parsedException)
+        {
+            return parsedException["Message"]?.Value<string>() ?? throw new InvalidCastException(
+                "JObject does not containt 'Message' property"
+            );
+        }
+
+        private static string ClassName(JObject parsedException)
+        {
+            return parsedException["ClassName"]?.Value<string>() ?? throw new InvalidCastException(
+                "JObject does not containt 'ClassName' property"
+            );
         }
 
         private static Exception WithInnerException(this JObject parsedException)
@@ -131,7 +148,7 @@ namespace Warehouse.Mobile.Plugins
 
         private static void FixIncorrectExceptionProperties(this JObject parsedException)
         {
-            if (parsedException["Data"].ToString() == "{}")
+            if (parsedException["Data"]?.ToString() == "{}")
             {
                 parsedException["Data"] = null;
             }

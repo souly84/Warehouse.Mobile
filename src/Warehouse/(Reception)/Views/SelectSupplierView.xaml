@@ -4,17 +4,44 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:viewModels="clr-namespace:Warehouse.Mobile.ViewModels"
     x:Class="Warehouse.Mobile.Views.SelectSupplierView"
-    Title="Select supplier"
     xmlns:neo="clr-namespace:Xamarin.Forms.NeoControls;assembly=Xamarin.Forms.NeoControls"
     xmlns:fonts="clr-namespace:Warehouse.Mobile;assembly=Warehouse.Mobile"
     xmlns:behaviors="clr-namespace:Warehouse.Mobile.Behavior"
     x:Name="ThisPage"
-
     x:DataType="viewModels:SelectSupplierViewModel"
-    >
-    <ContentView VerticalOptions="Center" Padding="5">
-        <StackLayout VerticalOptions="FillAndExpand">
-
+    NavigationPage.HasBackButton="False">
+     <NavigationPage.TitleView>
+        <Grid Padding="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <StackLayout >
+                 <Label
+                    FontFamily="materialicons"
+                    Text="{x:Static fonts:MaterialIcons.ArrowLeft}"
+                    TextColor="{DynamicResource TextsColor}"
+                 VerticalOptions="Center"
+                 HorizontalOptions="Start"
+                 HorizontalTextAlignment="Start"
+                    FontSize="25"
+                Margin="-5,0,0,0"/>
+                 <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Command="{Binding BackCommand}"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+              
+             <Label
+                 Grid.Column="1"
+                Text="Select Supplier"
+                VerticalOptions="Center"
+                FontSize="18"
+                TextColor="{DynamicResource TextsColor}"/>
+        </Grid>
+    </NavigationPage.TitleView>
+    <ContentView>
+        <StackLayout>
             <StackLayout
                 Spacing="0"
                 Orientation="Horizontal"

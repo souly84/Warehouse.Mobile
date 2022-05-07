@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using Dotnet.Commands;
 using Prism.Common;
 using Prism.Navigation;
 using Warehouse.Core.Plugins;
@@ -13,8 +14,7 @@ namespace Warehouse.Mobile.UnitTests
     {
         public static PageNavigationService PageNavigationService(this App app)
         {
-            var navigationService = app.Container.Resolve(typeof(INavigationService));
-            return navigationService as PageNavigationService;
+            return app.Resolve<INavigationService>() as PageNavigationService;
         }
 
         public static App ClosePopup(this App app)
@@ -94,27 +94,34 @@ namespace Warehouse.Mobile.UnitTests
         {
             app.CurrentViewModel<MenuSelectionViewModel>()
                .GoToPutAwayCommand
-               .Execute(null);
+               .ExecuteAsync().Wait();
             return app;
         }
 
-        public static App QuantityToMovePopup(this App app)
+        public static App GoToStockMovement(this App app)
         {
-            app.GoToPutAway()
-               .CurrentViewModel<PutAwayViewModel>()
+            app.CurrentViewModel<MenuSelectionViewModel>()
+               .GoToStockMoveCommand
+               .ExecuteAsync().Wait();
+            return app;
+        }
+
+        public static App GoToQuantityToMovePopup(this App app)
+        {
+            app.GoToPutAway();
+            app.CurrentViewModel<PutAwayViewModel>()
                .GoToPopupCommand
-               .Execute();
+               .ExecuteAsync().Wait();
             return app;
         }
 
         public static App GoToReceptionDetails(this App app)
         {
-            app.CurrentViewModel<MenuSelectionViewModel>()
-                .GoToAvailableSuppliersCommand
-                .Execute(null);
+            app.GoToSuppliers();
             app.CurrentViewModel<SelectSupplierViewModel>()
                .Suppliers.First()
-               .GoToReceptionDetailsCommand.Execute();
+               .GoToReceptionDetailsCommand
+               .ExecuteAsync().Wait();
             return app;
         }
 
@@ -122,7 +129,8 @@ namespace Warehouse.Mobile.UnitTests
         {
             app.CurrentViewModel<MenuSelectionViewModel>()
                .GoToAvailableSuppliersCommand
-               .Execute(null);
+               .ExecuteAsync()
+               .Wait();
             return app;
         }
     }

@@ -20,8 +20,8 @@ namespace Warehouse.Mobile.ViewModels.DatePicker
             };
         }
 
-        private ObservableCollection<ReceptionDateViewModel> _allowedDates;
-        public ObservableCollection<ReceptionDateViewModel> AllowedDates
+        private ObservableCollection<ReceptionDateViewModel>? _allowedDates;
+        public ObservableCollection<ReceptionDateViewModel>? AllowedDates
         {
             get => _allowedDates;
             set => SetProperty(ref _allowedDates, value);

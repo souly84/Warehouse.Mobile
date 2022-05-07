@@ -3,6 +3,10 @@ using Warehouse.Mobile.ViewModels;
 using Warehouse.Mobile.Extensions;
 using Xunit;
 using System.Threading.Tasks;
+using Dotnet.Commands;
+using System.Collections.Generic;
+using Prism.Navigation;
+using Warehouse.Mobile.UnitTests.Mocks;
 
 namespace Warehouse.Mobile.UnitTests
 {
@@ -11,11 +15,13 @@ namespace Warehouse.Mobile.UnitTests
     {
         private App _app = WarehouseMobile.Application();
 
-        [Fact]
-        public void ArgumentNullException()
+        [Theory, MemberData(nameof(CustomPopupMessageViewModellData))]
+        public void ArgumentNullException(
+            ICommands commands,
+            INavigationService navigationService)
         {
             Assert.Throws<ArgumentNullException>(
-                () => new CustomPopupMessageViewModel(null)
+                () => new CustomPopupMessageViewModel(commands, navigationService)
             );
         }
 
@@ -120,5 +126,13 @@ namespace Warehouse.Mobile.UnitTests
                 _app.ClosePopup();
             }
         }
+
+        public static IEnumerable<object[]> CustomPopupMessageViewModellData =>
+          new List<object[]>
+          {
+                new object[] { null, null },
+                new object[] { null, new MockNavigationService() },
+                new object[] { new Commands(), null },
+          };
     }
 }

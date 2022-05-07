@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Dotnet.Commands;
 using Prism.Navigation;
 using Prism.Services;
 using Warehouse.Core;
@@ -23,13 +24,13 @@ namespace Warehouse.Mobile.UnitTests
         public static IEnumerable<object[]> PutAwayViewModelData =>
           new List<object[]>
           {
-                new object[] { null, null, null, null },
-                new object[] { new MockScanner(), null, null, null },
-                new object[] { null, new MockPageDialogService(), null, null },
-                new object[] { null, null, new MockWarehouseCompany(), null },
-                new object[] { null, null, null, new MockNavigationService() },
-                new object[] { new MockScanner(), new MockPageDialogService(), null, null },
-                new object[] { new MockScanner(), new MockPageDialogService(), new MockWarehouseCompany(), null }
+                new object[] { null, null, null, null, null },
+                new object[] { new MockScanner(), null, null, null, null },
+                new object[] { null, new MockPageDialogService(), null, null, null },
+                new object[] { null, null, new MockWarehouseCompany(), null, null },
+                new object[] { null, null, null, null, new MockNavigationService() },
+                new object[] { new MockScanner(), new MockPageDialogService(), null, null, null },
+                new object[] { new MockScanner(), new MockPageDialogService(), new MockWarehouseCompany(), null, null }
           };
 
         [Theory, MemberData(nameof(PutAwayViewModelData))]
@@ -37,6 +38,7 @@ namespace Warehouse.Mobile.UnitTests
             IScanner scanner,
             IPageDialogService dialog,
             ICompany company,
+            ICommands commands,
             INavigationService navigationService)
         {
             Assert.Throws<ArgumentNullException>(
@@ -44,6 +46,7 @@ namespace Warehouse.Mobile.UnitTests
                     scanner,
                     dialog,
                     company,
+                    commands,
                     navigationService
                 )
             );
