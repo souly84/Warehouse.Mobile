@@ -58,13 +58,10 @@ namespace Warehouse.Mobile.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialog.DisplayAlertAsync("Error", ex.ToString(), "Ok");
+                await _dialog.ErrorAsync(ex);
             }
         }
 
-        public IAsyncCommand BackCommand => _cachedCommands.AsyncCommand(async () =>
-        {
-            await _navigationService.GoBackAsync();
-        });
+        public IAsyncCommand BackCommand => _cachedCommands.AsyncCommand(() => _navigationService.GoBackAsync());
     }
 }

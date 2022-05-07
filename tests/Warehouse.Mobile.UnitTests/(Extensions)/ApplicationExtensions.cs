@@ -14,8 +14,7 @@ namespace Warehouse.Mobile.UnitTests
     {
         public static PageNavigationService PageNavigationService(this App app)
         {
-            var navigationService = app.Container.Resolve(typeof(INavigationService));
-            return navigationService as PageNavigationService;
+            return app.Resolve<INavigationService>() as PageNavigationService;
         }
 
         public static App ClosePopup(this App app)
@@ -110,9 +109,7 @@ namespace Warehouse.Mobile.UnitTests
 
         public static App GoToReceptionDetails(this App app)
         {
-            app.CurrentViewModel<MenuSelectionViewModel>()
-               .GoToAvailableSuppliersCommand
-               .ExecuteAsync().Wait();
+            app.GoToSuppliers();
             app.CurrentViewModel<SelectSupplierViewModel>()
                .Suppliers.First()
                .GoToReceptionDetailsCommand

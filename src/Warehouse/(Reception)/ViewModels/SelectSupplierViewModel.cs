@@ -44,9 +44,9 @@ namespace Warehouse.Mobile.ViewModels
             set => SetProperty(ref _selectedDate, value);
         }
 
-        public IAsyncCommand ChangeSelectedDateCommand => _cachedCommands.AsyncCommand(() => RefreshAvailableSupplierList());
+        public IAsyncCommand ChangeSelectedDateCommand => _cachedCommands.AsyncCommand(RefreshAvailableSupplierList);
 
-        public IAsyncCommand BackCommand => _cachedCommands.AsyncCommand(() => _navigationService.GoBackAsync());
+        public IAsyncCommand BackCommand => _cachedCommands.AsyncCommand(_navigationService.GoBackAsync);
 
         public Task InitializeAsync(INavigationParameters parameters)
         {

@@ -50,20 +50,15 @@ namespace Warehouse.Mobile.UnitTests
         [Fact]
         public void ChangeSelectedDateCommand()
         {
-            var vm = WarehouseMobile
-                .Application(
-                    new MockWarehouseCompany(
-                        new MockSupplier(
-                            "Electrolux",
-                            new MockReception(
-                                "1",
-                                DateTime.Now.AddDays(1)
-                            )
-                        )
+            var vm = WarehouseMobile.Application(
+                new MockWarehouseCompany(
+                    new MockReception(
+                        "1",
+                        DateTime.Now.AddDays(1)
                     )
                 )
-                .GoToSuppliers()
-                .CurrentViewModel<SelectSupplierViewModel>();
+            ).GoToSuppliers()
+             .CurrentViewModel<SelectSupplierViewModel>();
             vm.SelectedDate = DateTime.Now.AddDays(1);
             vm.ChangeSelectedDateCommand.Execute();
             Assert.NotEmpty(vm.Suppliers);

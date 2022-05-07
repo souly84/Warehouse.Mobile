@@ -49,6 +49,7 @@
 
         public void BeepLoudly()
         {
+            // Nothing to do
         }
 
         public string GetApplicationPath()
@@ -68,6 +69,7 @@
 
         public void HideKeyboard()
         {
+            // Nothing to do
         }
 
         public string LoadFile(string fileName)
@@ -77,6 +79,7 @@
 
         public void SaveFile(string fileName, string text)
         {
+            // Nothing to do
         }
     }
 }

@@ -71,9 +71,7 @@ namespace Warehouse.Mobile.ViewModels
                     await receptionGroup.CommitAsync();
                 }
                 
-                await _navigationService.ShowMessageAsync(
-                    PopupSeverity.Info,
-                    "Success!",
+                await _navigationService.ShowSuccessAsync(
                     "Your reception has been synchronized successfully."
                 );
             }
@@ -86,28 +84,20 @@ namespace Warehouse.Mobile.ViewModels
             await _navigationService.GoBackAsync();
         });
 
-        public IAsyncCommand GoToHistoryCommand => _cachedCommands.AsyncCommand(async () =>
-        {
-            try
-            {
-                await _navigationService.NavigateAsync(
-                    AppConstants.HistoryViewId,
-                    new NavigationParameters{ { "Supplier", _supplier } }
-                );
-            }
-            catch (Exception ex)
-            {
-                await _navigationService.ShowErrorAsync(ex);
-            }
-        });
+        public IAsyncCommand GoToHistoryCommand => _cachedCommands.NavigationCommand(() =>
+            _navigationService.NavigateAsync(
+                AppConstants.HistoryViewId,
+                new NavigationParameters { { "Supplier", _supplier } }
+            )
+        );
 
         public IAsyncCommand BackCommand => _cachedCommands.AsyncCommand(async () =>
         {
             try
             {
-                if (await _dialog.DisplayAlertAsync("Warning", "Are you sure you want to leave this reception?", "Yes", "No"))
+                if (await _dialog.WarningAsync("Are you sure you want to leave this reception?"))
                 {
-                    var result = await _navigationService.GoBackAsync();
+                    await _navigationService.GoBackAsync();
                 }
             }
             catch (Exception ex)
@@ -130,7 +120,7 @@ namespace Warehouse.Mobile.ViewModels
             }
             catch (Exception ex)
             {
-                await _dialog.DisplayAlertAsync("Error", ex.ToString(), "Ok");
+                await _dialog.ErrorAsync(ex);
                 throw;
             }
         }
@@ -178,9 +168,7 @@ namespace Warehouse.Mobile.ViewModels
             }
             else
             {
-                return _navigationService.ShowMessageAsync(
-                    PopupSeverity.Warning,
-                    "Warning!",
+                return _navigationService.ShowWarningAsync(
                     "This item has already been scanned"
                 );
             }

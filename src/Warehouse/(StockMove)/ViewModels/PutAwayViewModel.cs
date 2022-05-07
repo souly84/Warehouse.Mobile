@@ -3,7 +3,6 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
 using Dotnet.Commands;
-using EbSoft.Warehouse.SDK;
 using Prism.Navigation;
 using Prism.Services;
 using Warehouse.Core;
@@ -102,7 +101,7 @@ namespace Warehouse.Mobile
                 AppConstants.QuantityToMovePopupViewId,
                 new NavigationParameters
                 {
-                    // Not we have mock params here
+                    // For now we have to mock params here
                     { "Origin", new MockStorage("MockStorage") },
                     { "Destination", "Mock Destination" },
                     { "Good", new MockWarehouseGood("1", 2) },
@@ -151,8 +150,8 @@ namespace Warehouse.Mobile
                     ScannedBarcode = barcode.BarcodeData;
                     WarehouseGood = await _company
                         .Warehouse
-                        .Goods.For(barcode.BarcodeData)
-                        .FirstAsync();
+                        .Goods
+                        .FirstAsync(barcode.BarcodeData);
 
                     var checkIn = await WarehouseGood.Storages.PutAway.ToViewModelListAsync();
                     if (!checkIn.Any())
@@ -161,14 +160,13 @@ namespace Warehouse.Mobile
                         ScannedBarcode = barcode.BarcodeData;
                         WarehouseGood = await _company
                             .Warehouse
-                            .Goods.For(barcode.BarcodeData)
-                            .FirstAsync();
+                            .Goods
+                            .FirstAsync(barcode.BarcodeData);
 
                         if (!checkIn.Any())
                         {
-                            await _dialog.DisplayAlertAsync(
-                                "Error",
-                                "This item is not present in the check in area", "Ok"
+                            await _dialog.ErrorAsync(
+                                "This item is not present in the check in area"
                             );
                             return;
                         }
@@ -193,9 +191,6 @@ namespace Warehouse.Mobile
             PutAwayStorage = null;
         }
 
-        public IAsyncCommand BackCommand => _commands.AsyncCommand(async () =>
-        {
-            await _navigationService.GoBackAsync();
-        });
+        public IAsyncCommand BackCommand => _commands.AsyncCommand(_navigationService.GoBackAsync);
     }
 }

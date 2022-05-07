@@ -95,23 +95,22 @@ namespace Warehouse.Mobile.UnitTests
             );
         }
 
-        [Fact(Skip = "Does not work at the moment")]
+        [Fact]
         public async Task GoBackToSupplier_WhenWarningDialogAccepted()
         {
-            var dialog = new MockPageDialogService();
-            await WarehouseMobile.Application(
+            var app = WarehouseMobile.Application(
                 new MockPlatformInitializer(
                     new MockWarehouseCompany(
                        new MockReceptionGood("1", 1, "1111")
                     ),
-                    pageDialogService: dialog
+                    pageDialogService: new MockPageDialogService()
                 )
-            ).GoToReceptionDetails()
-             .CurrentViewModel<ReceptionDetailsViewModel>()
-             .BackCommand.ExecuteAsync();
-
+            ).GoToReceptionDetails();
+            await app
+                .CurrentViewModel<ReceptionDetailsViewModel>()
+                .BackCommand.ExecuteAsync();
             Assert.IsType<SelectSupplierViewModel>(
-                await _app.WaitViewModel<SelectSupplierViewModel>()
+                app.CurrentViewModel<object>()
             );
         }
 
@@ -346,12 +345,12 @@ namespace Warehouse.Mobile.UnitTests
             );
         }
 
-        [Fact]
         /*
          * We scan 2222 barcode 3 times. The first scan should confirm the original good.
          * 2 extra scans should create Extra Confirmed good in the list and increase its confirmed
          * quantity to 3
          */
+        [Fact]
         public void ScanExtraConfirmedItem_IncreasesConfirmedQuantity()
         {
             Assert.Equal(
@@ -361,8 +360,7 @@ namespace Warehouse.Mobile.UnitTests
                     new MockReceptionGood("2", 1, "2222"),
                     new MockReceptionGood("4", 4, "3333")
                 ).GoToReceptionDetails()
-                 .Scan("2222")
-                 .Scan("2222").ClosePopup()
+                 .Scan("2222", "2222").ClosePopup()
                  .Scan("2222").ClosePopup()
                  .CurrentViewModel<ReceptionDetailsViewModel>()
                     .ReceptionGoods
@@ -370,13 +368,13 @@ namespace Warehouse.Mobile.UnitTests
             );
         }
 
-        [Fact]
         /*
          * Only 2 "5449000131805", "5410013108009" element should be presented in the list
          * All other elements were confirmed and should be skipped.
          * "4005176891021" this element is confirmed based on the state that is stored 
          * in key value storage.
          */
+        [Fact]
         public async Task RestoreReceptionState()
         {
             var reception = new EbSoftReception(_data.JsonAsWebRequest(), 9)
